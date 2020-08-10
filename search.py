@@ -2,79 +2,43 @@ import tb
 import os
 import csv
 
-         
-info={}
-i=0
-a=0
-filelist=[]
-list2=[]
-array=tb.returnCSVHeader()
+tb.returnMessage("Scanning drives")
 
-returnList={}
-countColumn=[]
-returnCSVHead=[]
-mylist = tb.returnAllTagsFromSettings()
+scanFiles=tb.scanFilesRecursively()
 
-x=-1
-for headerTitle in tb.returnCSVHeader():
-    x = x+1
-
-    if headerTitle =="FILE_EXTENSION" or headerTitle=="PATH" or headerTitle=="NAME":
-        returnCSVHead.append(headerTitle)
-        returnList[x]=headerTitle
-        countColumn.append(x)
-
-
-    if headerTitle in mylist:
-        returnCSVHead.append(headerTitle)
-        returnList[x]=headerTitle
-        countColumn.append(x)
-
-    pass
-
-print(tb.get_current_date() + " => Scanning drives")
-
-for filename in tb.returnFullGlobList():
-
-    try:
-        filename
-        pass
-    except UnicodeEncodeError:
-        print("file error: " + filename)
-        pass
-    else:
-        i=i+1
-        filelist.append(filename)
-        pass
-
-if i ==0:
-    print(tb.get_current_date() + " => No data found")
+if scanFiles["totalNumberOfFiles"]==0:
+    tb.returnMessage("No data found")
     quit()
 
-print(i)
+tb.returnMessage(str(scanFiles["totalNumberOfFiles"])+" files found")
+tb.returnMessage("Exporting data")
 
-print(tb.get_current_date() + " => "+str(i)+" files found")   
-print(tb.get_current_date() + " => Exporting data")  
 
 row={}
 
+FileInfomation = tb.returnFileInformation()
 
+print(FileInfomation)
 
-out = open('api.csv', 'w', newline='', encoding='utf8') 
-writer = csv.DictWriter(out, returnCSVHead)
-writer.writeheader()
-for filename in filelist:
+# out = open('api.csv', 'w', newline='', encoding='utf8') 
+# writer = csv.DictWriter(out, FileInfomation['returnCSVHead'])
+# writer.writeheader()
+for filename in scanFiles["filelist"]:
 
-    a = a+1
+    print(FileInformation["returnCSVHead"])
 
-    for column_name in countColumn:
+#     a = a+1
 
-        row[returnList[column_name]]=tb.getDetailsOf(filename,column_name)
+#     for column_name in FileInformation["returnCSVHead"]:
 
-    writer.writerow(row)
-    print(tb.get_current_date()+" => " + str(a) +"/" + str(i),end="\r")
+#         row[FileInformation[returnList[column_name]]]=tb.getDetailsOf(filename,column_name)
 
-    pass
+#     writer.writerow(row)
+#     tb.returnMessage(str(a) +"/" + str(scanFiles[totalNumberOfFiles]))
+#     #print(tb.get_current_date()+" => " + str(a) +"/" + str(i),end="\r")
 
-print(tb.get_current_date() + " => Process complete")
+#     pass
+
+# tb.returnMessage("Process complete")
+
 

@@ -11,6 +11,61 @@ import csv
 import win32com.client
 #Install under pywin32
 
+def scanFilesRecursively():
+
+    totalNumberOfFiles=0
+    filelist=[]
+
+    for filename in returnFullGlobList():
+
+        try:
+            filename
+            pass
+        except UnicodeEncodeError:
+            returnMessage("File error: " + filename)
+            pass
+        else:
+            totalNumberOfFiles=totalNumberOfFiles+1
+            filelist.append(filename)
+            pass
+    return {
+        "filelist":filelist,
+        "totalNumberOfFiles":totalNumberOfFiles
+    }
+
+def returnMessage(text):
+    return print(get_current_date() +" => "+ text)
+
+def returnFileInformation():
+    numberOfColumns=-1
+    returnCSVHead=[]
+    returnList={}
+    countColumn=[]
+    mylist = returnAllTagsFromSettings()
+        
+    for headerTitle in returnCSVHeader():
+
+        numberOfColumns = numberOfColumns+1
+
+        if headerTitle =="FILE_EXTENSION" or headerTitle=="PATH" or headerTitle=="NAME":
+            returnCSVHead.append(headerTitle)
+            returnList[numberOfColumns]=headerTitle
+            countColumn.append(numberOfColumns)
+
+
+        if headerTitle in mylist:
+            returnCSVHead.append(headerTitle)
+            returnList[numberOfColumns]=headerTitle
+            countColumn.append(numberOfColumns)
+
+        pass
+
+    return {
+        "returnCSVHead":returnCSVHead,
+        "countColumn":countColumn,
+        "returnList":returnList
+    }
+
 
 def returnAllTagsFromSettings():
     array=[]
