@@ -32,9 +32,6 @@ for headerTitle in tb.returnCSVHeader():
 
     pass
 
-print(returnList)
-print(countColumn)
-
 print(tb.get_current_date() + " => Scanning drives")
 
 for filename in tb.returnFullGlobList():
