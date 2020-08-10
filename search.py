@@ -47,6 +47,12 @@ for filename in tb.returnFullGlobList():
         filelist.append(filename)
         pass
 
+if i ==0:
+    print(tb.get_current_date() + " => No data found")
+    quit()
+
+print(i)
+
 print(tb.get_current_date() + " => "+str(i)+" files found")   
 print(tb.get_current_date() + " => Exporting data")  
 
