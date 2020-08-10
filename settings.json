@@ -1,0 +1,60 @@
+{
+    "Search_Location": [
+
+        "D:\\A\\Library\\Pictures\\"
+
+    ],
+    "Library": {
+        "Music Sorter by Artist > Album":{
+            "sort_filepath": "D:\\Library\\%KIND%\\%ITEM_TYPE%\\%CONTRIBUTING_ARTISTS%\\%ALBUM%\\",
+            "file_extensions": [
+                ".mp3",
+                ".ogg"
+            ]
+        },
+        "Picture Sorter By Year > Month":{
+            "sort_filepath": "D:\\Library\\%KIND%\\%DATE_TAKEN_YEAR%-%DATE_TAKEN_MONTH%\\",
+            "file_extensions": [
+                ".jpg",
+                ".JPG",
+                ".jpeg"
+            ]
+        },
+        "Document Sorter By Author":{
+            "sort_filepath": "D:\\Library\\%KIND%\\%ITEM_TYPE%\\%AUTHORS%\\",
+            "file_extensions": [
+                ".pdf",
+                ".docx"
+            ]
+        },
+        "Video Sort By Year > Month":{
+            "sort_filepath": "D:\\Library\\%KIND%\\%MEDIA_CREATED_YEAR%-%MEDIA_CREATED_MONTH%\\",
+            "file_extensions": [
+                ".mov",
+                ".MOV",
+                ".mp4",
+                ".MP4"
+            ]
+        },
+        "Unsorted":{
+            "sort_filepath": "D:\\Unsorted\\%PERCEIVED_TYPE%\\%ITEM_TYPE%\\%DATE_CREATED_YEAR%-%DATE_CREATED_MONTH%\\",
+            "file_extensions": [
+                ".wav",
+                ".aif",
+                ".aiff",
+                ".zip",
+                ".wav",
+                ".aif",
+                ".7z",
+                ".exe",
+                ".mp3",
+                ".JPG",
+                ".jpg",
+                ".iso"
+            ]
+        }
+
+    }
+}
+
+
