@@ -1,7 +1,7 @@
 {
     "Search_Location": [
 
-        "D:\\A\\"
+        "D:\\A\\Library\\"
 
     ],
     "Library": {
@@ -53,7 +53,8 @@
                 ".iso",
                 ".pdf",
                 ".exe",
-                ".mp4"
+                ".mp4",
+                ".ogg"
             ]
         }
 

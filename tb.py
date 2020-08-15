@@ -9,8 +9,24 @@ import os.path
 from datetime import datetime
 import csv
 import win32com.client
+import httplib2
+from bs4 import BeautifulSoup, SoupStrainer
+import urllib.request
+import re
+import bs4 as bs
+import csv
+import difflib
 
 #Install under pywin32
+
+
+def importCSVData(filename):
+    returnFile=[]
+    with open(filename) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            returnFile.append(row) 
+        return returnFile
 
 def scanFilesRecursively():
 
@@ -489,6 +505,14 @@ def returnCSVHeader():
             "TOTAL_BITRATE"
     ]
 
+def returnAllFilesByExtension(singleScanLocations,file_extension):
+    array=[]
+    for filename in glob.iglob( singleScanLocations + '/**/*'+file_extension, recursive=True):
+            array.append(filename)
+            pass
+    return array
+
+
 def returnFullGlobList():
     array=[]
 
@@ -618,7 +642,11 @@ def get_basename(filename):
     return splittext
 
 
-
+def createCSVHeader(filepath, header):
+    out = open(filepath, 'w', newline='', encoding='utf8') 
+    writer = csv.DictWriter(out,header)
+    writer.writeheader()
+    return writer
     
 def infoTag(info):
 
@@ -629,3 +657,23 @@ def infoTag(info):
     for n in range(320):
         array.append(info[n])
     return array 
+
+
+def returnURLContent(url):
+    return urllib.request.urlopen(url).read()
+
+def createFile(file,content):
+    f = open(file, "wb")
+    f.write(content)
+    f.close()
+
+def parseLinksFromHTML(file):
+    http = httplib2.Http()
+    status, response = http.request(file)
+    return bs.BeautifulSoup(response, 'html.parser',parseOnlyThese=SoupStrainer('a'))
+
+def removeDuplicates(array):
+    return list(dict.fromkeys(array))
+
+def matchRadio(argument_1,argument_2):
+    return difflib.SequenceMatcher(None,argument_1,argument_2).ratio()
