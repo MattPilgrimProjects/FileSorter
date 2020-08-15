@@ -38,7 +38,7 @@ def scanFilesRecursively():
 def returnMessage(text):
     return print(get_current_date() +" => "+ text)
 
-def returnUpdateMessage(text)
+def returnUpdateMessage(text):
     return print(get_current_date() +" => "+ text,end="\r")
 
 def returnFileInformation():

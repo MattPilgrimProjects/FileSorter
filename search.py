@@ -17,14 +17,14 @@ row={}
 
 FileInfomation = tb.returnFileInformation()
 
-a=0
+file_count=0
 
 out = open('api.csv', 'w', newline='', encoding='utf8') 
 writer = csv.DictWriter(out, FileInfomation['returnCSVHead'])
 writer.writeheader()
 for filename in scanFiles["filelist"]:
 
-    a = a+1
+    file_count = file_count+1
 
     for column_name in FileInfomation['countColumn']:
 
@@ -33,6 +33,6 @@ for filename in scanFiles["filelist"]:
         row[column_title]=tb.getDetailsOf(filename,column_name)
 
     writer.writerow(row)
-    tb.returnUpdateMessage(str(a) +"/" + str(scanFiles["totalNumberOfFiles"]))
+    tb.returnUpdateMessage(str(file_count) +"/" + str(scanFiles["totalNumberOfFiles"]))
 
 tb.returnMessage("Process complete")
