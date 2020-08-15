@@ -16,16 +16,15 @@ def importCSV(filename):
                     move_directory = sortFilePath(library["SORT_FILEPATH"],row)
                     move_filename = move_directory+row["NAME"]+row['FILE_EXTENSION']
 
-               
-
                     if tb.file_does_not_exists(move_filename) and tb.file_exists(original_filename) and "%" in move_filename:
-                        print(original_filename+" => "+move_filename)
+                        #print(original_filename+" => "+move_filename)
+                        pass
 
                     if tb.file_does_not_exists(move_filename) and tb.file_exists(original_filename) and "%" not in move_filename:
 
                         tb.create_recursive_diretory(move_directory)
                         shutil.move(original_filename,move_filename)
-                        print("Moved =>"+original_filename+" => "+move_filename)
+                        tb.returnMessage("Moved => "+original_filename+" => "+move_filename)
 
 
                  

@@ -1,7 +1,7 @@
 {
     "Search_Location": [
 
-        "C:\\Users\\Matt\\Downloads\\"
+        "D:\\A\\"
 
     ],
     "Library": {
@@ -50,7 +50,10 @@
                 ".mp3",
                 ".JPG",
                 ".jpg",
-                ".iso"
+                ".iso",
+                ".pdf",
+                ".exe",
+                ".mp4"
             ]
         }
 

@@ -13,7 +13,6 @@ if scanFiles["totalNumberOfFiles"]==0:
 tb.returnMessage(str(scanFiles["totalNumberOfFiles"])+" files found")
 tb.returnMessage("Exporting data")
 
-
 row={}
 
 FileInfomation = tb.returnFileInformation()
@@ -33,8 +32,7 @@ for filename in scanFiles["filelist"]:
    
         row[column_title]=tb.getDetailsOf(filename,column_name)
 
-        writer.writerow(row)
-        
-    print(tb.get_current_date()+" => " + str(a) +"/" + str(scanFiles["totalNumberOfFiles"]),end="\r")
+    writer.writerow(row)
+    tb.returnUpdateMessage(str(a) +"/" + str(scanFiles["totalNumberOfFiles"]))
 
 tb.returnMessage("Process complete")

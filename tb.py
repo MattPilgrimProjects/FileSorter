@@ -9,7 +9,7 @@ import os.path
 from datetime import datetime
 import csv
 import win32com.client
-import output
+
 #Install under pywin32
 
 def scanFilesRecursively():
@@ -29,6 +29,7 @@ def scanFilesRecursively():
             totalNumberOfFiles=totalNumberOfFiles+1
             filelist.append(filename)
             pass
+
     return {
         "filelist":filelist,
         "totalNumberOfFiles":totalNumberOfFiles
@@ -36,6 +37,9 @@ def scanFilesRecursively():
 
 def returnMessage(text):
     return print(get_current_date() +" => "+ text)
+
+def returnUpdateMessage(text)
+    return print(get_current_date() +" => "+ text,end="\r")
 
 def returnFileInformation():
     numberOfColumns=-1
