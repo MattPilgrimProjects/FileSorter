@@ -4,32 +4,37 @@ mid = MidiFile('test.mid')
 
 row={}
 test=[]
+array=[]
+
+channel=""
+note_value=""
+
+returnValue={}
 
 for i, track in enumerate(mid.tracks):
     
     for msg in track:
 
-        if "note_on" in str(msg):
+        msg = str(msg)
 
-            array = str(msg).split(" ")
+        msg = msg.split(" ")
 
-            data={}
-            data_fixed={}
+        for tag in msg:
 
-            for key in array:
-                
-                row=key.split("=")
+            if "channel" in tag:
+                channel = tag.replace("channel=","")
+              
 
-                if len(row) ==2:
+            if "note" in tag and "note_on" not in tag and "note_off" not in tag and "notes" not in tag:
+                note_value = tag.replace("note=","")
 
-                    data[row[0]]=row[1]
+                array.append(str(channel+":"+note_value))
 
-                    for key1,value1 in data.items():
+array = tb.removeDuplicates(array)
+tb.export_json("test.json",array)
 
-                        if "velocity" not in key1 and "time" not in key1:
+          
+        
+             
 
-                            data_fixed[key1]=value1
-
-                    test.append(data_fixed)
-       
-tb.export_json("test.json",test)
+     
