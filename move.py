@@ -29,9 +29,9 @@ def importCSV(filename):
 
                         try:
                             shutil.move(original_filename,move_filename)
-                            tb.returnMessage("  Moved =>   "+original_filename+"  =>  "+move_filename)
-                        except(OSError,FileNotFoundError):
-                            tb.returnMessage("  File Error =>   "+original_filename+"  =>  "+move_filename)
+                            tb.returnMessage("Moved =>   "+original_filename+"  =>  "+move_filename)
+                        except(FileNotFoundError):
+                            tb.returnMessage("File Error =>   "+original_filename+"  =>  "+move_filename)
 
               
               
