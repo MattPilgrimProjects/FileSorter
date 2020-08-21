@@ -2,6 +2,7 @@ import csv
 import tb
 import shutil
 import datetime
+import os
 
 def importCSV(filename):
     with open(filename,newline="") as csvfile:
@@ -17,17 +18,22 @@ def importCSV(filename):
                     move_filename = move_directory+row["NAME"]+row['FILE_EXTENSION']
 
                     if tb.file_does_not_exists(move_filename) and tb.file_exists(original_filename) and "%" in move_filename:
-                        #print(original_filename+" => "+move_filename)
+                        # print(original_filename+" => "+move_filename)
                         pass
 
                     if tb.file_does_not_exists(move_filename) and tb.file_exists(original_filename) and "%" not in move_filename:
+                        try:
+                            tb.create_recursive_diretory(move_directory)
+                        except(FileNotFoundError):
+                            tb.returnMessage("Unable to create Directory")
 
-                        tb.create_recursive_diretory(move_directory)
-                        shutil.move(original_filename,move_filename)
-                        tb.returnMessage("Moved => "+original_filename+" => "+move_filename)
+                        try:
+                            shutil.move(original_filename,move_filename)
+                            tb.returnMessage("  Moved =>   "+original_filename+"  =>  "+move_filename)
+                        except(OSError,FileNotFoundError):
+                            tb.returnMessage("  File Error =>   "+original_filename+"  =>  "+move_filename)
 
-
-                 
+              
               
     pass
 
@@ -79,7 +85,7 @@ def sortFilePath(sort_filepath,row):
 
         if "%"+target_list+"%" in sort_filepath:
 
-            sort_filepath = sort_filepath.replace("%"+target_list+"%",deserialize(row[target_list]))
+            sort_filepath = sort_filepath.replace("%"+target_list+"%",deserialize(row[target_list])).strip()
     
     return sort_filepath
 
@@ -96,3 +102,6 @@ def deserialize(tag):
     
 
 importCSV("api.csv")
+
+
+os.system("pause")
