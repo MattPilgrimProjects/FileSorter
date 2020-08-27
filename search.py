@@ -19,7 +19,7 @@ FileInfomation = tb.returnFileInformation()
 
 file_count=0
 
-out = open('api.csv', 'w', newline='', encoding='utf8') 
+out = open('C:\\Users\\Matt\\Desktop\\api.csv', 'w', newline='', encoding='utf8') 
 writer = csv.DictWriter(out, FileInfomation['returnCSVHead'])
 writer.writeheader()
 for filename in scanFiles["filelist"]:

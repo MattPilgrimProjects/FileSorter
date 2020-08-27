@@ -98,7 +98,7 @@ def deserialize(tag):
     return tag
     
 
-importCSV("api.csv")
+importCSV("C:\\Users\\Matt\\Desktop\\api.csv")
 
 
 os.system("pause")
