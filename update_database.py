@@ -1,5 +1,9 @@
-import tb
+import library.tb
+import library.json
 
+tb = library.tb
+
+json = library.json
 
 data = tb.import_file("C:\\inetpub\\wwwroot\\api\\freemidi.json")
 

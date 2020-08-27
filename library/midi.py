@@ -1,4 +1,4 @@
-import tb
+import json
 
 def midi_range_array():
     return {
@@ -147,10 +147,16 @@ def return_array_of_notes_from_raw_data(filename):
 
     midi_range = midi_range_array()
     
-    for target_list in tb.import_json(filename):
+    for target_list in import_json(filename):
         
         note = target_list.split(":")
 
         return_array_of_notes.append(midi_range[note[1]])
 
     return return_array_of_notes
+
+def import_json(filename):
+    jsonFile = open(filename, 'r')
+    config = json.load(jsonFile)
+    jsonFile.close()
+    return config

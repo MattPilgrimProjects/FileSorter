@@ -1,6 +1,8 @@
 from mido import MidiFile
-import tb
+import library.tb
 mid = MidiFile('C:\\Users\\Matt\\Desktop\\test.mid')
+
+tb = library.tb
 
 row={}
 test=[]

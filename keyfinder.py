@@ -1,8 +1,10 @@
-import tb
-
 import library.midi
+import library.json
+
 
 midi = library.midi
+
+json = library.json
 
 midi_range=midi.midi_range_array()
 
@@ -207,7 +209,7 @@ for note in {
     pass
 
 
-tb.export_json("C:\\Users\\Matt\\Desktop\\pink-floyd-comfortably-numb.json",{
+json.export_json("C:\\Users\\Matt\\Desktop\\pink-floyd-comfortably-numb.json",{
     "artist":"Pink Floyd",
     "song":"Comfortably Numb",
     "major":return_array_of_scales_major,

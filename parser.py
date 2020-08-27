@@ -1,4 +1,6 @@
-import tb
+import library.tb
+
+tb = library.tb
 
 filelist = tb.returnAllFilesByExtension("C:\\inetpub\\wwwroot\\api\\processed\\",".csv")
 
