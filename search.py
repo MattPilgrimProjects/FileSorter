@@ -1,6 +1,8 @@
-import tb
-import os
-import csv
+import library.tb
+import library.csv
+
+tb = library.tb
+csv = library.csv
 
 tb.returnMessage("Scanning drives")
 
@@ -9,9 +11,9 @@ scanFiles=tb.scanFilesRecursively()
 if scanFiles["totalNumberOfFiles"]==0:
     tb.returnMessage("No data found")
     quit()
-
-tb.returnMessage(str(scanFiles["totalNumberOfFiles"])+" files found")
-tb.returnMessage("Exporting data")
+else:
+    tb.returnMessage(str(scanFiles["totalNumberOfFiles"])+" files found")
+    tb.returnMessage("Exporting data")
 
 row={}
 
@@ -19,9 +21,8 @@ FileInfomation = tb.returnFileInformation()
 
 file_count=0
 
-out = open('C:\\Users\\Matt\\Desktop\\api.csv', 'w', newline='', encoding='utf8') 
-writer = csv.DictWriter(out, FileInfomation['returnCSVHead'])
-writer.writeheader()
+writer = csv.create_csv_header("C:\\Users\\Matt\\Desktop\\api.csv",FileInfomation['returnCSVHead'])
+
 for filename in scanFiles["filelist"]:
 
     file_count = file_count+1
@@ -33,6 +34,7 @@ for filename in scanFiles["filelist"]:
         row[column_title]=tb.getDetailsOf(filename,column_name)
 
     writer.writerow(row)
+    
     tb.returnUpdateMessage(str(file_count) +"/" + str(scanFiles["totalNumberOfFiles"]))
 
 tb.returnMessage("Process complete")

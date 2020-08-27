@@ -1,8 +1,10 @@
 import csv
-import tb
+import library.tb
 import shutil
 import datetime
 import os
+
+tb = library.tb
 
 def importCSV(filename):
     with open(filename,newline="") as csvfile:

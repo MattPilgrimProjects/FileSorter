@@ -1,6 +1,6 @@
 from mido import MidiFile
 import tb
-mid = MidiFile('test.mid')
+mid = MidiFile('C:\\Users\\Matt\\Desktop\\test.mid')
 
 row={}
 test=[]
@@ -31,7 +31,7 @@ for i, track in enumerate(mid.tracks):
                 array.append(str(channel+":"+note_value))
 
 array = tb.removeDuplicates(array)
-tb.export_json("test.json",array)
+tb.export_json("C:\\Users\\Matt\\Desktop\\test.json",array)
 
           
         
