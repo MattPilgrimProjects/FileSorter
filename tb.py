@@ -33,12 +33,12 @@ def scanFilesRecursively():
     totalNumberOfFiles=0
     filelist=[]
 
-    for filename in returnFullGlobList():
+    for filename in returnFullFileList():
 
         try:
             filename
             pass
-        except UnicodeEncodeError:
+        except (UnicodeEncodeError,AttributeError):
             returnMessage("File error: " + filename)
             pass
         else:
@@ -110,15 +110,17 @@ def getDetailsOf(filename,header):
 
     sh=returnwin32com() 
 
-    ns = sh.NameSpace(os.path.dirname(filename))
+    try:
+        ns = sh.NameSpace(os.path.dirname(filename))
+        AFile = ns.ParseName(os.path.basename(filename))
+        ns.GetDetailsOf(AFile, header)
+        value = ns.GetDetailsOf(AFile, header)
+        return valueDecode(value)
+        
+    except(AttributeError):
+        pass
 
-    AFile = ns.ParseName(os.path.basename(filename))
-
-    ns.GetDetailsOf(AFile, header)
-
-    value = ns.GetDetailsOf(AFile, header)
-
-    return valueDecode(value)
+    
 
 def valueDecode(value):
     value = value.encode("ascii", "ignore")

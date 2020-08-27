@@ -29,9 +29,9 @@ def importCSV(filename):
 
                         try:
                             shutil.move(original_filename,move_filename)
-                            tb.returnMessage("Moved =>   "+original_filename+"  =>  "+move_filename)
+                            tb.returnMessage("Moved => "+move_filename)
                         except(FileNotFoundError):
-                            tb.returnMessage("File Error =>   "+original_filename+"  =>  "+move_filename)
+                            tb.returnMessage("File Error => "+move_filename)
 
               
               
@@ -62,15 +62,12 @@ def sortFilePath(sort_filepath,row):
         
         if "%"+target_list+"_YEAR%" in sort_filepath and row[target_list] != "":
 
-            
-
             year = row[target_list].split("/")[2].split(" ")[0]
 
             year_return = datetime.datetime.strptime(year, '%y').strftime('%Y')
 
             sort_filepath = sort_filepath.replace("%"+target_list+"_YEAR%",year_return)
 
-        
         if "%"+target_list+"_MONTH%" in sort_filepath and row[target_list] != "":
 
             month = row[target_list].split("/")[1]

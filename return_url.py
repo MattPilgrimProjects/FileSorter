@@ -1,6 +1,6 @@
 import tb
 
-key = "thunder"
+key = "can"
 
 url="https://freemidi.org/search?q="+key
 
