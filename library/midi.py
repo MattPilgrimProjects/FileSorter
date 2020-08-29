@@ -105,7 +105,31 @@ def midi_range_array():
         "27":"D#/Eb",
         "26":"D",
         "25":"C#/Db",
-        "24":"C"
+        "24":"C",
+        "23":"B",
+        "22":"A#/Bb",
+        "21":"A",
+        "20":"G#/Ab",
+        "19":"G",
+        "18":"F#/Gb",
+        "17":"F",
+        "16":"E",
+        "15":"D#/Eb",
+        "14":"D",
+        "13":"C#/Db",
+        "12":"C",
+        "11":"B",
+        "10":"A#/Bb",
+        "9":"A",
+        "8":"G#/Ab",
+        "7":"G",
+        "6":"F#/Gb",
+        "5":"F",
+        "4":"E",
+        "3":"D#/Eb",
+        "2":"D",
+        "1":"C#/Db",
+        "0":"C"
     }
 
 def scaleMatchPercentage(return_array_of_notes,scale):
@@ -146,12 +170,19 @@ def return_array_of_notes_from_raw_data(filename):
     return_array_of_notes=[]
 
     midi_range = midi_range_array()
-    
-    for target_list in import_json(filename):
-        
-        note = target_list.split(":")
 
-        return_array_of_notes.append(midi_range[note[1]])
+    try:
+        import_json(filename)['midi']
+    except KeyError:
+        pass
+    else:
+    
+        for target_list in import_json(filename)['midi']:
+
+        
+            note = target_list.split(":")
+
+            return_array_of_notes.append(midi_range[note[1]])
 
     return return_array_of_notes
 

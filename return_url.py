@@ -2,7 +2,7 @@ import library.tb
 
 tb = library.tb
 
-key = "can"
+key = "small"
 
 url="https://freemidi.org/search?q="+key
 
