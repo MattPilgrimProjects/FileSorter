@@ -52,8 +52,7 @@ for track_details in library.json.import_json(setup["track_database"]):
 
             
                 library.json.update_json(setup["dev_path"]+track_details["path"]+".json",{
-                    "midi" : tb.removeDuplicates(array),
-                    "full_array":array
+                    "midi":array
                     })
 
                 tb.returnMessage("Updated " + setup["dev_path"]+track_details["path"]+".json")

@@ -144,8 +144,7 @@ def scaleMatchPercentage(return_array_of_notes,scale):
 
             if note in scale: match = match+1
 
-
-    return len(return_array_of_notes)/100*match
+    return match/len(return_array_of_notes)*100
 
 def scale_generator(tonic,intervals):
     interval = tonic
@@ -154,7 +153,7 @@ def scale_generator(tonic,intervals):
 
     midi_range = midi_range_array()
 
-    if tonic < 116:
+    if tonic < 120:
 
         for key in intervals:
 
