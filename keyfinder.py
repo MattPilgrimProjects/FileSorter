@@ -25,24 +25,23 @@ notes_sample_size={
 
 midi = library.midi
 
-json = library.json
-
 midi_range=midi.midi_range_array()
 
 return_full_midi_list=[]
 
 
 
-for filename in library.scan.scanFilesRecursively("C:\\inetpub\\wwwroot\\api\\dev\\library\\blink-182\\*.json"):
+for filename in library.scan.scanFilesRecursively("C:\\inetpub\\wwwroot\\api\\dev\\library\\blink-182\\all-the-small-things.json"):
 
     try:
-        library.json.import_json(filename)['midi']
+        return_array_of_notes = library.midi.return_array_of_notes_from_raw_data(filename)
     except KeyError:
         library.tb.returnMessage("MIDI not found")
     else:
-
-        return_array_of_notes = midi.return_array_of_notes_from_raw_data(filename)
-
+        # print(library.json.import_json(filename))
+        # print(midi_array)
+           
+     
         # Find the correct or likely match of the natural minor and major key
 
         find_highest_percentage_major=[]
@@ -58,11 +57,7 @@ for filename in library.scan.scanFilesRecursively("C:\\inetpub\\wwwroot\\api\\de
 
             minor = midi.scale_generator(int(test_note),[2,1,2,2,1,2,2])
 
-            
-
             major = midi.scale_generator(int(test_note),[2,2,1,2,2,2,1])
-          
-
 
             find_highest_percentage_minor.append(midi.scaleMatchPercentage(return_array_of_notes_single,minor))
 
@@ -98,30 +93,34 @@ for filename in library.scan.scanFilesRecursively("C:\\inetpub\\wwwroot\\api\\de
 
             major = midi.scale_generator(int(test_note),[2,2,1,2,2,2,1])
 
+            # print(return_array_of_notes_single)
+            # print(major)
+            # print(midi.scaleMatchPercentage(return_array_of_notes_single,major))
+            # print("---")
+
 
             
-            if midi.scaleMatchPercentage(return_array_of_notes,minor) > percentage_minor:
+            if midi.scaleMatchPercentage(return_array_of_notes_single,minor) > percentage_minor:
 
-                print(test_note_name+" minor => "+str(midi.scaleMatchPercentage(return_array_of_notes,minor)))
+                # print(test_note_name+" minor => "+str(midi.scaleMatchPercentage(return_array_of_notes,minor)))
 
                 return_array_of_scales.append(test_note_name+" Minor")
 
-            if midi.scaleMatchPercentage(return_array_of_notes,major) > percentage_major:
-                print(test_note_name+" major => "+str(midi.scaleMatchPercentage(return_array_of_notes,major)))
+            if midi.scaleMatchPercentage(return_array_of_notes_single,major) > percentage_major:
+                # print(test_note_name+" major => "+str(midi.scaleMatchPercentage(return_array_of_notes,major)))
                 return_array_of_scales.append(test_note_name+" Major")
             
             
             pass
 
         scale_notes = {}
-        for target_list in library.tb.removeDuplicates(return_array_of_notes):
-            scale_notes[target_list] = return_array_of_notes.count(target_list)
+        for target_list in library.json.import_json(filename)["note_sequence"]:
+            
+            scale_notes[target_list] = library.json.import_json(filename)["midi"].count(target_list)
             pass
         
 
-
-
-        json.update_json(filename,{
+        library.json.update_json(filename,{
             "scale_notes":scale_notes,
             "scale_match":return_array_of_scales
         })
