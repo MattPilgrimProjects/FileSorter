@@ -40,17 +40,17 @@ for track_details in library.json.import_json(setup["track_database"]):
     midi_filename = setup["midi_library_location"]+track_details["track_id"]+".mid"
 
     try:
-        library.json.import_json(setup["dev_path"]+track_details["path"]+".json")["midi"]
+        library.json.import_json(setup["api_path"]+track_details["path"]+".json")["midi"]
         pass
     except KeyError:
         try:
             mid = MidiFile(setup["midi_library_location"]+track_details["track_id"]+".mid")
             pass
         except EOFError as error:
-            # print("Error on import " + track_details["path"])
+            print("Error on import " + track_details["path"])
             pass
         except OSError as error:
-            # print("Error on import " + track_details["path"])
+            print("Error on import " + track_details["path"])
             pass
         else:
 
@@ -69,15 +69,15 @@ for track_details in library.json.import_json(setup["track_database"]):
             pass
 
 
-            library.json.update_json(setup["dev_path"]+track_details["path"]+".json",{
+            library.json.update_json(setup["api_path"]+track_details["path"]+".json",{
                 "note_sequence":note_list,
                 "note_used":scale_notes
             })
 
-            tb.returnMessage("Adding")
+            tb.returnMessage("Adding" + track_details["path"])
     else:
         pass
-        # tb.returnMessage("Already Added")
+        tb.returnMessage("Already Added" + track_details["path"])
 
 
        

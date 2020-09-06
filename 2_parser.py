@@ -1,8 +1,11 @@
 import library.tb
+import library.json
 
 tb = library.tb
 
-filelist = tb.returnAllFilesByExtension("C:\\inetpub\\wwwroot\\api\\processed\\",".csv")
+setup = library.json.import_json("setup.json")
+
+filelist = tb.returnAllFilesByExtension(setup['local_paths']['processed'],".csv")
 
 artists=[]
 
@@ -28,4 +31,4 @@ data={
     "tracks":tb.removeDuplicates(tracks)
 }
 
-tb.export_json("C:\\inetpub\\wwwroot\\api\\freemidi.json",data)
+tb.export_json(setup['json_local_midi_library']['freemidi'],data)

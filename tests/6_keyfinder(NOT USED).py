@@ -31,7 +31,7 @@ return_full_midi_list=[]
 
 
 
-for filename in library.scan.scanFilesRecursively("C:\\inetpub\\wwwroot\\api\\dev\\library\\blink-182\\all-the-small-things.json"):
+for filename in library.scan.scanFilesRecursively("C:\\inetpub\\wwwroot\\api\\live\\library\\blink-182\\all-the-small-things.json"):
 
     try:
         return_array_of_notes = library.midi.return_array_of_notes_from_raw_data(filename)

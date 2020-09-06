@@ -1,16 +1,19 @@
 import library.tb
+import library.json
 
 tb = library.tb
 
-key = "love"
+setup = library.json.import_json("setup.json")
 
-url="https://freemidi.org/search?q="+key
+key = "hell"
 
-local_path_temporary = "C:\\inetpub\\wwwroot\\api\\temporary\\"+key+".html"
+url=setup['url_list']['freemidi']+key
 
-local_uri_temporary = "http://localhost/api/temporary/"+key+".html"
+local_path_temporary = setup['local_paths']['temporary_storage']+key+".html"
 
-local_path_csv_processed = "C:\\inetpub\\wwwroot\\api\\processed\\"+key+".csv"
+local_uri_temporary = setup['local_paths']['website']+key+".html"
+
+local_path_csv_processed = setup['local_paths']['processed']+key+".csv"
 
 if tb.file_does_not_exists(local_path_temporary):
 

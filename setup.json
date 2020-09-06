@@ -1,5 +1,13 @@
 {
     "midi_library_location": "C:\\Users\\Matt\\Desktop\\Midi-Library\\",
+    "url_list":{
+	"freemidi":"https://freemidi.org/search?q="
+     },
+    "local_paths":{
+        "temporary_storage":"C:\\inetpub\\wwwroot\\api\\temporary\\",
+        "processed":"C:\\inetpub\\wwwroot\\api\\processed\\",
+        "website":"http://localhost/api/temporary/"
+    },
     "json_local_midi_library": {
         "freemidi": "C:\\inetpub\\wwwroot\\api\\freemidi.json",
         "midiworld":"C:\\inetpub\\wwwroot\\api\\midiworld.json"
@@ -12,3 +20,4 @@
     "api_path":"C:\\inetpub\\wwwroot\\api\\live\\library\\",
     "dev_path":"C:\\inetpub\\wwwroot\\api\\dev\\library\\"
 }
+

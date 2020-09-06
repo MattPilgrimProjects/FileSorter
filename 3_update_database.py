@@ -5,7 +5,9 @@ tb = library.tb
 
 json = library.json
 
-data = tb.import_file("C:\\inetpub\\wwwroot\\api\\freemidi.json")
+setup = library.json.import_json("setup.json")
+
+data = tb.import_file(setup['json_local_midi_library']['freemidi'])
 
 def returnTrackInformationWithoutID(data):
 
@@ -89,18 +91,17 @@ for track in returnTrackInformationWithoutID(data['tracks']):
     
     track_uri_live = track_uri_live.replace("-"," ")
 
- 
-    tb.create_recursive_diretory(r"C:\\inetpub\\wwwroot\\api\\live\library\\"+artist_match)
-    tb.create_recursive_diretory(r"C:\\inetpub\\wwwroot\\api\\dev\library\\"+artist_match)
+    
+    tb.create_recursive_diretory(setup['api_path']+artist_match)
+    tb.create_recursive_diretory(setup['dev_path']+artist_match)
 
-    library.json.export_json(
-        r"C:\\inetpub\\wwwroot\\api\\dev\library\\"+artist_match+"\\"+track_uri+".json",
+    library.json.export_json(setup['dev_path']+artist_match+"\\"+track_uri+".json",
         {
 
         })
 
     library.json.export_json(
-        r"C:\\inetpub\\wwwroot\\api\\live\library\\"+artist_match+"\\"+track_uri+".json",
+        setup['api_path']+artist_match+"\\"+track_uri+".json",
         {
             "artist_name":artist_match.replace("-"," ").title(),
             "track_title":track_uri_live.replace("-"," ").title(),
@@ -115,7 +116,7 @@ for track in returnTrackInformationWithoutID(data['tracks']):
         })
     pass
 
-tb.export_json("C:\\inetpub\\wwwroot\\api\\ai.json",data_array)
+tb.export_json(setup['track_database'],data_array)
 
 
 
