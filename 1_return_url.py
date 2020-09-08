@@ -1,9 +1,10 @@
+from app import setup
 import library.tb
 import library.json
 
 tb = library.tb
 
-setup = library.json.import_json("setup.json")
+
 
 key = "hell"
 

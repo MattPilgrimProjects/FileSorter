@@ -1,11 +1,10 @@
+from app import setup
 import library.tb
 import library.json
 
 tb = library.tb
 
 json = library.json
-
-setup = library.json.import_json("setup.json")
 
 data = tb.import_file(setup['json_local_midi_library']['freemidi'])
 
@@ -117,16 +116,3 @@ for track in returnTrackInformationWithoutID(data['tracks']):
     pass
 
 tb.export_json(setup['track_database'],data_array)
-
-
-
-
-quit()
-
-   
-
-    
-
-   
-
-        

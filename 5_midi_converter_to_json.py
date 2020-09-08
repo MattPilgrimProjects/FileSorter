@@ -1,3 +1,4 @@
+from app import setup
 from mido import MidiFile
 import library.tb
 import library.json
@@ -7,24 +8,25 @@ import library.filemodels
 
 
 from library.json import import_json
+from library.tb import file_exists
 ######
 
 tb = library.tb
 
-setup = import_json("setup.json")
 
 # Parse Midi Data to JSON Files
 
 for track_details in import_json(setup["track_database"]):
 
-    midi_filename = setup["midi_library_location"]+track_details["track_id"]+".mid"
+    midi_filename = setup["midi_library_location"]["download_path"]+track_details["track_id"]+".mid"
 
-    process_filename = setup['midi_library_location']+"processed\\"+track_details["track_id"]+".json"
+    process_filename = setup['midi_library_location']["json_processed_path"]+track_details["track_id"]+".json"
 
-    raw_filename = setup['midi_library_location']+"raw\\"
+    raw_filename = setup['midi_library_location']["midi_processed_path"]
 
-    if library.tb.file_does_not_exists(process_filename):
-
+    if file_exists(process_filename) or file_exists(process_filename):
+        pass
+    else:
         try:
             mid = MidiFile(midi_filename)  
         except TypeError:
@@ -34,11 +36,7 @@ for track_details in import_json(setup["track_database"]):
         except OSError:
             print("OSError")
         else:
-            library.midi.export_processed_content(mid,process_filename)
+            array = library.midi.export_processed_content(mid,process_filename)
+            library.json.export_json(process_filename,array)
             library.filemodels.move_file_content(midi_filename,raw_filename)
-    else:
-        pass
-
-
-       
      

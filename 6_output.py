@@ -4,9 +4,9 @@ from library.scan import scan_file_recursively
 from library.json import import_json
 from library.json import update_json
 
-raw_content = setup["midi_library_location"]+"processed\\*.json"
+raw_json_content = setup["midi_library_location"]+"processed\\*.json"
 
-test = scan_file_recursively(raw_content)
+test = scan_file_recursively(raw_json_content)
 
 print(test)
 

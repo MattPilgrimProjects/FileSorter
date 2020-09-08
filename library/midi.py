@@ -363,6 +363,6 @@ def export_processed_content(mid,process_filename):
 
             array.append(msg)
 
-    library.json.export_json(process_filename,array)
+    
 
     return array
