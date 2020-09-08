@@ -323,3 +323,46 @@ def import_json(filename):
     config = json.load(jsonFile)
     jsonFile.close()
     return config
+
+
+      
+def midi_output(mid):
+
+    array=[]
+    
+    for i, track in enumerate(mid.tracks):
+
+        for msg in track:
+
+            msg = str(msg)
+
+            msg = msg.split(" ")
+
+            for tag in msg:
+
+                if "channel" in tag:
+                    channel = tag.replace("channel=","")
+                        
+
+                if "note" in tag and "note_on" not in tag and "note_off" not in tag and "notes" not in tag:
+                    note_value = tag.replace("note=","")
+                    array.append(note_value)
+              
+    return array
+
+
+def export_processed_content(mid,process_filename):
+    
+    array=[]
+    
+    for i, track in enumerate(mid.tracks):
+
+        for msg in track:
+
+            msg = str(msg)
+
+            array.append(msg)
+
+    library.json.export_json(process_filename,array)
+
+    return array
