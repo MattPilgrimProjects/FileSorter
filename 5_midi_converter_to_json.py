@@ -1,4 +1,5 @@
 from app import setup
+from app import app_setup
 from mido import MidiFile
 import library.tb
 import library.json
@@ -18,11 +19,11 @@ tb = library.tb
 
 for track_details in import_json(setup["track_database"]):
 
-    midi_filename = setup["midi_library_location"]["download_path"]+track_details["track_id"]+".mid"
+    midi_filename = app_setup(2)["storage"]["midi_library"]+track_details["track_id"]+".mid"
 
-    process_filename = setup['midi_library_location']["json_processed_path"]+track_details["track_id"]+".json"
+    process_filename = app_setup(2)['processing']["json_processed_path"]+track_details["track_id"]+".json"
 
-    raw_filename = setup['midi_library_location']["midi_processed_path"]
+    raw_filename = app_setup(2)['processing']["midi_processed_path"]
 
     if file_exists(process_filename) or file_exists(process_filename):
         pass
@@ -30,11 +31,11 @@ for track_details in import_json(setup["track_database"]):
         try:
             mid = MidiFile(midi_filename)  
         except TypeError:
-            print("TypeError")
+            print("TypeError - " + track_details["track_id"])
         except EOFError:
-            print("EOFError")
+            print("EOFError - " +track_details["track_id"])
         except OSError:
-            print("OSError")
+            print("OSError - " +track_details["track_id"])
         else:
             array = library.midi.export_processed_content(mid,process_filename)
             library.json.export_json(process_filename,array)

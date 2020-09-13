@@ -1,10 +1,11 @@
 from app import setup
+from app import app_setup
 import library.tb
 import library.json
 
 tb = library.tb
 
-filelist = tb.returnAllFilesByExtension(setup['local_paths']['processed'],".csv")
+filelist = tb.returnAllFilesByExtension(app_setup(1)['storage']['local_path_csv_processed'],".csv")
 
 artists=[]
 
@@ -30,4 +31,4 @@ data={
     "tracks":tb.removeDuplicates(tracks)
 }
 
-tb.export_json(setup['json_local_midi_library']['freemidi'],data)
+tb.export_json(app_setup(1)['storage']['search_results'],data)

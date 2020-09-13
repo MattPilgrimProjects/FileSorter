@@ -1,14 +1,16 @@
 from app import setup
+from app import app_setup
 from library.scan import scan_file_recursively
 
 from library.json import import_json
 from library.json import update_json
 
-raw_json_content = setup["midi_library_location"]+"processed\\*.json"
+raw_json_content = app_setup(1)["processing"]["json_processing_path"]+"*.json"
 
 test = scan_file_recursively(raw_json_content)
 
 print(test)
+
 
 
 

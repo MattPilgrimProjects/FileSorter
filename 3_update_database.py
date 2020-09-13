@@ -1,4 +1,5 @@
 from app import setup
+from app import app_setup
 import library.tb
 import library.json
 
@@ -6,7 +7,7 @@ tb = library.tb
 
 json = library.json
 
-data = tb.import_file(setup['json_local_midi_library']['freemidi'])
+data = tb.import_file(app_setup(1)['storage']['search_results'])
 
 def returnTrackInformationWithoutID(data):
 
@@ -91,16 +92,16 @@ for track in returnTrackInformationWithoutID(data['tracks']):
     track_uri_live = track_uri_live.replace("-"," ")
 
     
-    tb.create_recursive_diretory(setup['api_path']+artist_match)
-    tb.create_recursive_diretory(setup['dev_path']+artist_match)
+    tb.create_recursive_diretory(app_setup(1)['processing']['api_path']+artist_match)
+    tb.create_recursive_diretory(app_setup(1)['processing']['dev_path']+artist_match)
 
-    library.json.export_json(setup['dev_path']+artist_match+"\\"+track_uri+".json",
+    library.json.export_json(app_setup(1)['processing']['dev_path']+artist_match+"\\"+track_uri+".json",
         {
 
         })
 
     library.json.export_json(
-        setup['api_path']+artist_match+"\\"+track_uri+".json",
+        app_setup(1)['processing']['api_path']+artist_match+"\\"+track_uri+".json",
         {
             "artist_name":artist_match.replace("-"," ").title(),
             "track_title":track_uri_live.replace("-"," ").title(),
@@ -115,4 +116,4 @@ for track in returnTrackInformationWithoutID(data['tracks']):
         })
     pass
 
-tb.export_json(setup['track_database'],data_array)
+tb.export_json(app_setup(1)['track_database'],data_array)
