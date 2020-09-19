@@ -15,9 +15,9 @@ for uri in import_json(return_midi_list)['tracks']:
 
     midi_id = uri.split("-")[1]
 
-    download_path = app_setup(1)['storage']['midi_lbrary']+midi_id+'.mid'
-    midi_processed_path = app_setup(1)['processing']["midi_processed_path"]+midi_id+'.mid'
-    json_processed_path = app_setup(1)['processing']["json_processed_path"]+midi_id+'.json'
+    download_path = app_setup(1)['storage']['midi_library']+midi_id+'.mid'
+    midi_processed_path = app_setup(1)['processing']["midi_processing_path"]+midi_id+'.mid'
+    json_processed_path = app_setup(1)['processing']["json_processing_path"]+midi_id+'.json'
 
     if file_exists(midi_processed_path):
         pass
@@ -26,7 +26,7 @@ for uri in import_json(return_midi_list)['tracks']:
     elif file_exists(json_processed_path):
         pass
     else:
-        # midi = requests.get(setup["midi_library_public_link"]["freemidi"]+midi_id, allow_redirects=False)
-        # open(setup['midi_library_location']["download_path"]+midi_id+'.mid', 'wb').write(midi.content)
+        midi = requests.get(app_setup(1)["download_link"]+midi_id, allow_redirects=False)
+        open(app_setup(1)["storage"]["midi_library"]+midi_id+'.mid', 'wb').write(midi.content)
         library.tb.returnMessage("Adding Song: " + midi_id)
 

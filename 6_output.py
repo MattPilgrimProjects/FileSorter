@@ -5,11 +5,20 @@ from library.scan import scan_file_recursively
 from library.json import import_json
 from library.json import update_json
 
-raw_json_content = app_setup(1)["processing"]["json_processing_path"]+"*.json"
+raw_json_content = app_setup(1)["processing"]["json_processing_path"]+"61.json"
 
-test = scan_file_recursively(raw_json_content)
 
-print(test)
+for filename in scan_file_recursively(raw_json_content):
+
+    try:
+        data = import_json(filename)
+    except:
+        pass
+    else:
+        print(data)
+
+
+
 
 
 

@@ -19,11 +19,11 @@ tb = library.tb
 
 for track_details in import_json(setup["track_database"]):
 
-    midi_filename = app_setup(2)["storage"]["midi_library"]+track_details["track_id"]+".mid"
+    midi_filename = app_setup(1)["storage"]["midi_library"]+track_details["track_id"]+".mid"
 
-    process_filename = app_setup(2)['processing']["json_processed_path"]+track_details["track_id"]+".json"
+    process_filename = app_setup(1)['processing']["json_processing_path"]+track_details["track_id"]+".json"
 
-    raw_filename = app_setup(2)['processing']["midi_processed_path"]
+    raw_filename = app_setup(1)['processing']["midi_processing_path"]
 
     if file_exists(process_filename) or file_exists(process_filename):
         pass
@@ -36,6 +36,8 @@ for track_details in import_json(setup["track_database"]):
             print("EOFError - " +track_details["track_id"])
         except OSError:
             print("OSError - " +track_details["track_id"])
+        except ValueError as error_message:
+            print(str(error_message) +" - "+ track_details["track_id"])
         else:
             array = library.midi.export_processed_content(mid,process_filename)
             library.json.export_json(process_filename,array)

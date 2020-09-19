@@ -1,5 +1,6 @@
 from app import setup
 from app import app_setup
+import app
 import library.tb
 import library.json
 
@@ -116,4 +117,4 @@ for track in returnTrackInformationWithoutID(data['tracks']):
         })
     pass
 
-tb.export_json(app_setup(1)['track_database'],data_array)
+tb.export_json(app.track_database(),data_array)
