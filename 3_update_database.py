@@ -4,117 +4,29 @@ import app
 import library.tb
 import library.json
 
-tb = library.tb
+db=[]
 
-json = library.json
+for preset_title in setup['midi_library']:
 
-data = tb.import_file(app_setup(1)['storage']['search_results'])
+    preset_json = setup['midi_library'][preset_title]["export"]["track_listing"]
 
-def returnTrackInformationWithoutID(data):
+    for body in app.import_config(preset_json):
 
-    track_array=[]
+        path = setup['live_database']+body['artist'].lower().replace(" ","-")+"\\"+body['track'].lower().replace(" ","-")
 
-    track=""
+        library.tb.create_recursive_diretory(path)
 
-    for track in data:
-
-        track = track.replace("/download3-","")
-
-        track_array.append(track)
-
-    return track_array
-
-def returnArtistInformationWithoutID(data): 
-
-    artist_array=[]
-
-    for artist in data:
-
-        artist = artist.replace("/artist-","")
-
-        artist = artist.split("-")
-
-        artist.pop(0)
-
-        s="-"
-        artist = s.join(artist)
-
-        artist_array.append(artist)
-
-    return artist_array
-
-def matchRatio(artist,track):
-
-    track_split = track.split("-")
-    artist_split = artist.split("-")
-    count=[]
-    overall=[]
-
-    for artist_split_value in artist_split:
-
-        if artist_split_value in track_split:
-            count.append("|")
-            overall.append("|")
-        else:
-            overall.append("|")
-    
-    return len(count)/len(overall) * 100
- 
-  
-
-data_array=[]
-live_data=[]
-
-for track in returnTrackInformationWithoutID(data['tracks']):
-
-    id = track.split("-")
-
-    artist_match=""
-
-    for artist in returnArtistInformationWithoutID(data["artists"]):
-
-        
-        if matchRatio(artist,track) == 100.0:
-
-            artist_match = artist
-        
-            
-    track_title = track.replace("-"+artist_match,"")
-
-    if artist_match == "":
-        track_uri=""
-        track_uri_live=""
-
-    else:
-        track_uri=track_title.strip("-").replace(id[0]+"-","")
-        track_uri_live = track_title.strip("-").replace(id[0]+"-","")
-
-    
-    track_uri_live = track_uri_live.replace("-"," ")
-
-    
-    tb.create_recursive_diretory(app_setup(1)['processing']['api_path']+artist_match)
-    tb.create_recursive_diretory(app_setup(1)['processing']['dev_path']+artist_match)
-
-    library.json.export_json(app_setup(1)['processing']['dev_path']+artist_match+"\\"+track_uri+".json",
-        {
-
+        library.json.export_json(path+"\\"+body['track_id']+".json",{
+            "Artist":body['artist'],
+            "Track":body["track"],
         })
 
-    library.json.export_json(
-        app_setup(1)['processing']['api_path']+artist_match+"\\"+track_uri+".json",
-        {
-            "artist_name":artist_match.replace("-"," ").title(),
-            "track_title":track_uri_live.replace("-"," ").title(),
+        db.append({
+            "Artist":body['artist'],
+            "Track":body["track"],
+            "src":"/"+body['artist'].lower().replace(" ","-")+"/"+body['track'].lower().replace(" ","-")
         })
-    
-    data_array.append({
-        "raw_data":track,
-        "track_id":id[0],
-        "artist":artist_match,
-        "track_uri":track_uri,
-        "path":"/"+artist_match+"/"+track_uri
-        })
-    pass
 
-tb.export_json(app.track_database(),data_array)
+library.json.export_json(app.track_database(),db)
+
+

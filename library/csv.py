@@ -5,3 +5,18 @@ def create_csv_header(filename,csv_header):
     writer = csv.DictWriter(out, csv_header)
     writer.writeheader()
     return writer
+
+
+def createCSVHeader(filepath, header):
+    out = open(filepath, 'w', newline='', encoding='utf8') 
+    writer = csv.DictWriter(out,header)
+    writer.writeheader()
+    return writer
+
+def importCSVData(filename):
+    returnFile=[]
+    with open(filename) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            returnFile.append(row) 
+        return returnFile
