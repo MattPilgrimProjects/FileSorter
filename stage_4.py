@@ -2,57 +2,48 @@ import app
 import library.json
 import library.comment
 
-search_database = app.setup["search_database"]
+search_database = app.settings["search_database"]
 
 search_database = library.json.import_json(search_database)
 
-live_database = app.setup["live_database"]
+live_database = app.settings["live_database"]
 
 array=[]
 
 def freemidi(schema):
-    data = schema.split(" ")
-        
-    track_id = schema.split("-")[0]
 
-    raw = schema.replace(track_id+"-","")
+    track_id = schema.replace("a href=download3-","").split("-")[0]
 
-    raw_1 = schema.split(" ")
+    track = schema.split("=")[2]
 
-    raw_2 = schema.replace(raw_1[0],"")
+    artist_lower_case = track.replace(" ","-").lower()
 
-    split_track = raw_2.lower().replace(" ","-").split("-")
-        
-    split_track.pop(0)
+    artist = schema.replace("a href=download3-","").replace(artist_lower_case,"").replace(track_id,"").split("title=")[0].replace("--","").title().replace("-"," ")
 
-    track_slash = "-".join(split_track)
-
-    track = schema.replace(raw.split(" ")[0],"").replace(track_id,"").replace("- ","").replace('title=',"").title().strip()
-
-    track_return = track.replace("(","").replace(")","")
+    print(artist)
 
     return{
-        "track_id":schema.split("-")[0],
-        "artist":schema.replace(track_slash,"").replace(track_id,"").split(" ")[0].replace("--","").title().replace("-"," ").replace(track_return,"").strip(),
+        "track_id":track_id,
+        "artist":artist,
         "track":track
         }
 
 def midiworld(schema):
 
         return{
-        "track_id":schema.split(" - ")[1].replace('\" ',""),
+        "track_id":schema.split(" - ")[1].replace('\" ',"").replace("a href=httpswwwmidiworldcomdownload",""),
         "artist":schema.split("(")[1].split(")")[0],
         "track":schema.split(" (")[0]
         }
 
 
 
+
 for schema in search_database:
 
-    if schema['title']=="freemidi":group = freemidi(schema['raw'])
+    if schema['title']=="freemidi":group = freemidi(schema['raw']) 
 
-    if schema['title']=="midiworld":group = midiworld(schema['raw'])
-        
+    if schema['title']=="midiworld":group = midiworld(schema['raw'])  
 
     if group["track_id"].strip().isdigit():
 
@@ -67,9 +58,6 @@ for schema in search_database:
     else:
         pass
 
-
-    pass
-
 library.json.export_json(live_database,array)
-library.comment.returnMessage(live_database)
+library.comment.returnMessage("Completed: "+live_database)
 

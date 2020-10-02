@@ -3,8 +3,15 @@ import library.directory
 import library.comment
 import library.url
 import library.file
+import library.json
 
-keyword = app.setup["keyword"]
+keywords_array = library.json.import_json(app.settings["keyword_list_export"]["compressed"])
+
+print(keywords_array)
+
+keyword = "all"
+
+
 
 stage = app.setup['stage']
 

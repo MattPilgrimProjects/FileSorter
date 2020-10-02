@@ -1,13 +1,19 @@
 {
-    "return_xml_catalog":"C:\\Users\\Matt\\Downloads\\karaokeversion_catalog_en_GBP.xml\\karaokeversion_catalog_en_GBP.xml",
+    "return_xml_catalog":"Z:\\karaokeversion_catalog_en_GBP.xml",
+    "keyword_list_export":{
+        "compressed":"Z:\\compressed.json",
+        "uncompressed":"Z:\\uncompressed.json"
+    },
+    
 
+    
 
     "Search_Location": [
-        "D:\\Library\\"
+        "E:\\A\\Library\\OGG\\"
     ],
     "Library": {
         "Music Sorter by Artist > Album": {
-            "sort_filepath": "D:\\Fixed_Library\\%KIND%\\%CONTRIBUTING_ARTISTS%\\",
+            "sort_filepath": "E:\\Library\\Music\\%CONTRIBUTING_ARTISTS%\\",
             "file_extensions": [
                 ".aif",
                 ".AIF",
@@ -28,11 +34,13 @@
                 ".wma",
                 ".WMA",
                 ".wpl",
-                ".WPL"
+                ".WPL",
+                ".aiff",
+                ".AIFF"
             ]
         },
         "Picture Sorter By Year > Month": {
-            "sort_filepath": "D:\\Fixed_Library\\%KIND%\\%CAMERA_MAKER%\\",
+            "sort_filepath": "E:\\Library\\Pictures\\%DATE_TAKEN_YEAR%-%DATE_TAKEN_MONTH%\\",
             "file_extensions": [
                 ".ai",
                 ".AI",
@@ -61,7 +69,7 @@
             ]
         },
         "Document Sorter By Author": {
-            "sort_filepath": "D:\\Fixed_Library\\%KIND%\\%AUTHORS%\\",
+            "sort_filepath": "E:\\Library\\Documents\\%AUTHORS%\\",
             "file_extensions": [
                 ".doc",
                 ".DOC",
@@ -90,7 +98,7 @@
             ]
         },
         "Video Sort By Year > Month": {
-            "sort_filepath": "D:\\Fixed_Library\\%KIND%\\%MEDIA_CREATED_YEAR%-%MEDIA_CREATED_MONTH%\\",
+            "sort_filepath": "E:\\Library\\Videos\\%MEDIA_CREATED_YEAR%-%MEDIA_CREATED_MONTH%\\",
             "file_extensions": [
                 ".3g2",
                 ".3G2",
@@ -125,7 +133,7 @@
             ]
         },
         "Unsorted": {
-            "sort_filepath": "D:\\Fixed_Library\\%KIND%\\%ITEM_TYPE%\\",
+            "sort_filepath": "E:\\Fixed_Library\\%KIND%\\%ITEM_TYPE%\\",
             "file_extensions": [
                 ".aif",
                 ".AIF",
@@ -250,8 +258,82 @@
                 ".xlsm",
                 ".XLSM",
                 ".xlsx",
-                ".XLSX"
+                ".XLSX",
+                ".ZIP",
+                ".zip",
+                ".7z",
+                ".7Z"
             ]
         }
-    }
+    },
+
+    
+    "keyword": "all",
+
+    "raw_midi_path":"Z:\\raw_midi\\",    
+
+    "search_database": "Z:\\raw_href\\search.json",
+
+    "live_database": "Z:\\raw_href\\clean.json",
+
+    "live_api": "C:\\inetpub\\wwwroot\\api\\",
+
+    "import_midi_url":{
+        "freemidi":"https://freemidi.org/getter-",
+        "midiworld":"https://www.midiworld.com/download/"
+    },
+
+    "stage": [
+
+        {
+                "title": "freemidi",
+                "search_url": "https://freemidi.org/search?q=",
+                "download_url": "https://freemidi.org/getter-",
+                "href_save_location": "C:\\inetpub\\wwwroot\\live\\freemidi\\",
+                "localhost": "http://localhost/live/freemidi/",
+                "processed_href": {
+                    "search_attribute": "a",
+                    "move_to": "Z:\\raw_href\\freemidi\\processed\\",
+                    "match": [
+                        "title="
+                    ],
+                    "remove": [
+                        "<a href='download3-'"
+                    ],
+                    "trim": ">"
+
+                },
+            "import_midi": {
+                    "download_url": "https://freemidi.org/getter-",
+                    "download_location": "Z:\\raw_midi\\freemidi\\"
+                }
+        },
+        {
+            "title": "midiworld",
+            "search_url": "https://www.midiworld.com/search/?q=",
+            "download_url": "https://www.midiworld.com/download/",
+            "href_save_location": "C:\\inetpub\\wwwroot\\live\\midiworld\\",
+            "localhost": "http://localhost/live/midiworld/",
+            "processed_href": {
+                "search_attribute": "li",
+                "move_to": "Z:\\raw_href\\midiworld\\processed\\",
+                "match": [
+                    "download"
+                ],
+                "remove": [
+                    "<li>",
+                    "<a href='https://www.midiworld.com/download/'",
+                    "<div id='audio-player'",
+                    "Please install flash",
+                    "\n"
+                ],
+                "trim": "target"
+            },
+            "import_midi": {
+                "download_url":"https://www.midiworld.com/download/",
+                "download_location": "Z:\\raw_midi\\midiworld\\"
+
+            }
+        }
+    ]
 }

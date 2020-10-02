@@ -31,4 +31,4 @@ for artist in root.findall('./artist'):
                     "url":url.text.replace("http://www.karaoke-version.com/mp3-backingtrack","").replace(".html","")  
                 })
 
-library.json.export_json("db.json",array)
+library.json.export_json("Z:\\db.json",array)
