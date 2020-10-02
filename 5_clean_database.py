@@ -20,8 +20,6 @@ def freemidi(schema):
 
     artist = schema.replace("a href=download3-","").replace(artist_lower_case,"").replace(track_id,"").split("title=")[0].replace("--","").title().replace("-"," ")
 
-    print(artist)
-
     return{
         "track_id":track_id,
         "artist":artist,

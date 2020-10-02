@@ -9,11 +9,11 @@
     
 
     "Search_Location": [
-        "E:\\A\\Library\\OGG\\"
+        "E:\\Manually Sorted\\"
     ],
     "Library": {
         "Music Sorter by Artist > Album": {
-            "sort_filepath": "E:\\Library\\Music\\%CONTRIBUTING_ARTISTS%\\",
+            "sort_filepath": "E:\\OneDrive\\Music\\%CONTRIBUTING_ARTISTS%\\",
             "file_extensions": [
                 ".aif",
                 ".AIF",
@@ -40,7 +40,7 @@
             ]
         },
         "Picture Sorter By Year > Month": {
-            "sort_filepath": "E:\\Library\\Pictures\\%DATE_TAKEN_YEAR%-%DATE_TAKEN_MONTH%\\",
+            "sort_filepath": "E:\\OneDrive\\Pictures\\%DATE_TAKEN_YEAR%-%DATE_TAKEN_MONTH%\\",
             "file_extensions": [
                 ".ai",
                 ".AI",
@@ -69,7 +69,7 @@
             ]
         },
         "Document Sorter By Author": {
-            "sort_filepath": "E:\\Library\\Documents\\%AUTHORS%\\",
+            "sort_filepath": "E:\\OneDrive\\Documents\\%AUTHORS%\\",
             "file_extensions": [
                 ".doc",
                 ".DOC",
@@ -98,7 +98,7 @@
             ]
         },
         "Video Sort By Year > Month": {
-            "sort_filepath": "E:\\Library\\Videos\\%MEDIA_CREATED_YEAR%-%MEDIA_CREATED_MONTH%\\",
+            "sort_filepath": "E:\\OneDrive\\Videos\\%MEDIA_CREATED_YEAR%-%MEDIA_CREATED_MONTH%\\",
             "file_extensions": [
                 ".3g2",
                 ".3G2",
