@@ -1,5 +1,12 @@
 import library.json
-import random
+import library.parser
+import library.xml
+import library.json
+import library.directory
+
+directory = library.directory
+xml = library.xml
+json = library.json
 
 setup = library.json.import_json("settings.json")
 
@@ -23,3 +30,6 @@ def regex_filter():
     return setup['regex_filters']
 
 
+def random_keyword():
+    keywords_array = library.json.import_json(settings["keyword_list_export"]["compressed"])
+    return library.parser.return_random_array_value(keywords_array)

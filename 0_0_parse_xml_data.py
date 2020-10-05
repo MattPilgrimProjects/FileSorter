@@ -1,8 +1,7 @@
 import app
-import library.xml
-import library.json
 
-root = library.xml.importXML(app.settings['return_xml_catalog'])
+
+root = app.xml.importXML(app.settings['return_xml_catalog'])
 
 array=[]
 
@@ -24,11 +23,15 @@ for artist in root.findall('./artist'):
                 song_title_tag = song_title.text
 
                 pass
+
+                url = url.text.replace("http://www.karaoke-version.com/mp3-backingtrack","").replace(".html","")
+
+                app.directory.create_recursive_diretory(app.settings["live_api"]+url)
             
                 array.append({
-                    "artist":artist_name_tag,
+                    "artist":artist_name_tag.replace("-"," "),
                     "track":song_title_tag,
-                    "url":url.text.replace("http://www.karaoke-version.com/mp3-backingtrack","").replace(".html","")  
+                    "url": url
                 })
 
-library.json.export_json("Z:\\db.json",array)
+app.json.export_json(app.settings["database"],array)

@@ -5,13 +5,7 @@ import library.url
 import library.file
 import library.json
 
-keywords_array = library.json.import_json(app.settings["keyword_list_export"]["compressed"])
-
-print(keywords_array)
-
-keyword = "all"
-
-
+keyword = app.random_keyword()
 
 stage = app.setup['stage']
 

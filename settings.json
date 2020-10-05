@@ -1,9 +1,12 @@
 {
     "return_xml_catalog":"Z:\\karaokeversion_catalog_en_GBP.xml",
+    "database":"Z:\\db.json",
     "keyword_list_export":{
         "compressed":"Z:\\compressed.json",
         "uncompressed":"Z:\\uncompressed.json"
     },
+
+    "raw_midi_to_json":"Z:\\raw_midi_to_json\\",
     
 
     
@@ -267,9 +270,6 @@
         }
     },
 
-    
-    "keyword": "all",
-
     "raw_midi_path":"Z:\\raw_midi\\",    
 
     "search_database": "Z:\\raw_href\\search.json",
@@ -291,14 +291,17 @@
                 "download_url": "https://freemidi.org/getter-",
                 "href_save_location": "C:\\inetpub\\wwwroot\\live\\freemidi\\",
                 "localhost": "http://localhost/live/freemidi/",
+                "raw_midi_to_json":"Z:\\raw_midi_to_json\\freemidi\\",
                 "processed_href": {
                     "search_attribute": "a",
                     "move_to": "Z:\\raw_href\\freemidi\\processed\\",
-                    "match": [
-                        "title="
-                    ],
+                    "match": "title=",
+                  
                     "remove": [
-                        "<a href='download3-'"
+                        "<a href=\"download3-",
+                        "title=\"",
+                        "\"",
+                        "<a href=/login login / join"                        
                     ],
                     "trim": ">"
 
@@ -314,18 +317,15 @@
             "download_url": "https://www.midiworld.com/download/",
             "href_save_location": "C:\\inetpub\\wwwroot\\live\\midiworld\\",
             "localhost": "http://localhost/live/midiworld/",
+            "raw_midi_to_json":"Z:\\raw_midi_to_json\\midiworld\\",
             "processed_href": {
                 "search_attribute": "li",
                 "move_to": "Z:\\raw_href\\midiworld\\processed\\",
-                "match": [
-                    "download"
-                ],
+                "match": "download",
                 "remove": [
-                    "<li>",
-                    "<a href='https://www.midiworld.com/download/'",
-                    "<div id='audio-player'",
-                    "Please install flash",
-                    "\n"
+                    "<li>\n",
+                    "<a href=\"https://www.midiworld.com/download/",
+                    "\""
                 ],
                 "trim": "target"
             },

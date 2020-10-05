@@ -1,4 +1,5 @@
 import json
+import mido
 
 def midi_range_array_by_note():
     return {
@@ -366,3 +367,17 @@ def export_processed_content(mid,process_filename):
     
 
     return array
+
+
+def read_midi(filename):
+    array=[]
+    mid = mido.MidiFile(filename)
+    for msg in mid.play():
+
+        msg = str(msg)
+
+        msg = msg.split(" ")
+
+        array.append(msg)
+    return array
+  
