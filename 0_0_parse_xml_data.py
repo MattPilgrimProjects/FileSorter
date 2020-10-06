@@ -26,7 +26,7 @@ for artist in root.findall('./artist'):
 
                 url = url.text.replace("http://www.karaoke-version.com/mp3-backingtrack","").replace(".html","")
 
-                app.directory.create_recursive_diretory(app.settings["live_api"]+url)
+               
             
                 array.append({
                     "artist":artist_name_tag.replace("-"," "),

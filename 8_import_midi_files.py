@@ -17,7 +17,7 @@ for schema in database:
 
     title = schema["title"]
 
-    if int(schema['track_id']) < 3000:
+    if int(schema['track_id']) < 4000:
         
         if library.file.file_does_not_exists(raw_midi_path+title+"\\"+schema['track_id']+".mid"):
             time.sleep(1)
