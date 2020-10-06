@@ -6,6 +6,7 @@
         "uncompressed":"Z:\\uncompressed.json"
     },
 
+
     "raw_midi_to_json":"Z:\\raw_midi_to_json\\",
     
 
@@ -142,6 +143,8 @@
     "search_database": "Z:\\raw_href\\search.json",
 
     "live_database": "Z:\\raw_href\\clean.json",
+
+    "processed_database":"Z:\\raw_href\\processed.json",
 
     "live_api": "C:\\inetpub\\wwwroot\\api\\",
 

@@ -59,8 +59,11 @@ for schema in stage:
 
                 data = regex(csv_row[0],schema)
 
-                if data!="":
-                    array.append(data.strip()+" ="+schema['title'])
+                raw_data = data.strip()+" ="+schema['title']
+
+                if data!="" and raw_data not in app.json.import_json("Z:\\raw_href\\processed.json"):
+                    
+                    array.extend([raw_data])
                 
 
         pass

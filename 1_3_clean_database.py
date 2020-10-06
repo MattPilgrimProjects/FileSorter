@@ -2,6 +2,49 @@ import app
 import library.scan
 import library.json
 import library.comment
+import re
+
+def midiworld(schema):
+
+        
+
+        track = schema.split(" (")[0]
+
+        artist = schema.replace(track+" (","").split(")")[0]
+
+        url = "/"+artist.replace(" ","-").lower()+"/"+track.replace(" ","-").lower()
+
+        track_id = schema.replace(" ("+artist+") - ","").replace(" =midiworld","").replace(track,"")
+
+        return{
+        "title":"midiworld",
+        "track_id":track_id,
+        "url": url,
+        }
+
+
+def freemidi(schema):
+
+    schema = schema.replace("=freemidi","").lower()
+
+  
+
+    track_id = schema.split("-")[0]
+
+    track = schema.split(" ")[0].replace(track_id+"-","")
+    
+   
+
+    track = schema.replace(track,"").replace(track_id+"- ","").strip().replace(" ","-")
+
+    artist = schema.split(" ")[0].replace(track_id+"-","").replace(track+"-","")
+
+    return{
+        "title":"freemidi",
+        "track_id":track_id,
+        "url": "/"+artist+"/"+track
+        }
+
 
 array=[]
 unclean=[]
@@ -11,29 +54,78 @@ live_database = app.settings["live_database"]
 title=""
 track_id=""
 
+clean_array=[]
+unclean_array=[]
+
 library.comment.returnMessage("Starting")
 
-for schema in library.json.import_json(app.settings["database"]):
+key=[]
 
-    for array_content in library.json.import_json(app.settings["search_database"]):
+manual_search=[]
 
-        if schema["track"] in array_content:
+for schema in app.json.import_json(app.settings["database"]):
+   
 
-            if "freemidi" in array_content:
-                title = "freemidi"
-                track_id = array_content.split("-")[0]
+    
 
-            array.append({
-                "title":title,
-                "track_id":track_id,
-                "artist": schema["artist"],
-                "track": schema["track"],
-                "url": schema["url"]
-            })
+    array_content = library.json.import_json(app.settings["search_database"])
 
-            library.comment.returnUpdateMessage("Clean Data Added")
+
+    for array_value in array_content:
+
         
+
+        freemidi_group = freemidi(array_value) 
+        midiworld_group = midiworld(array_value)
+
+        if "=freemidi" in array_value and freemidi_group["url"] == schema["url"] and freemidi_group["track_id"].isdigit():
+            clean_array.append(freemidi_group)  
+            key.append(array_value)
+            
+
+        if "=midiworld" in array_value and midiworld_group["url"] == schema["url"] and midiworld_group["track_id"].isdigit():
+            clean_array.append(midiworld_group)
+            key.append(array_value)
+
+        if "=freemidi" in array_value and freemidi_group["track_id"].isdigit():
+
+            split_url = midiworld_group["url"].replace("/","-").split("-")
+
+            stats = library.parser.match_percentage(split_url,schema["url"])
+
+            if stats > 60:
+                manual_search.append({
+                    "track_id":freemidi_group["track_id"],
+                    "url":freemidi_group["url"],
+                    "match":schema["url"],
+                    "stats":stats,
+                    "schema":schema
+                })
+
+        if "=midiworld" in array_value and freemidi_group["track_id"].isdigit():
+
+
+            stats = library.parser.match_percentage(
+                midiworld_group["url"].replace("/","-").split("-"),
+                schema["url"].replace("/","-").split("-")
+                )
+
+            if stats > 60:
+                manual_search.append({
+                    "track_id":freemidi_group["track_id"],
+                    "url":freemidi_group["url"],
+                    "match":schema["url"],
+                    "stats":stats,
+                    "schema":schema
+                })
+            
+            pass
+
   
-library.json.export_json("Z:\\raw_href\\unclean.json",unclean)
-library.json.export_json(live_database,array)
+        
+
+app.json.export_json(live_database,clean_array)
+library.json.export_json("Z:\\raw_href\\processed.json",key)
+
+library.json.export_json("Z:\\raw_href\\error.json",manual_search)
 library.comment.returnMessage("Completed: "+live_database)

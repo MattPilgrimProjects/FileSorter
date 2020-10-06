@@ -1,10 +1,9 @@
 import app
-import library.json
 import library.file
 import library.midi
-import library.comment
 
-for schema in library.json.import_json(app.settings["live_database"]):
+
+for schema in app.json.import_json(app.settings["live_database"]):
 
     json_output = app.settings["raw_midi_to_json"]+schema["title"]+"\\"+ schema["track_id"] + ".json"
     midi_input =  app.settings["raw_midi_path"]+schema["title"]+"\\"+schema["track_id"] + ".mid"
@@ -14,20 +13,21 @@ for schema in library.json.import_json(app.settings["live_database"]):
         try:
             mid = library.midi.read_midi(midi_input)  
         except TypeError as error_message:
-            library.comment.returnMessage(str(error_message) +" - "+ schema["track_id"])
+            app.comment.returnMessage(str(error_message) +" - "+ schema["track_id"])
             pass
         except EOFError as error_message:
-            library.comment.returnMessage(str(error_message) +" - "+ schema["track_id"])
+            app.comment.returnMessage(str(error_message) +" - "+ schema["track_id"])
             pass
         except OSError as error_message:
-            library.comment.returnMessage(str(error_message) +" - "+ schema["track_id"])
+            app.comment.returnMessage(str(error_message) +" - "+ schema["track_id"])
             pass
         except ValueError as error_message:
-            library.comment.returnMessage(str(error_message) +" - "+ schema["track_id"])
+            app.comment.returnMessage(str(error_message) +" - "+ schema["track_id"])
             pass 
         except NameError as error_message:
-            library.comment.returnMessage(str(error_message) +" - "+ schema["track_id"])
+            app.comment.returnMessage(str(error_message) +" - "+ schema["track_id"])
             pass      
         else:
-            library.json.export_json(json_output,mid)
-            library.comment.returnMessage("Completed => "+json_output)
+            app.directory.create_recursive_diretory(app.settings["live_api"]+schema['url'])
+            app.json.export_json(json_output,mid)
+            app.comment.returnMessage("Completed => "+json_output)

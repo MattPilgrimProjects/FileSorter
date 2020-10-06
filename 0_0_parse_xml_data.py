@@ -11,8 +11,8 @@ for artist in root.findall('./artist'):
 
     for songs in artist.iter('songs'):
 
-        for song in songs.iter("song"): 
-            
+        for song in songs.iter("song"):
+
 
             for url in song.iter("url"):
 
@@ -26,12 +26,11 @@ for artist in root.findall('./artist'):
 
                 url = url.text.replace("http://www.karaoke-version.com/mp3-backingtrack","").replace(".html","")
 
-               
-            
                 array.append({
-                    "artist":artist_name_tag.replace("-"," "),
+                    "artist":artist_name_tag,
                     "track":song_title_tag,
                     "url": url
                 })
+
 
 app.json.export_json(app.settings["database"],array)

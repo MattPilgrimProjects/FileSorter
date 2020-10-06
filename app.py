@@ -3,10 +3,14 @@ import library.parser
 import library.xml
 import library.json
 import library.directory
+import library.comment
+
 
 directory = library.directory
 xml = library.xml
 json = library.json
+comment = library.comment
+
 
 setup = library.json.import_json("settings.json")
 

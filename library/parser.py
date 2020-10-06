@@ -19,3 +19,14 @@ def return_random_array_value(array):
 def remove_duplicates_from_array(array):
     array = list(dict.fromkeys(array))
     return array 
+
+
+def match_percentage(array_1,array_2):
+
+    match=0
+
+    for note in array_1:
+
+        if note in array_2: match = match+1
+
+    return match/len(array_1)*100
