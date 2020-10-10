@@ -9,7 +9,7 @@ import library.url
 import library.scan
 import library.csv
 import library.tb
-
+import library.midi
 
 directory = library.directory
 xml = library.xml
@@ -21,6 +21,7 @@ url = library.url
 scan = library.scan
 csv = library.csv
 tb = library.tb
+midi = library.midi
 
 setup = library.json.import_json("settings.json")
 
