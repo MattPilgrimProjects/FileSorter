@@ -1,17 +1,10 @@
 import app
-import library.file
-import library.csv
-import library.directory
-import library.parser
-import library.comment
-import library.scan
-
 
 stage = app.setup['stage']
 
 for schema in stage:
 
-    file_array = library.scan.scan_file_recursively(schema["href_save_location"]+"*.html")
+    file_array = app.scan.scan_file_recursively(schema["href_save_location"]+"*.html")
 
     for filename in file_array:
         
@@ -30,12 +23,12 @@ for schema in stage:
 
         row={}
 
-        if library.file.file_does_not_exists(move_to):
+        if app.file.file_does_not_exists(move_to):
 
-            writer = library.csv.createCSVHeader(move_to,["href"])
+            writer = app.csv.createCSVHeader(move_to,["href"])
 
 
-            for link in library.parser.parseLinksFromHTML(localhost,search_attribute):
+            for link in app.parser.parseLinksFromHTML(localhost,search_attribute):
 
                 for match in match_array:
     
@@ -44,16 +37,6 @@ for schema in stage:
                         writer.writerow(row)
                         
                     pass
-
             
-            library.comment.returnMessage(move_to)
-
-
-    pass
-
-
-
-
-
-
-          
+            app.comment.returnMessage(move_to)
+    pass     

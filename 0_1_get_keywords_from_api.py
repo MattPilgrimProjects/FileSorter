@@ -1,13 +1,10 @@
 import app
 
-import library.json
-import library.comment
-
-library.comment.returnMessage("Begin Search")
+app.comment.returnMessage("Begin Search")
 
 array=[]
 
-for data in library.json.import_json("Z:\\db.json"):
+for data in app.json.import_json(app.settings["database"]):
 
     url = data["url"]
 
@@ -17,21 +14,12 @@ for data in library.json.import_json("Z:\\db.json"):
 
         url = url.replace("/","-")
 
-    
     if "-" in url:
         pass
     else:
         array.append(url)
     pass
 
-library.json.export_json(app.settings["keyword_list_export"]["uncompressed"],array)
+app.json.export_json(app.settings["keyword_list_export"]["compressed"],app.parser.remove_duplicates_from_array(array))
 
-compressed = list(dict.fromkeys(array))
-
-
-library.json.export_json(app.settings["keyword_list_export"]["compressed"],compressed)
-
-library.comment.returnMessage("Completed")
-
-
-
+app.comment.returnMessage("Completed")

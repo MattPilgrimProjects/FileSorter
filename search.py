@@ -1,28 +1,25 @@
-import library.tb
-import library.csv
-import library.comment
+import app
 
-tb = library.tb
-csv = library.csv
+csv = app.csv
 
-library.comment.returnMessage("Scanning drives")
+app.comment.returnMessage("Scanning drives")
 
-scanFiles=tb.scanFilesRecursively()
+scanFiles=app.tb.scanFilesRecursively()
 
 if scanFiles["totalNumberOfFiles"]==0:
-    library.comment.returnMessage("No data found")
+    app.comment.returnMessage("No data found")
     quit()
 else:
-    library.comment.returnMessage(str(scanFiles["totalNumberOfFiles"])+" files found")
-    library.comment.returnMessage("Exporting data")
+    app.comment.returnMessage(str(scanFiles["totalNumberOfFiles"])+" files found")
+    app.comment.returnMessage("Exporting data")
 
 row={}
  
-FileInfomation = tb.returnFileInformation()
+FileInfomation = app.tb.returnFileInformation()
 
 file_count=0
 
-writer = csv.create_csv_header("api.csv",FileInfomation['returnCSVHead'])
+writer = csv.create_csv_header(app.settings["search_output"],FileInfomation['returnCSVHead'])
 
 for filename in scanFiles["filelist"]:
 
@@ -32,10 +29,10 @@ for filename in scanFiles["filelist"]:
 
         column_title = FileInfomation['returnList'][column_name]
    
-        row[column_title]=tb.getDetailsOf(filename,column_name)
+        row[column_title]=app.tb.getDetailsOf(filename,column_name)
 
     writer.writerow(row)
     
-    library.comment.returnUpdateMessage(str(file_count) +"/" + str(scanFiles["totalNumberOfFiles"]))
+    app.comment.returnUpdateMessage(str(file_count) +"/" + str(scanFiles["totalNumberOfFiles"]))
 
-library.comment.returnMessage("Process complete")
+app.comment.returnMessage("Process complete")

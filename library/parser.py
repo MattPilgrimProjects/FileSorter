@@ -30,3 +30,15 @@ def match_percentage(array_1,array_2):
         if note in array_2: match = match+1
 
     return match/len(array_1)*100
+
+
+def find_and_replace_array(string,array):
+
+    for key,value in array.items():
+
+        return_data = string.replace(key,value)
+
+        pass
+
+    return return_data
+    

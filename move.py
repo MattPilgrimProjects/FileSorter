@@ -1,3 +1,4 @@
+import app
 import csv
 import library.tb
 import shutil
@@ -19,10 +20,6 @@ def importCSV(filename):
                     move_directory = sortFilePath(library["SORT_FILEPATH"],row)
                     move_filename = move_directory+row["NAME"]+row['FILE_EXTENSION']
 
-                    if tb.file_does_not_exists(move_filename) and tb.file_exists(original_filename) and "%" in move_filename:
-                        # print(original_filename+" => "+move_filename)
-                        pass
-
                     if tb.file_does_not_exists(move_filename) and tb.file_exists(original_filename) and "%" not in move_filename:
                         try:
                             tb.create_recursive_diretory(move_directory)
@@ -34,9 +31,7 @@ def importCSV(filename):
                             tb.returnMessage("Moved => "+move_filename)
                         except(FileNotFoundError):
                             tb.returnMessage("File Error => "+move_filename)
-
-              
-              
+                         
     pass
 
 def returnLibraryDetails():
@@ -76,18 +71,13 @@ def sortFilePath(sort_filepath,row):
 
             sort_filepath = sort_filepath.replace("%"+target_list+"_MONTH%",month)
 
-    
-
     for target_list in row:
-
-
 
         if "%"+target_list+"%" in sort_filepath:
 
             sort_filepath = sort_filepath.replace("%"+target_list+"%",deserialize(row[target_list])).strip()
     
     return sort_filepath
-
 
 def deserialize(tag):
 
@@ -99,8 +89,4 @@ def deserialize(tag):
         tag = "%BLANK%"
     return tag
     
-
-importCSV("api.csv")
-
-
-os.system("pause")
+importCSV(app.settings["search_output"])

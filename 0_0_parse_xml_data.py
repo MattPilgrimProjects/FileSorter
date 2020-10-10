@@ -1,7 +1,6 @@
 import app
 
-
-root = app.xml.importXML(app.settings['return_xml_catalog'])
+root = app.xml.importXML(app.settings["xml_catalog"]["xml_file"])
 
 array=[]
 
@@ -24,13 +23,12 @@ for artist in root.findall('./artist'):
 
                 pass
 
-                url = url.text.replace("http://www.karaoke-version.com/mp3-backingtrack","").replace(".html","")
-
+                url = app.parser.find_and_replace_array(url.text,app.settings["xml_catalog"]["replace"])
+                
                 array.append({
                     "artist":artist_name_tag,
                     "track":song_title_tag,
                     "url": url
                 })
-
 
 app.json.export_json(app.settings["database"],array)

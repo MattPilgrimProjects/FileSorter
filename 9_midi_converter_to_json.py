@@ -1,17 +1,14 @@
 import app
-import library.file
-import library.midi
-
 
 for schema in app.json.import_json(app.settings["live_database"]):
 
     json_output = app.settings["raw_midi_to_json"]+schema["title"]+"\\"+ schema["track_id"] + ".json"
     midi_input =  app.settings["raw_midi_path"]+schema["title"]+"\\"+schema["track_id"] + ".mid"
 
-    if library.file.file_does_not_exists(json_output):
+    if app.file.file_does_not_exists(json_output):
 
         try:
-            mid = library.midi.read_midi(midi_input)  
+            mid = app.midi.read_midi(midi_input)  
         except TypeError as error_message:
             app.comment.returnMessage(str(error_message) +" - "+ schema["track_id"])
             pass

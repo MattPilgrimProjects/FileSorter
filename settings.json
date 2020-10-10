@@ -1,4 +1,12 @@
 {
+  "xml_catalog":{
+    "xml_file":"Z:\\karaokeversion_catalog_en_GBP.xml",
+    "replace":{
+      "http://www.karaoke-version.com/mp3-backingtrack":"",
+      ".html":""
+    }
+  },
+
     "return_xml_catalog":"Z:\\karaokeversion_catalog_en_GBP.xml",
     "database":"Z:\\db.json",
     "keyword_list_export":{
@@ -8,16 +16,16 @@
 
 
     "raw_midi_to_json":"Z:\\raw_midi_to_json\\",
-    
 
-    
+
+    "search_output":"S:\\api.csv",
 
     "Search_Location": [
-        "D:\\2019-12\\"
+        "E:\\A\\"
     ],
     "Library": {
         "Music Sorter by Artist > Album": {
-            "sort_filepath": "S:\\Music\\%CONTRIBUTING_ARTISTS%\\",
+            "sort_filepath": "D:\\Music\\%CONTRIBUTING_ARTISTS%\\",
             "file_extensions": [
                 ".aif",
                 ".AIF",
@@ -44,7 +52,7 @@
             ]
         },
         "Picture Sorter By Year > Month": {
-            "sort_filepath": "S:\\Pictures\\%DATE_TAKEN_YEAR%-%DATE_TAKEN_MONTH%\\",
+            "sort_filepath": "D:\\Pictures\\%DATE_TAKEN_YEAR%-%DATE_TAKEN_MONTH%\\",
             "file_extensions": [
                 ".ai",
                 ".AI",
@@ -73,7 +81,7 @@
             ]
         },
         "Document Sorter By Author": {
-            "sort_filepath": "S:\\Documents\\%AUTHORS%\\",
+            "sort_filepath": "D:\\Documents\\%AUTHORD%\\",
             "file_extensions": [
                 ".doc",
                 ".DOC",
@@ -102,7 +110,7 @@
             ]
         },
         "Video Sort By Year > Month": {
-            "sort_filepath": "S:\\Videos\\%MEDIA_CREATED_YEAR%-%MEDIA_CREATED_MONTH%\\",
+            "sort_filepath": "D:\\Videos\\%MEDIA_CREATED_YEAR%-%MEDIA_CREATED_MONTH%\\",
             "file_extensions": [
                 ".3g2",
                 ".3G2",
@@ -138,7 +146,7 @@
         }
     },
 
-    "raw_midi_path":"Z:\\raw_midi\\",    
+    "raw_midi_path":"Z:\\raw_midi\\",
 
     "search_database": "Z:\\raw_href\\search.json",
 
@@ -166,12 +174,12 @@
                     "search_attribute": "a",
                     "move_to": "Z:\\raw_href\\freemidi\\processed\\",
                     "match": "title=",
-                  
+
                     "remove": [
                         "<a href=\"download3-",
                         "title=\"",
                         "\"",
-                        "<a href=/login login / join"                        
+                        "<a href=/login login / join"
                     ],
                     "trim": ">"
 

@@ -1,11 +1,5 @@
 import app
-import library.json
-import library.csv
-import library.comment
-import library.scan
 import re
-
-
 
 stage = app.setup['stage']
 
@@ -13,7 +7,7 @@ search_database = app.setup["search_database"]
 
 array=[]
 
-library.comment.returnMessage("Start Search")
+app.comment.returnMessage("Start Search")
 
 def hasNumbers(inputString):
     return any(char.isdigit() for char in inputString)
@@ -23,10 +17,6 @@ def regex(data,schema):
     trim = schema["processed_href"]["trim"]
 
     data = data.split(trim, 1)[0]
-
-    # regex = re.compile('[^a-z- =0-9()A-Z]')
-    
-    # data = regex.sub('', )
 
     if schema["processed_href"]["match"] in data:
         return_data = data
@@ -41,17 +31,14 @@ def regex(data,schema):
 
     
     return return_data
-    
-
-
 
 for schema in stage:
 
     process_href = schema["processed_href"]["move_to"]
 
-    for filename in library.scan.scan_file_recursively(process_href+"*.csv"):
+    for filename in app.scan.scan_file_recursively(process_href+"*.csv"):
 
-        csv_file = library.csv.importCSVData(filename)
+        csv_file = app.csv.importCSVData(filename)
 
         for csv_row in csv_file:
 
@@ -68,12 +55,10 @@ for schema in stage:
 
         pass
 
-array = library.parser.remove_duplicates_from_array(array)
+array = app.parser.remove_duplicates_from_array(array)
 
-library.json.export_json(search_database,array)
+app.json.export_json(search_database,array)
 
-library.comment.returnMessage(search_database)
+app.comment.returnMessage(search_database)
 
-library.comment.returnMessage("Completed")
-
-
+app.comment.returnMessage("Completed")

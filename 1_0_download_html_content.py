@@ -1,9 +1,4 @@
 import app
-import library.directory
-import library.comment
-import library.url
-import library.file
-import library.json
 
 keyword = app.random_keyword()
 
@@ -12,27 +7,23 @@ stage = app.setup['stage']
 for schema in stage:
 
     search_url = schema['search_url'] + keyword
+
     href_save_location = schema['href_save_location']
 
     href_save_file = href_save_location+keyword+".html"
 
-    library.directory.create_recursive_diretory(href_save_location)
+    app.directory.create_recursive_diretory(href_save_location)
 
-    library.directory.create_recursive_diretory(schema["processed_href"]["move_to"])
+    app.directory.create_recursive_diretory(schema["processed_href"]["move_to"])
 
-    if library.file.file_does_not_exists(href_save_file):
+    if app.file.file_does_not_exists(href_save_file):
 
-        
-        contents = library.url.returnURLContent(search_url)
-        library.file.createFile(href_save_file,contents)
+        contents = app.url.returnURLContent(search_url)
 
-        library.comment.returnMessage("Download Content => "+href_save_file)
+        app.file.createFile(href_save_file,contents)
 
-        pass
-
-        
+        app.comment.returnMessage("Download Content => "+href_save_file)
+      
     else:
 
-        library.comment.returnMessage("File Already Exists => " + href_save_file)
-
-    pass
+        app.comment.returnMessage("File Already Exists => " + href_save_file)

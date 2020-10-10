@@ -1,7 +1,4 @@
 import app
-import library.scan
-import library.json
-import library.comment
 import re
 
 def midiworld(schema):
@@ -27,14 +24,10 @@ def freemidi(schema):
 
     schema = schema.replace("=freemidi","").lower()
 
-  
-
     track_id = schema.split("-")[0]
 
     track = schema.split(" ")[0].replace(track_id+"-","")
     
-   
-
     track = schema.replace(track,"").replace(track_id+"- ","").strip().replace(" ","-")
 
     artist = schema.split(" ")[0].replace(track_id+"-","").replace(track+"-","")
@@ -57,7 +50,7 @@ track_id=""
 clean_array=[]
 unclean_array=[]
 
-library.comment.returnMessage("Starting")
+app.comment.returnMessage("Starting")
 
 key=[]
 
@@ -65,15 +58,9 @@ manual_search=[]
 
 for schema in app.json.import_json(app.settings["database"]):
    
+    array_content = app.json.import_json(app.settings["search_database"])
 
-    
-
-    array_content = library.json.import_json(app.settings["search_database"])
-
-
-    for array_value in array_content:
-
-        
+    for array_value in array_content:     
 
         freemidi_group = freemidi(array_value) 
         midiworld_group = midiworld(array_value)
@@ -91,7 +78,7 @@ for schema in app.json.import_json(app.settings["database"]):
 
             split_url = midiworld_group["url"].replace("/","-").split("-")
 
-            stats = library.parser.match_percentage(split_url,schema["url"])
+            stats = app.parser.match_percentage(split_url,schema["url"])
 
             if stats > 60:
                 manual_search.append({
@@ -105,7 +92,7 @@ for schema in app.json.import_json(app.settings["database"]):
         if "=midiworld" in array_value and freemidi_group["track_id"].isdigit():
 
 
-            stats = library.parser.match_percentage(
+            stats = app.parser.match_percentage(
                 midiworld_group["url"].replace("/","-").split("-"),
                 schema["url"].replace("/","-").split("-")
                 )
@@ -121,11 +108,10 @@ for schema in app.json.import_json(app.settings["database"]):
             
             pass
 
-  
-        
-
 app.json.export_json(live_database,clean_array)
-library.json.export_json("Z:\\raw_href\\processed.json",key)
 
-library.json.export_json("Z:\\raw_href\\error.json",manual_search)
-library.comment.returnMessage("Completed: "+live_database)
+app.json.export_json("Z:\\raw_href\\processed.json",key)
+
+app.json.export_json("Z:\\raw_href\\error.json",manual_search)
+
+app.comment.returnMessage("Completed: "+live_database)
