@@ -1,9 +1,7 @@
 import app
 import re
 
-def midiworld(schema):
-
-        
+def midiworld(schema,data):
 
         track = schema.split(" (")[0]
 
@@ -11,18 +9,19 @@ def midiworld(schema):
 
         url = "/"+artist.replace(" ","-").lower()+"/"+track.replace(" ","-").lower()
 
-        track_id = schema.replace(" ("+artist+") - ","").replace(" =midiworld","").replace(track,"")
+        track_id = schema.replace(" ("+artist+") - ","").replace(" =>midiworld","").replace(track,"")
 
         return{
-        "title":"midiworld",
+        "artist":data["artist"],
+        "track":data["track"],
+        "source":"midiworld",
         "track_id":track_id,
         "url": url,
         }
 
+def freemidi(schema,data):
 
-def freemidi(schema):
-
-    schema = schema.replace("=freemidi","").lower()
+    schema = schema.replace("=>freemidi","").lower()
 
     track_id = schema.split("-")[0]
 
@@ -33,21 +32,25 @@ def freemidi(schema):
     artist = schema.split(" ")[0].replace(track_id+"-","").replace(track+"-","")
 
     return{
-        "title":"freemidi",
+        "artist":data["artist"],
+        "track":data["track"],
+        "source":"freemidi",
         "track_id":track_id,
         "url": "/"+artist+"/"+track
         }
 
-
 array=[]
+
 unclean=[]
 
 live_database = app.settings["live_database"]
 
 title=""
+
 track_id=""
 
 clean_array=[]
+
 unclean_array=[]
 
 app.comment.returnMessage("Starting")
@@ -56,32 +59,26 @@ key=[]
 
 manual_search=[]
 
-for schema in app.json.import_json(app.settings["database"]):
+keyword = "art"
+
+for schema in app.json.import_json("Z:\\raw_api_keywords\\"+keyword+".json"):
    
-    array_content = app.json.import_json(app.settings["search_database"])
+    array_content = app.json.import_json("S:\\Midi-Library\\raw_keywords_json\\freemidi\\"+keyword+".json")
 
     for array_value in array_content:     
 
-        freemidi_group = freemidi(array_value) 
-        midiworld_group = midiworld(array_value)
+        freemidi_group = freemidi(array_value,schema) 
+        midiworld_group = midiworld(array_value,schema)
 
-        if "=freemidi" in array_value and freemidi_group["url"] == schema["url"] and freemidi_group["track_id"].isdigit():
-            clean_array.append(freemidi_group)  
-            key.append(array_value)
-            
-
-        if "=midiworld" in array_value and midiworld_group["url"] == schema["url"] and midiworld_group["track_id"].isdigit():
-            clean_array.append(midiworld_group)
-            key.append(array_value)
-
-        if "=freemidi" in array_value and freemidi_group["track_id"].isdigit():
+        if "=>freemidi" in array_value and freemidi_group["track_id"].isdigit():
 
             split_url = midiworld_group["url"].replace("/","-").split("-")
 
             stats = app.parser.match_percentage(split_url,schema["url"])
 
-            if stats > 60:
+            if stats > 80:
                 manual_search.append({
+                    "source":freemidi_group["source"],
                     "track_id":freemidi_group["track_id"],
                     "url":freemidi_group["url"],
                     "match":schema["url"],
@@ -89,18 +86,19 @@ for schema in app.json.import_json(app.settings["database"]):
                     "schema":schema
                 })
 
-        if "=midiworld" in array_value and freemidi_group["track_id"].isdigit():
+        if "=>midiworld" in array_value and freemidi_group["track_id"].isdigit():
 
 
             stats = app.parser.match_percentage(
-                midiworld_group["url"].replace("/","-").split("-"),
-                schema["url"].replace("/","-").split("-")
+                midiworld_group["url"],
+                schema["url"]
                 )
 
-            if stats > 60:
+            if stats > 80:
                 manual_search.append({
-                    "track_id":freemidi_group["track_id"],
-                    "url":freemidi_group["url"],
+                    "source":midiworld_group["source"],
+                    "track_id":midiworld_group["track_id"],
+                    "url":midiworld_group["url"],
                     "match":schema["url"],
                     "stats":stats,
                     "schema":schema
@@ -108,10 +106,6 @@ for schema in app.json.import_json(app.settings["database"]):
             
             pass
 
-app.json.export_json(live_database,clean_array)
+app.json.export_json("Z:\\raw_href\\"+keyword+".json",manual_search)
 
-app.json.export_json("Z:\\raw_href\\processed.json",key)
-
-app.json.export_json("Z:\\raw_href\\error.json",manual_search)
-
-app.comment.returnMessage("Completed: "+live_database)
+app.comment.returnMessage("Completed: "+"Z:\\raw_href\\"+keyword+".json")

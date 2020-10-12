@@ -1,25 +1,30 @@
 import app
 
-app.comment.returnMessage("Begin Search")
+if app.file.file_does_not_exists(app.settings["keyword_list_export"]["compressed"]):
 
-array=[]
+    app.comment.returnMessage("Begin Search")
 
-for data in app.json.import_json(app.settings["database"]):
+    array=[]
 
-    url = data["url"]
+    for data in app.json.import_json(app.settings["database"]):
 
-    url = url.split("-")
+        url = data["url"]
 
-    for url in url:
+        url = url.split("-")
 
-        url = url.replace("/","-")
+        for url in url:
 
-    if "-" in url:
+            url = url.replace("/","-")
+
+        if "-" in url:
+            pass
+        else:
+            array.append(url)
         pass
-    else:
-        array.append(url)
-    pass
 
-app.json.export_json(app.settings["keyword_list_export"]["compressed"],app.parser.remove_duplicates_from_array(array))
+    app.json.export_json(app.settings["keyword_list_export"]["compressed"],app.parser.remove_duplicates_from_array(array))
 
-app.comment.returnMessage("Completed")
+    app.comment.returnMessage("Completed")
+
+else:
+    app.comment.returnMessage("Keywords already exist")

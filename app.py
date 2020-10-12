@@ -23,9 +23,9 @@ csv = library.csv
 tb = library.tb
 midi = library.midi
 
-setup = library.json.import_json("settings.json")
+setup = library.json.import_json("S:\Documents\GitHub\FileSorter\FileSorter\settings.json")
 
-settings = library.json.import_json("settings.json")
+settings = library.json.import_json("S:\Documents\GitHub\FileSorter\FileSorter\settings.json")
 
 
 def import_config(filename):

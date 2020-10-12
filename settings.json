@@ -1,21 +1,21 @@
 {
   "xml_catalog":{
-    "xml_file":"Z:\\karaokeversion_catalog_en_GBP.xml",
+    "xml_file":"S:\\Midi-Library\\karaokeversion_catalog_en_GBP.xml",
     "replace":{
       "http://www.karaoke-version.com/mp3-backingtrack":"",
       ".html":""
     }
   },
 
-    "return_xml_catalog":"Z:\\karaokeversion_catalog_en_GBP.xml",
-    "database":"Z:\\db.json",
+    "return_xml_catalog":"S:\\Midi-Library\\karaokeversion_catalog_en_GBP.xml",
+    "database":"S:\\Midi-Library\\db.json",
     "keyword_list_export":{
-        "compressed":"Z:\\compressed.json",
-        "uncompressed":"Z:\\uncompressed.json"
+        "compressed":"S:\\Midi-Library\\compressed.json",
+        "uncompressed":"S:\\Midi-Library\\uncompressed.json"
     },
 
 
-    "raw_midi_to_json":"Z:\\raw_midi_to_json\\",
+    "raw_midi_to_json":"S:\\Midi-Library\\raw_midi_to_json\\",
 
 
     "search_output":"S:\\api.csv",
@@ -146,13 +146,13 @@
         }
     },
 
-    "raw_midi_path":"Z:\\raw_midi\\",
+    "raw_midi_path":"S:\\Midi-Library\\raw_midi\\",
 
-    "search_database": "Z:\\raw_href\\search.json",
+    "search_database": "S:\\Midi-Library\\raw_href\\search.json",
 
-    "live_database": "Z:\\raw_href\\clean.json",
+    "live_database": "S:\\Midi-Library\\raw_href\\clean.json",
 
-    "processed_database":"Z:\\raw_href\\processed.json",
+    "processed_database":"S:\\Midi-Library\\raw_href\\processed.json",
 
     "live_api": "C:\\inetpub\\wwwroot\\api",
 
@@ -170,10 +170,11 @@
                 "download_url": "https://freemidi.org/getter-",
                 "href_save_location": "C:\\inetpub\\wwwroot\\live\\freemidi\\",
                 "localhost": "http://localhost/live/freemidi/",
-                "raw_midi_to_json":"Z:\\raw_midi_to_json\\freemidi\\",
+                "raw_midi_to_json":"S:\\Midi-Library\\raw_midi_to_json\\freemidi\\",
+                "raw_keywords_json":"S:\\Midi-Library\\raw_keywords_json\\freemidi\\",
                 "processed_href": {
                     "search_attribute": "a",
-                    "move_to": "Z:\\raw_href\\freemidi\\processed\\",
+                    "move_to": "S:\\Midi-Library\\raw_href\\freemidi\\processed\\",
                     "match": "title=",
 
                     "remove": [
@@ -187,7 +188,7 @@
                 },
             "import_midi": {
                     "download_url": "https://freemidi.org/getter-",
-                    "download_location": "Z:\\raw_midi\\freemidi\\"
+                    "download_location": "S:\\Midi-Library\\raw_midi\\freemidi\\"
                 }
         },
         {
@@ -196,10 +197,11 @@
             "download_url": "https://www.midiworld.com/download/",
             "href_save_location": "C:\\inetpub\\wwwroot\\live\\midiworld\\",
             "localhost": "http://localhost/live/midiworld/",
-            "raw_midi_to_json":"Z:\\raw_midi_to_json\\midiworld\\",
+            "raw_midi_to_json":"S:\\Midi-Library\\raw_midi_to_json\\midiworld\\",
+            "raw_keywords_json":"S:\\Midi-Library\\raw_keywords_json\\midiworld\\",
             "processed_href": {
                 "search_attribute": "li",
-                "move_to": "Z:\\raw_href\\midiworld\\processed\\",
+                "move_to": "S:\\Midi-Library\\raw_href\\midiworld\\processed\\",
                 "match": "download",
                 "remove": [
                     "<li>\n",
@@ -210,7 +212,7 @@
             },
             "import_midi": {
                 "download_url":"https://www.midiworld.com/download/",
-                "download_location": "Z:\\raw_midi\\midiworld\\"
+                "download_location": "S:\\Midi-Library\\raw_midi\\midiworld\\"
 
             }
         }
