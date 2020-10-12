@@ -1,8 +1,9 @@
 import json
 import mido
 
+
 def midi_range_array_by_note():
-    return {
+    return{
             "C":"0",
             "C#/Db":"1",
             "D":"2",
@@ -370,8 +371,10 @@ def export_processed_content(mid,process_filename):
 
 
 def read_midi(filename):
+
     array=[]
     mid = mido.MidiFile(filename)
+  
     for msg in mid.play():
 
         msg = str(msg)
@@ -381,3 +384,27 @@ def read_midi(filename):
         array.append(msg)
     return array
   
+
+def return_notes_and_channels(midi_filename,schema):
+    try:
+        mid = read_midi(midi_input)  
+    except TypeError as error_message:
+        mid = str(error_message) +" - "+ schema["track_id"]
+        pass
+    except EOFError as error_message:
+        mid = str(error_message) +" - "+ schema["track_id"]
+        pass
+    except OSError as error_message:
+        mid = str(error_message) +" - "+ schema["track_id"]
+        pass
+    except ValueError as error_message:
+        mid = str(error_message) +" - "+ schema["track_id"]
+        pass 
+    except NameError as error_message:
+        mid = str(error_message) +" - "+ schema["track_id"]
+        pass      
+    except KeyError as error_message:
+        mid = str(error_message) +" - "+ schema["track_id"]
+        pass  
+    else:
+        return mid

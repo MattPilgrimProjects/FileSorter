@@ -154,7 +154,8 @@
 
     "processed_database":"Z:\\raw_href\\processed.json",
 
-    "live_api": "C:\\inetpub\\wwwroot\\api\\",
+    "live_api": "C:\\inetpub\\wwwroot\\api",
+
 
     "import_midi_url":{
         "freemidi":"https://freemidi.org/getter-",

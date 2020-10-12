@@ -9,6 +9,43 @@ array=[]
 
 app.comment.returnMessage("Start Search")
 
+def midiworld(schema,data):
+
+    track = schema.split(" (")[0]
+
+    artist = schema.replace(track+" (","").split(")")[0]
+
+    url = "/"+artist.replace(" ","-").lower()+"/"+track.replace(" ","-").lower()
+
+    track_id = schema.replace(" ("+artist+") - ","").replace(" =midiworld","").replace(track,"")
+
+    return output_handler(data["artist"],data["track"],"midiworld",track_id,url)
+
+def output_handler(artist,track,source,track_id,url):
+    return {
+        "artist":artist,
+        "track":track,
+        "source":source,
+        "track_id":track_id,
+        "url": url,
+    } 
+
+def freemidi(schema,data):
+
+    schema = schema.replace("=freemidi","").lower()
+
+    track_id = schema.split("-")[0]
+
+    track = schema.split(" ")[0].replace(track_id+"-","")
+    
+    track = schema.replace(track,"").replace(track_id+"- ","").strip().replace(" ","-")
+
+    artist = schema.split(" ")[0].replace(track_id+"-","").replace(track+"-","")
+
+    url = "/"+artist+"/"+track
+
+    return output_handler(data["artist"],data["track"],"freemidi",track_id,url)
+
 def hasNumbers(inputString):
     return any(char.isdigit() for char in inputString)
 
@@ -32,6 +69,9 @@ def regex(data,schema):
     
     return return_data
 
+
+##########################################################################################
+
 for schema in stage:
 
     process_href = schema["processed_href"]["move_to"]
@@ -46,10 +86,10 @@ for schema in stage:
 
                 data = regex(csv_row[0],schema)
 
-                raw_data = data.strip()+" ="+schema['title']
+                raw_data = data.strip()+"=>"+schema['title']
 
-                if data!="" and raw_data not in app.json.import_json("Z:\\raw_href\\processed.json"):
-                    
+                if data!="":
+
                     array.extend([raw_data])
                 
 

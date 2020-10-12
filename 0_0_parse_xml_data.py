@@ -23,6 +23,8 @@ for artist in root.findall('./artist'):
 
                 pass
 
+
+
                 url = app.parser.find_and_replace_array(url.text,app.settings["xml_catalog"]["replace"])
                 
                 array.append({
@@ -30,5 +32,5 @@ for artist in root.findall('./artist'):
                     "track":song_title_tag,
                     "url": url
                 })
-
+app.comment.returnMessage(app.settings["database"])
 app.json.export_json(app.settings["database"],array)
