@@ -59,7 +59,7 @@ key=[]
 
 manual_search=[]
 
-keyword = "art"
+keyword = app.random_keyword()
 
 for schema in app.json.import_json("Z:\\raw_api_keywords\\"+keyword+".json"):
    

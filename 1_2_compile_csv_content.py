@@ -1,5 +1,7 @@
 import app
 import re
+import schedule
+import time
 
 stage = app.setup['stage']
 
@@ -34,35 +36,45 @@ def regex(data,schema):
 
 
 ##########################################################################################
+def compile_csv_content():
 
-keyword = app.random_keyword()
+    keyword = app.random_keyword()
 
-for schema in stage:
+    for schema in stage:
 
-    process_href = schema["processed_href"]["move_to"]+keyword+".csv"
+        process_href = schema["processed_href"]["move_to"]+keyword+".csv"
 
-    if app.file.file_exists(process_href):
+        if app.file.file_exists(process_href):
 
-        csv_file = app.csv.importCSVData(process_href)
+            csv_file = app.csv.importCSVData(process_href)
 
-        for csv_row in csv_file:
+            for csv_row in csv_file:
 
-            if csv_row[0]!="href" and hasNumbers(csv_row[0]):
+                if csv_row[0]!="href" and hasNumbers(csv_row[0]):
 
-                data = regex(csv_row[0],schema)
+                    data = regex(csv_row[0],schema)
 
-                raw_data = data.strip()+"=>"+schema['title']
+                    raw_data = data.strip()+"=>"+schema['title']
 
-                if data!="":
+                    if data!="":
 
-                    array.extend([raw_data])
-                    
+                        array.extend([raw_data])
+                        
 
-            pass
+                pass
 
-        array = app.parser.remove_duplicates_from_array(array)
+            array = app.parser.remove_duplicates_from_array(array)
 
-        app.json.export_json(schema['raw_keywords_json']+"\\"+keyword+".json",array)
-        app.comment.returnMessage("Completed =>"+keyword)
-    else:
-        app.comment.returnMessage("Keyword not found =>" +keyword)
+            app.json.export_json(schema['raw_keywords_json']+"\\"+keyword+".json",array)
+            app.comment.returnMessage("Completed =>"+keyword)
+        else:
+            app.comment.returnMessage("Keyword not found =>" +keyword)
+    return True
+
+
+
+schedule.every(5).seconds.do(compile_csv_content)
+
+while 1:
+    schedule.run_pending()
+    time.sleep(1)

@@ -49,7 +49,7 @@ def parse_xml_data():
 
     return "Done"
 
-schedule.every(1).minutes.do(parse_xml_data)
+schedule.every(10).seconds.do(parse_xml_data)
 
 while 1:
     schedule.run_pending()
