@@ -1,80 +1,51 @@
 import app
-import re
-import schedule
-import time
 
-stage = app.setup['stage']
-
-search_database = app.setup["search_database"]
-
-array=[]
-
-app.comment.returnMessage("Start Search")
-
-def hasNumbers(inputString):
-    return any(char.isdigit() for char in inputString)
-
-def regex(data,schema):
-
-    trim = schema["processed_href"]["trim"]
-
-    data = data.split(trim, 1)[0]
-
-    if schema["processed_href"]["match"] in data:
-        return_data = data
-    else:
-        return_data = ""
-        pass
-
-
-    for remove in schema["processed_href"]["remove"]:
-
-        return_data = return_data.replace(remove,"")
-
-    
-    return return_data
-
-
-##########################################################################################
 def compile_csv_content():
 
-    keyword = app.random_keyword()
+    for schema in app.setup['stage']:
+        
+        for keyword in return_keywords_from_processed_list(schema):
+               
+               process_href = schema["processed_href"]["move_to"]+keyword+".csv"
 
-    for schema in stage:
+               array=[]
 
-        process_href = schema["processed_href"]["move_to"]+keyword+".csv"
+               if app.file.file_exists(process_href):
 
-        if app.file.file_exists(process_href):
+                for csv_row in app.csv.importCSVData(process_href):
 
-            csv_file = app.csv.importCSVData(process_href)
+                    if csv_row[0]!="href" and app.parser.hasNumbers(csv_row[0]):
 
-            for csv_row in csv_file:
+                        data = app.parser.regex(csv_row[0],schema)
 
-                if csv_row[0]!="href" and hasNumbers(csv_row[0]):
+                        raw_data = data.strip()+"=>"+schema['title']
 
-                    data = regex(csv_row[0],schema)
+                        if data!="":
+                            array.extend([raw_data])
 
-                    raw_data = data.strip()+"=>"+schema['title']
+                array = app.parser.remove_duplicates_from_array(array)
+                app.comment.returnMessage(schema['raw_keywords_json']+"\\"+keyword+".json")
+                app.json.export_json(schema['raw_keywords_json']+"\\"+keyword+".json",array)
 
-                    if data!="":
-
-                        array.extend([raw_data])
-                        
-
-                pass
-
-            array = app.parser.remove_duplicates_from_array(array)
-
-            app.json.export_json(schema['raw_keywords_json']+"\\"+keyword+".json",array)
-            app.comment.returnMessage("Completed =>"+keyword)
-        else:
-            app.comment.returnMessage("Keyword not found =>" +keyword)
-    return True
+            
 
 
 
-schedule.every(5).seconds.do(compile_csv_content)
+def return_keywords_from_processed_list(schema):
 
-while 1:
-    schedule.run_pending()
-    time.sleep(1)
+    keyword_array = []
+
+    for filename in app.scan.scan_file_recursively(schema["processed_href"]["move_to"]+"\\*"):
+
+        keyword = app.parser.find_and_replace_array(filename,{
+           schema["processed_href"]["move_to"]:"",
+            ".csv":""
+        })
+
+        keyword_array.append(keyword)
+
+    return keyword_array
+
+
+app.comment.returnMessage("Start Search")
+compile_csv_content()

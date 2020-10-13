@@ -42,3 +42,26 @@ def find_and_replace_array(string,array):
 
     return string
     
+
+def hasNumbers(inputString):
+    return any(char.isdigit() for char in inputString)
+
+def regex(data,schema):
+
+    trim = schema["processed_href"]["trim"]
+
+    data = data.split(trim, 1)[0]
+
+    if schema["processed_href"]["match"] in data:
+        return_data = data
+    else:
+        return_data = ""
+        pass
+
+
+    for remove in schema["processed_href"]["remove"]:
+
+        return_data = return_data.replace(remove,"")
+
+    
+    return return_data

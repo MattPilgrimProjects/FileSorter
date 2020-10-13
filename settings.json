@@ -7,6 +7,8 @@
     }
   },
 
+  "raw_api_keywords":"S:\\Midi-Library\\raw_api_keywords\\",
+
     "return_xml_catalog":"S:\\Midi-Library\\karaokeversion_catalog_en_GBP.xml",
     "database":"S:\\Midi-Library\\db.json",
     "keyword_list_export":{

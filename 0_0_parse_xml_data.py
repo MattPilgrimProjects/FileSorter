@@ -1,7 +1,6 @@
 import app
 
-import schedule
-import time
+import library.cron
 
 def parse_xml_data():
 
@@ -9,7 +8,7 @@ def parse_xml_data():
 
     array=[]
 
-    return_keyword = app.parser.return_random_array_value(app.json.import_json(app.settings["keyword_list_export"]["compressed"]))
+    return_keyword = app.random_keyword()
 
     for artist in root.findall('./artist'):
 
@@ -49,8 +48,4 @@ def parse_xml_data():
 
     return "Done"
 
-schedule.every(10).seconds.do(parse_xml_data)
-
-while 1:
-    schedule.run_pending()
-    time.sleep(1)
+library.cron.schedule_handler(5,parse_xml_data)

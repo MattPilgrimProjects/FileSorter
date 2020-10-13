@@ -1,29 +1,34 @@
 import app
 
-keyword = app.random_keyword()
+import library.cron
 
-stage = app.setup['stage']
+def download_html_content():
+    keyword = app.random_keyword()
 
-for schema in stage:
+    stage = app.setup['stage']
 
-    search_url = schema['search_url'] + keyword
+    for schema in stage:
 
-    href_save_location = schema['href_save_location']
+        search_url = schema['search_url'] + keyword
 
-    href_save_file = href_save_location+keyword+".html"
+        href_save_location = schema['href_save_location']
 
-    app.directory.create_recursive_diretory(href_save_location)
+        href_save_file = href_save_location+keyword+".html"
 
-    app.directory.create_recursive_diretory(schema["processed_href"]["move_to"])
+        app.directory.create_recursive_diretory(href_save_location)
 
-    if app.file.file_does_not_exists(href_save_file):
+        app.directory.create_recursive_diretory(schema["processed_href"]["move_to"])
 
-        contents = app.url.returnURLContent(search_url)
+        if app.file.file_does_not_exists(href_save_file):
 
-        app.file.createFile(href_save_file,contents)
+            contents = app.url.returnURLContent(search_url)
 
-        app.comment.returnMessage("Download Content => "+href_save_file)
-      
-    else:
+            app.file.createFile(href_save_file,contents)
 
-        app.comment.returnMessage("File Already Exists => " + href_save_file)
+            app.comment.returnMessage("Download Content => "+href_save_file)
+        
+        else:
+
+            app.comment.returnMessage("File Already Exists => " + href_save_file)
+
+library.cron.schedule_handler(2,download_html_content)
