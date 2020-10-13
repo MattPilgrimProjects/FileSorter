@@ -9,7 +9,7 @@ def midiworld(schema,data):
 
         url = "/"+artist.replace(" ","-").lower()+"/"+track.replace(" ","-").lower()
 
-        track_id = schema.replace(" ("+artist+") - ","").replace(" =>midiworld","").replace(track,"")
+        track_id = schema.replace(" ("+artist+") - ","").replace("=>midiworld","").replace(track,"")
 
         return{
         "artist":data["artist"],
@@ -66,54 +66,39 @@ for setting in app.setup['stage']:
             manual_search=[]
 
             for schema in app.json.import_json(app.setup['raw_api_keywords']+keyword+".json"):
-    
+                
+
                 for array_value in array_content:
 
-                    freemidi_group = freemidi(array_value,schema) 
+                    if "=>freemidi" in array_value:
+                        group = freemidi(array_value,schema)
+                    else:
+                        group= midiworld(array_value,schema)
+                   
 
-                    midiworld_group = midiworld(array_value,schema)
+                    if group["track_id"].isdigit():
 
-                    if "=>freemidi" in array_value and freemidi_group["track_id"].isdigit():
-
-                        split_url = midiworld_group["url"].replace("/","-").split("-")
+                        split_url = group["url"].replace("/","-").split("-")
 
                         stats = app.parser.match_percentage(split_url,schema["url"])
 
-                        if stats > 80:
+                        if stats > 90:
                             manual_search.append({
-                                "source":freemidi_group["source"],
-                                "track_id":freemidi_group["track_id"],
-                                "url":freemidi_group["url"],
+                                "source":group["source"],
+                                "artist":group["artist"],
+                                "track":group["track"],
+                                "track_id":group["track_id"],
+                                "url":group["url"],
                                 "match":schema["url"],
-                                "stats":stats,
-                                "schema":schema
+                                "stats":stats
                             })
 
-                    if "=>midiworld" in array_value and freemidi_group["track_id"].isdigit():
-
-                        stats = app.parser.match_percentage(
-                            midiworld_group["url"],
-                            schema["url"]
-                            )
-
-                        if stats > 80:
-                            manual_search.append({
-                                "source":midiworld_group["source"],
-                                "track_id":midiworld_group["track_id"],
-                                "url":midiworld_group["url"],
-                                "match":schema["url"],
-                                "stats":stats,
-                                "schema":schema
-                            })
+                   
 
             if manual_search !=[]:
 
-                app.json.export_json("S:\\Midi-Library\\raw_artist_match\\"+keyword+".json",manual_search)
-                app.comment.returnMessage("Completed: "+"S:\\Midi-Library\\raw_artist_match\\"+keyword+".json")
-
-      
-                    
-            
+                app.json.export_json(setting["raw_artist_match"]+keyword+".json",manual_search)
+                app.comment.returnMessage("Completed: "+setting["raw_artist_match"]+keyword+".json")
 
         else:
             pass

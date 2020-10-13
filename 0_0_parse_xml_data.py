@@ -18,7 +18,6 @@ def parse_xml_data():
 
             for song in songs.iter("song"):
 
-
                 for url in song.iter("url"):
 
                     pass
@@ -29,8 +28,6 @@ def parse_xml_data():
 
                     pass
 
-
-
                     url = app.parser.find_and_replace_array(url.text,app.settings["xml_catalog"]["replace"])
 
                     if return_keyword in artist_name_tag or return_keyword in song_title_tag:
@@ -40,12 +37,11 @@ def parse_xml_data():
                             "track":song_title_tag,
                             "url": url
                         })
-    if app.file.file_exists("Z:\\raw_api_keywords\\"+return_keyword+".json"):
-        app.comment.returnMessage("Already added")
-    else:
-        app.comment.returnMessage("Z:\\raw_api_keywords\\"+return_keyword+".json")
-        app.json.export_json("Z:\\raw_api_keywords\\"+return_keyword+".json",array)
 
-    return "Done"
+    if app.file.file_exists(app.settings["raw_api_keywords"]+return_keyword+".json"):
+        return app.comment.returnMessage("Already added")
+    else:    
+        app.json.export_json(app.settings["raw_api_keywords"]+return_keyword+".json",array)
+        return app.comment.returnMessage(app.settings["raw_api_keywords"]+return_keyword+".json")
 
 library.cron.schedule_handler(5,parse_xml_data)

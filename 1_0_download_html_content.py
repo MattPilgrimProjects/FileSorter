@@ -5,9 +5,7 @@ import library.cron
 def download_html_content():
     keyword = app.random_keyword()
 
-    stage = app.setup['stage']
-
-    for schema in stage:
+    for schema in app.setup['stage']:
 
         search_url = schema['search_url'] + keyword
 

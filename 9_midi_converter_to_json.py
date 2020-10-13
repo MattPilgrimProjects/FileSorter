@@ -1,19 +1,23 @@
 import app
+import library.scan
+import library.midi
+import library.parser
 
-for schema in app.json.import_json(app.settings["live_database"]):
+for setting in app.setup['stage']:
 
-    json_output = app.settings["raw_midi_to_json"]+schema["title"]+"\\"+ schema["track_id"] + ".json"
-    midi_input =  app.settings["raw_midi_path"]+schema["title"]+"\\"+schema["track_id"] + ".mid"
+    for filename in library.scan.scan_file_recursively(setting["import_midi"]["download_location"]+"*"):
 
-    if app.file.file_exists(midi_input) and app.file.file_does_not_exists(json_output):
+        track_id = library.parser.find_and_replace_array(filename,{
+            setting["import_midi"]["download_location"]:"",
+            ".mid":""
+        })
+        
+        json_output = setting['raw_midi_to_json']+track_id+".json"
 
-        app.comment.returnMessage("Processing => "+midi_input)
+        app.comment.returnMessage("Processing => "+filename)
 
-        midi_data = app.midi.return_notes_and_channels(midi_input,schema)
+        midi_data = library.midi.return_notes_and_channels(filename,track_id)
 
         app.json.export_json(json_output,midi_data)
 
         app.comment.returnMessage("Completed => "+json_output)
-    else:
-        app.comment.returnMessage("Already Added")
-        pass

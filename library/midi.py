@@ -385,26 +385,26 @@ def read_midi(filename):
     return array
   
 
-def return_notes_and_channels(midi_filename,schema):
+def return_notes_and_channels(midi_filename,track_id):
     try:
-        mid = read_midi(midi_input)  
+        mid = read_midi(midi_filename)  
     except TypeError as error_message:
-        mid = str(error_message) +" - "+ schema["track_id"]
+        mid = str(error_message) +" - "+ track_id
         pass
     except EOFError as error_message:
-        mid = str(error_message) +" - "+ schema["track_id"]
+        mid = str(error_message) +" - "+ track_id
         pass
     except OSError as error_message:
-        mid = str(error_message) +" - "+ schema["track_id"]
+        mid = str(error_message) +" - "+ track_id
         pass
     except ValueError as error_message:
-        mid = str(error_message) +" - "+ schema["track_id"]
+        mid = str(error_message) +" - "+ track_id
         pass 
     except NameError as error_message:
-        mid = str(error_message) +" - "+ schema["track_id"]
+        mid = str(error_message) +" - "+ track_id
         pass      
     except KeyError as error_message:
-        mid = str(error_message) +" - "+ schema["track_id"]
+        mid = str(error_message) +" - "+ track_id
         pass  
     else:
         return mid
