@@ -14,9 +14,9 @@ for setting in app.settings['stage']:
             raw_midi_path = setting["import_midi"]["download_location"]
             import_midi_url = setting["import_midi"]["download_url"]
 
-            if library.file.file_does_not_exists(raw_midi_path+"\\"+schema['track_id']+".mid"):
+            if library.file.file_does_not_exists(raw_midi_path+schema['track_id']+".mid"):
 
                 midi = library.parser.request_data_from_url(import_midi_url+schema['track_id'])
-                library.file.createFile(raw_midi_path+"\\"+schema["track_id"]+".mid",midi.content)
-                library.comment.returnMessage("Adding Song: " + raw_midi_path+"\\"+schema['track_id']+".mid")
+                library.file.createFile(raw_midi_path+schema["track_id"]+".mid",midi.content)
+                library.comment.returnMessage("Adding Song: " + raw_midi_path+schema['track_id']+".mid")
 

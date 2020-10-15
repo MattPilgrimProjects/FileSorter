@@ -374,15 +374,26 @@ def read_midi(filename):
 
     array=[]
     mid = mido.MidiFile(filename)
-    
-  
-    for msg in mid.play():
 
-        msg = str(msg)
+    for i, track in enumerate(mid.tracks):
+        
+        channel = 'Track {}: {}'.format(i, track.name)
 
-        msg = msg.split(" ")
+        note_array=[]
 
-        array.append(msg)
+        for msg in track:
+            
+            msg = str(msg)
+                
+            if "note_on " in msg:
+                note_array.append(msg)
+         
+
+                # 
+        array.append({
+                "channel":channel,
+                "body":note_array
+            })
     return array
   
 

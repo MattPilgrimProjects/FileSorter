@@ -50,4 +50,4 @@ for data in parse_xml_data():
     pass
 
 
-library.cron.schedule_handler(5,parse_xml_data)
+library.cron.schedule_handler(1,parse_xml_data)

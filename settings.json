@@ -7,6 +7,8 @@
     }
   },
 
+  "midi_body_structure":"S:\\Midi-Library\\raw_midi_body_structure\\",
+
   "raw_api_keywords":"S:\\Midi-Library\\raw_api_keywords\\",
 
     "return_xml_catalog":"S:\\Midi-Library\\karaokeversion_catalog_en_GBP.xml",
@@ -19,6 +21,7 @@
 
     "raw_midi_to_json":"S:\\Midi-Library\\raw_midi_to_json\\",
 
+    "www":"C:\\inetpub\\wwwroot\\api\\www.json",
 
     "search_output":"S:\\api.csv",
 

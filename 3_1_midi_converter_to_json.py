@@ -8,8 +8,6 @@ for setting in app.setup['stage']:
 
     for filename in library.scan.scan_file_recursively(setting["import_midi"]["download_location"]+"*"):
 
-       
-
         track_id = library.parser.find_and_replace_array(filename,{
             setting["import_midi"]["download_location"]:"",
             ".mid":""
@@ -18,7 +16,7 @@ for setting in app.setup['stage']:
         json_output = setting['raw_midi_to_json']+track_id+".json"
         
 
-        if library.file.file_does_not_exists(json_output):
+        if library.file.file_exists(filename) and library.file.file_does_not_exists(json_output):
 
             app.comment.returnMessage("Processing => "+filename)
 

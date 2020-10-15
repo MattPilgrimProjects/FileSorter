@@ -42,7 +42,7 @@ app.comment.returnMessage("Starting")
 for setting in app.settings['stage']:
 
     
-    for filename in app.scan.scan_file_recursively(setting["raw_midi_to_json"]+"*.json"):
+    for filename in app.scan.scan_file_recursively(setting["raw_midi_to_json"]+"1576.json"):
 
         note_array=[]
         channel_array=[]
