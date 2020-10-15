@@ -374,6 +374,7 @@ def read_midi(filename):
 
     array=[]
     mid = mido.MidiFile(filename)
+    
   
     for msg in mid.play():
 
@@ -386,25 +387,13 @@ def read_midi(filename):
   
 
 def return_notes_and_channels(midi_filename,track_id):
+
     try:
-        mid = read_midi(midi_filename)  
-    except TypeError as error_message:
-        mid = str(error_message) +" - "+ track_id
+        mid = read_midi(midi_filename)
+    except EOFError:
         pass
-    except EOFError as error_message:
-        mid = str(error_message) +" - "+ track_id
+    except TypeError:
         pass
-    except OSError as error_message:
-        mid = str(error_message) +" - "+ track_id
-        pass
-    except ValueError as error_message:
-        mid = str(error_message) +" - "+ track_id
-        pass 
-    except NameError as error_message:
-        mid = str(error_message) +" - "+ track_id
-        pass      
-    except KeyError as error_message:
-        mid = str(error_message) +" - "+ track_id
-        pass  
     else:
         return mid
+

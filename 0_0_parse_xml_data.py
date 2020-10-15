@@ -6,9 +6,9 @@ def parse_xml_data():
 
     root = app.xml.importXML(app.settings["xml_catalog"]["xml_file"])
 
-    array=[]
-
     return_keyword = app.random_keyword()
+
+    array=[]
 
     for artist in root.findall('./artist'):
 
@@ -29,19 +29,25 @@ def parse_xml_data():
                     pass
 
                     url = app.parser.find_and_replace_array(url.text,app.settings["xml_catalog"]["replace"])
-
-                    if return_keyword in artist_name_tag or return_keyword in song_title_tag:
-                    
-                        array.append({
+                   
+                    array.append({
                             "artist":artist_name_tag,
                             "track":song_title_tag,
                             "url": url
-                        })
+                    })
 
     if app.file.file_exists(app.settings["raw_api_keywords"]+return_keyword+".json"):
-        return app.comment.returnMessage("Already added")
+       app.comment.returnMessage("Already added")
     else:    
         app.json.export_json(app.settings["raw_api_keywords"]+return_keyword+".json",array)
-        return app.comment.returnMessage(app.settings["raw_api_keywords"]+return_keyword+".json")
+        app.comment.returnMessage(app.settings["raw_api_keywords"]+return_keyword+".json")
+
+    return array
+
+writer = app.csv.createCSVHeader("S:\\Midi-Library\\db.csv",["artist","track","url"])
+for data in parse_xml_data():
+    writer.writerow(data)
+    pass
+
 
 library.cron.schedule_handler(5,parse_xml_data)

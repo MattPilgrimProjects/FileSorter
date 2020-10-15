@@ -61,51 +61,42 @@ for setting in app.setup['stage']:
 
         array_content = app.json.import_json(setting["raw_keywords_json"]+keyword+".json")
 
-        if app.file.file_exists(app.setup['raw_api_keywords']+keyword+".json"):
+        if app.file.file_exists(app.setup['raw_api_keywords']+keyword+".json") and app.file.file_exists(app.setup['raw_api_keywords']+keyword+".json"):
 
-            manual_search=[]
+                manual_search=[]
 
-            for schema in app.json.import_json(app.setup['raw_api_keywords']+keyword+".json"):
-                
+                for schema in app.json.import_json(app.setup['raw_api_keywords']+keyword+".json"):                  
 
-                for array_value in array_content:
+                    for array_value in array_content:
 
-                    if "=>freemidi" in array_value:
-                        group = freemidi(array_value,schema)
-                    else:
-                        group= midiworld(array_value,schema)
-                   
 
-                    if group["track_id"].isdigit():
+                        if "=>freemidi" in array_value:
+                            group = freemidi(array_value,schema)
+                        else:
+                            group= midiworld(array_value,schema)
+                    
 
-                        split_url = group["url"].replace("/","-").split("-")
+                        if group["track_id"].isdigit():
 
-                        stats = app.parser.match_percentage(split_url,schema["url"])
+                            split_url = group["url"].replace("/","-").split("-")
 
-                        if stats > 90:
-                            manual_search.append({
-                                "source":group["source"],
-                                "artist":group["artist"],
-                                "track":group["track"],
-                                "track_id":group["track_id"],
-                                "url":group["url"],
-                                "match":schema["url"],
-                                "stats":stats
-                            })
+                            stats = app.parser.match_percentage(split_url,schema["url"])
 
-                   
+                            if stats > 80:
+                                manual_search.append({
+                                    "source":group["source"],
+                                    "artist":group["artist"],
+                                    "track":group["track"],
+                                    "track_id":group["track_id"],
+                                    "url":group["url"],
+                                    "match":schema["url"],
+                                    "stats":stats
+                                })
 
-            if manual_search !=[]:
+                    
 
                 app.json.export_json(setting["raw_artist_match"]+keyword+".json",manual_search)
                 app.comment.returnMessage("Completed: "+setting["raw_artist_match"]+keyword+".json")
 
         else:
             pass
-
-
-  
- 
-
-
-

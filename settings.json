@@ -23,9 +23,16 @@
     "search_output":"S:\\api.csv",
 
     "Search_Location": [
-        "E:\\A\\"
+        "E:\\Library\\1\\"
     ],
     "Library": {
+        " Library":{
+            "sort_filepath": "D:\\Compressed\\%FILE_EXTENSION%\\",
+            "file_extensions": [
+                ".zip",
+                ".7z"
+            ]
+        },
         "Music Sorter by Artist > Album": {
             "sort_filepath": "D:\\Music\\%CONTRIBUTING_ARTISTS%\\",
             "file_extensions": [
@@ -83,7 +90,7 @@
             ]
         },
         "Document Sorter By Author": {
-            "sort_filepath": "D:\\Documents\\%AUTHORD%\\",
+            "sort_filepath": "D:\\Documents\\%AUTHORS%\\",
             "file_extensions": [
                 ".doc",
                 ".DOC",
@@ -152,7 +159,8 @@
 
     "search_database": "S:\\Midi-Library\\raw_href\\search.json",
 
-    "live_database": "S:\\Midi-Library\\raw_href\\clean.json",
+    "live_database": "S:\\Midi-Library\\api.json",
+    "dev_database": "S:\\Midi-Library\\api.csv",
 
     "processed_database":"S:\\Midi-Library\\raw_href\\processed.json",
 
@@ -175,6 +183,8 @@
                 "raw_midi_to_json":"S:\\Midi-Library\\raw_midi_to_json\\freemidi\\",
                 "raw_keywords_json":"S:\\Midi-Library\\raw_keywords_json\\freemidi\\",
                 "raw_artist_match":"S:\\Midi-Library\\raw_artist_match\\freemidi\\",
+                "midi_body_structure":"S:\\Midi-Library\\raw_midi_body_structure\\freemidi\\",
+                "raw_key_signatures":"S:\\Midi-Library\\raw_key_signatures\\freemidi\\",
                 "processed_href": {
                     "search_attribute": "a",
                     "move_to": "S:\\Midi-Library\\raw_href\\freemidi\\processed\\",
@@ -203,6 +213,8 @@
             "raw_midi_to_json":"S:\\Midi-Library\\raw_midi_to_json\\midiworld\\",
             "raw_keywords_json":"S:\\Midi-Library\\raw_keywords_json\\midiworld\\",
             "raw_artist_match":"S:\\Midi-Library\\raw_artist_match\\midiworld\\",
+            "midi_body_structure":"S:\\Midi-Library\\raw_midi_body_structure\\midiworld\\",
+            "raw_key_signatures":"S:\\Midi-Library\\raw_key_signatures\\midiworld\\",
             "processed_href": {
                 "search_attribute": "li",
                 "move_to": "S:\\Midi-Library\\raw_href\\midiworld\\processed\\",
