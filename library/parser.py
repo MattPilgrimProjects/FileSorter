@@ -3,6 +3,7 @@ import bs4 as bs
 from bs4 import BeautifulSoup, SoupStrainer
 import requests
 import random
+import re
 
 def parseLinksFromHTML(file,attribute):
     http = httplib2.Http()
@@ -65,3 +66,7 @@ def regex(data,schema):
 
     
     return return_data
+
+
+def sanitize(value):
+    return re.findall("[-)(a-zA-Z0-9 =>.$£':;?&,é]+", value)[0]

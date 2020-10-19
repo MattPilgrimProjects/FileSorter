@@ -1,4 +1,22 @@
 {
+
+    "sources":{
+        "track_list":{
+            "csv":"S:\\Midi-Library\\sources\\track_list.csv",
+            "json":"S:\\Midi-Library\\sources\\track_list.json"
+        },
+        "midi_list":{
+            "csv":"S:\\Midi-Library\\sources\\midi_list.csv",
+            "json":"S:\\Midi-Library\\sources\\midi_list.json"
+        },
+        "midi_list_tidy":{
+            "csv":"S:\\Midi-Library\\sources\\midi_list_tidy.csv",
+            "json":"S:\\Midi-Library\\sources\\midi_list_tidy.json"
+        },
+        "midi_location":"S:\\Midi-Library\\raw_midi\\"
+    },
+
+
   "xml_catalog":{
     "xml_file":"S:\\Midi-Library\\karaokeversion_catalog_en_GBP.xml",
     "replace":{
@@ -26,16 +44,9 @@
     "search_output":"S:\\api.csv",
 
     "Search_Location": [
-        "E:\\Library\\1\\"
-    ],
+        "D:\\2019-12\\Import\\3D Objects\\Unsorted\\A\\Compressed\\Unsorted\\Sorted\\Compressed\\Unsorted\\Unsorted\\Audio\\"
+     ],
     "Library": {
-        " Library":{
-            "sort_filepath": "D:\\Compressed\\%FILE_EXTENSION%\\",
-            "file_extensions": [
-                ".zip",
-                ".7z"
-            ]
-        },
         "Music Sorter by Artist > Album": {
             "sort_filepath": "D:\\Music\\%CONTRIBUTING_ARTISTS%\\",
             "file_extensions": [
@@ -64,7 +75,7 @@
             ]
         },
         "Picture Sorter By Year > Month": {
-            "sort_filepath": "D:\\Pictures\\%DATE_TAKEN_YEAR%-%DATE_TAKEN_MONTH%\\",
+            "sort_filepath": "D:\\Pictures\\%CAMERA_MODEL%\\%DATE_TAKEN_YEAR%-%DATE_TAKEN_MONTH%\\",
             "file_extensions": [
                 ".ai",
                 ".AI",
@@ -93,7 +104,7 @@
             ]
         },
         "Document Sorter By Author": {
-            "sort_filepath": "D:\\Documents\\%AUTHORS%\\",
+            "sort_filepath": "D:\\Documents\\%AUTHORS%\\%PROGRAM_NAME%\\",
             "file_extensions": [
                 ".doc",
                 ".DOC",
@@ -154,6 +165,69 @@
                 ".VOB",
                 ".wmv",
                 ".WMV"
+            ]
+        },
+
+        "Library":{
+            "sort_filepath": "E:\\Unsorted\\%ITEM_TYPE%\\",
+            "file_extensions": [
+                ".jpg",
+                ".JPG",
+                ".gif",
+                ".bmp",
+                ".png",
+                ".jpg",
+                ".jpeg",
+                ".gif",
+                ".tif",
+                ".tiff",
+                ".raw",
+                ".psd",
+
+
+                ".wav",
+                ".WAV",
+                ".aif",
+                ".aiff",
+                ".ogg",
+                ".mp3",
+                ".m4a",
+                ".aac",
+                ".mid",
+                ".wma",
+                ".flac",
+                ".rmi",
+                ".aifc",
+
+                ".pdf",
+                ".pptx",
+                ".xlsx",
+                ".docx",
+                ".xls",
+                ".odt",
+                ".doc",
+                ".ppt",
+                ".xls",
+                ".ods",
+                ".odc",
+
+                ".mp4",
+                ".MP4",
+                ".mov",
+                ".MOV",
+                ".m4v",
+
+                ".7z",
+                ".zip",
+                ".gz",
+                ".cab",
+                ".rar",
+                ".tar",
+
+                ".ost",
+                ".eml",
+                ".pst"
+
             ]
         }
     },

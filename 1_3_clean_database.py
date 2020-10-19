@@ -1,5 +1,8 @@
 import app
-import re
+# import re
+import library
+
+# This is significantly longer to run so ideally run at midnight (takes around 2 hours to compile)
 
 def midiworld(schema,data):
 
@@ -39,64 +42,41 @@ def freemidi(schema,data):
         "url": "/"+artist+"/"+track
         }
 
-def return_keywords_from_processed_list(schema):
+def clear_database():
 
-    keyword_array = []
+    manual_search=[]
 
-    for filename in app.scan.scan_file_recursively(schema["raw_keywords_json"]+"\\*"):
+    for schema in library.json.import_json(app.settings["sources"]["track_list"]["json"]):
 
-        keyword = app.parser.find_and_replace_array(filename,{
-           schema["raw_keywords_json"]:"",
-            ".json":""
-        })
+        array_content = app.json.import_json(app.settings["sources"]["midi_list"]["json"])
 
-        keyword_array.append(keyword)
+        for array_value in array_content:
+        
+            if "=>freemidi" in array_value:
+                group = freemidi(array_value,schema)
+            else:
+                group= midiworld(array_value,schema)            
 
-    return keyword_array
+            if group["track_id"].isdigit():
 
+                split_url = group["url"].replace("/","-").split("-")
 
-for setting in app.setup['stage']:
+                stats = app.parser.match_percentage(split_url,schema["url"])
 
-    for keyword in return_keywords_from_processed_list(setting):
+            if stats > 90:
+                library.comment.returnUpdateMessage("Added:"+ group["track_id"]+"                                              ")
+                manual_search.append({
+                    "source":group["source"],
+                    "artist":group["artist"],
+                    "track":group["track"],
+                    "track_id":group["track_id"],
+                    "check_url":group["url"],
+                    "original_url":schema["url"],
+                    "stats":stats
+                })
+    return manual_search
 
-        array_content = app.json.import_json(setting["raw_keywords_json"]+keyword+".json")
-
-        if app.file.file_exists(app.setup['raw_api_keywords']+keyword+".json") and app.file.file_exists(app.setup['raw_api_keywords']+keyword+".json"):
-
-                manual_search=[]
-
-                for schema in app.json.import_json(app.setup['raw_api_keywords']+keyword+".json"):                  
-
-                    for array_value in array_content:
-
-
-                        if "=>freemidi" in array_value:
-                            group = freemidi(array_value,schema)
-                        else:
-                            group= midiworld(array_value,schema)
-                    
-
-                        if group["track_id"].isdigit():
-
-                            split_url = group["url"].replace("/","-").split("-")
-
-                            stats = app.parser.match_percentage(split_url,schema["url"])
-
-                            if stats > 80:
-                                manual_search.append({
-                                    "source":group["source"],
-                                    "artist":group["artist"],
-                                    "track":group["track"],
-                                    "track_id":group["track_id"],
-                                    "url":group["url"],
-                                    "match":schema["url"],
-                                    "stats":stats
-                                })
-
-                    
-
-                app.json.export_json(setting["raw_artist_match"]+keyword+".json",manual_search)
-                app.comment.returnMessage("Completed: "+setting["raw_artist_match"]+keyword+".json")
-
-        else:
-            pass
+app.comment.returnMessage("Start")
+app.json.export_json(app.settings["sources"]["midi_list_tidy"]["json"],clear_database())
+app.csv.export_csv(app.settings["sources"]["midi_list_tidy"]["csv"],["source","artist","track","track_id","check_url","original_url","stats"],clear_database())
+app.comment.returnMessage("Completed")

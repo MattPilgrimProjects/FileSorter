@@ -20,3 +20,6 @@ def createFile(file,content):
 
 def file_remove(filename):
     return shutil.rmtree(filename)
+
+def move_file(original_location,new_location):
+    return shutil.move(original_location,new_location)

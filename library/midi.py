@@ -386,7 +386,7 @@ def read_midi(filename):
             msg = str(msg)
                 
             if "note_on " in msg:
-                note_array.append(msg)
+                note_array.append(msg.split("note=")[1].split(" ")[0])
          
 
                 # 
@@ -404,6 +404,8 @@ def return_notes_and_channels(midi_filename,track_id):
     except EOFError:
         pass
     except TypeError:
+        pass
+    except OSError:
         pass
     else:
         return mid

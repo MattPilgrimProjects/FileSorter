@@ -6,21 +6,9 @@ import library.comment
 
 import numpy
 
-def destinct(array,channel):
-
-    return_array=[]
-
-    for key in array:
-
-        if key[1] == channel and key[0] =="note_on":
-            return_array.append(key[2].replace("note=",""))
-        else:
-            pass
-
-        pass
-
-    
-    a = numpy.array(return_array)
+def destinct(array):
+   
+    a = numpy.array(array)
     unique, counts = numpy.unique(a, return_counts=True) 
 
     test =  dict(zip(unique, counts))
@@ -42,8 +30,9 @@ app.comment.returnMessage("Starting")
 for setting in app.settings['stage']:
 
     
-    for filename in app.scan.scan_file_recursively(setting["raw_midi_to_json"]+"1576.json"):
+    for filename in app.scan.scan_file_recursively(setting["raw_midi_to_json"]+"*.json"):
 
+        array=[]
         note_array=[]
         channel_array=[]
 
@@ -54,19 +43,15 @@ for setting in app.settings['stage']:
         })
 
         app.comment.returnMessage("Proccessing: "+keyword+".json") 
+        
+        minimize_array={}
 
         for channel in library.json.import_json(filename):
 
-            note_array.append(channel)
-            channel_array.append(channel[1])
-                
-            channel_array = list(dict.fromkeys(channel_array))
+            minimize_array[channel['channel']]=destinct(channel["body"])
 
-            array={}
+        array.append(minimize_array)
 
-            for channel in channel_array:
-
-                array[channel]=destinct(note_array,channel)
 
         app.json.export_json(setting["midi_body_structure"]+keyword+".json",array)   
         app.comment.returnMessage(setting["midi_body_structure"]+keyword+".json")   

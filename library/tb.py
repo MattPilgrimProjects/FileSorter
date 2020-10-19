@@ -33,7 +33,7 @@ def scanFilesRecursively():
     totalNumberOfFiles=0
     filelist=[]
 
-    for filename in returnFullFileList():
+    for filename in returnFullGlobList():
 
         try:
             filename
@@ -540,6 +540,10 @@ def returnFullFileList():
     for file_extension in returnFullFileExtensionList():
         
         for singleScanLocations in import_file("settings.json")["Search_Location"]:
+
+            # for filename in glob.iglob( singleScanLocations + '/**/*' + file_extension.upper() , recursive=True):
+            #     array.append(filename)
+            # pass
 
             for filename in glob.iglob( singleScanLocations + '/**/*' + file_extension , recursive=True):
                 array.append(filename)

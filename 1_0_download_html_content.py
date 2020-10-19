@@ -51,6 +51,6 @@ def download_html_content():
             app.comment.returnMessage("File Already Exists => " + href_save_file)
 
 
-library.cron.schedule_handler(1,download_html_content)
+library.cron.schedule_handler(5,download_html_content)
 
 

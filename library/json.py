@@ -8,7 +8,7 @@ def import_json(filename):
 
 def export_json(filename,array):
     with open(filename, 'w') as json_file:
-        return json.dump(array, json_file,indent=4) 
+        return json.dump(array, json_file,ensure_ascii=False,indent=4) 
 
 
 def update_json(filename,content):

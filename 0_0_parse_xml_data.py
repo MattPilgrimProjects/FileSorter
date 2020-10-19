@@ -1,12 +1,11 @@
 import app
+import re
 
 import library.cron
 
 def parse_xml_data():
 
     root = app.xml.importXML(app.settings["xml_catalog"]["xml_file"])
-
-    return_keyword = app.random_keyword()
 
     array=[]
 
@@ -31,23 +30,20 @@ def parse_xml_data():
                     url = app.parser.find_and_replace_array(url.text,app.settings["xml_catalog"]["replace"])
                    
                     array.append({
-                            "artist":artist_name_tag,
-                            "track":song_title_tag,
+                            "artist":library.parser.sanitize(artist_name_tag),
+                            "track": library.parser.sanitize(song_title_tag),
                             "url": url
                     })
-
-    if app.file.file_exists(app.settings["raw_api_keywords"]+return_keyword+".json"):
-       app.comment.returnMessage("Already added")
-    else:    
-        app.json.export_json(app.settings["raw_api_keywords"]+return_keyword+".json",array)
-        app.comment.returnMessage(app.settings["raw_api_keywords"]+return_keyword+".json")
-
     return array
 
-writer = app.csv.createCSVHeader("S:\\Midi-Library\\db.csv",["artist","track","url"])
+artist_profile=[]
+json_array=[]
+writer = app.csv.createCSVHeader(app.settings["sources"]["track_list"]["csv"],["artist","track","url"])
+
 for data in parse_xml_data():
+
+    json_array.append(data)
     writer.writerow(data)
     pass
 
-
-library.cron.schedule_handler(1,parse_xml_data)
+app.json.export_json(app.settings["sources"]["track_list"]["json"],json_array)

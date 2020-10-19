@@ -1,42 +1,64 @@
 import app
+import re
 
-stage = app.setup['stage']
+def processed_to_csv():
+    stage = app.setup['stage']
 
-for schema in stage:
+    return_array=[]
 
-    file_array = app.scan.scan_file_recursively(schema["href_save_location"]+"*.html")
+    for schema in stage:
 
-    for filename in file_array:
-        
-        keyword = filename.replace(schema["href_save_location"],"").replace(".html","")
+        file_array = app.scan.scan_file_recursively(schema["href_save_location"]+"*.html")
 
-        move_to = schema["processed_href"]["move_to"]+keyword+".csv"
+        for filename in file_array:
+            
+            keyword = filename.replace(schema["href_save_location"],"").replace(".html","")
 
-        href_file = schema["href_save_location"]+keyword+".html"
+            move_to = schema["processed_href"]["move_to"]+keyword+".csv"
 
-        localhost = schema["localhost"]+keyword+".html"
+            href_file = schema["href_save_location"]+keyword+".html"
 
-        search_attribute = schema["processed_href"]["search_attribute"]
+            localhost = schema["localhost"]+keyword+".html"
 
-        match_array = schema["processed_href"]["match"]
+            search_attribute = schema["processed_href"]["search_attribute"]
 
-
-        row={}
-
-        if app.file.file_does_not_exists(move_to):
-
-            writer = app.csv.createCSVHeader(move_to,["href"])
-
+            match_array = schema["processed_href"]["match"]
 
             for link in app.parser.parseLinksFromHTML(localhost,search_attribute):
 
                 for match in match_array:
-    
+        
                     if match in str(link):
-                        row['href'] = link
-                        writer.writerow(row)
-                        
+
+                        data = str(link)
+
+                        data = app.parser.regex(data,schema)
+
+                        raw_data = data.strip()+"=>"+schema['title']
+
+                        if app.parser.hasNumbers(raw_data) and raw_data!="":
+                            return_array.append(raw_data) 
+                               
                     pass
-            
-            app.comment.returnMessage(move_to)
-    pass     
+                
+        pass     
+    return return_array
+
+src = app.parser.remove_duplicates_from_array(processed_to_csv())
+
+writer = app.csv.createCSVHeader(app.settings["sources"]["midi_list"]["csv"],["href"])
+
+return_array=[]
+
+for data in src:
+
+    data = app.parser.sanitize(data)
+
+    writer.writerow({"href":data})
+    
+    return_array.append(data)
+    
+
+app.json.export_json(app.settings["sources"]["midi_list"]["json"],return_array)
+
+app.comment.returnMessage("Completed"+app.settings["sources"]["midi_list"]["csv"])

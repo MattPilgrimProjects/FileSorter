@@ -5,18 +5,19 @@ import library.parser
 import library.comment
 import library.file
 
-for setting in app.settings['stage']:
+import time
 
-    for filename in library.scan.scan_file_recursively(setting['raw_artist_match']+"*"):
+def import_midi_files(schema):
 
-        for schema in library.json.import_json(filename):
+    if library.file.file_exists(app.settings["sources"]["midi_location"]+schema["source"]+"\\"+schema["track_id"]+".mid"):
+        pass
+    else:
+        midi = library.parser.request_data_from_url(app.settings["import_midi_url"][schema["source"]]+schema["track_id"])
+        library.file.createFile(app.settings["sources"]["midi_location"]+schema["source"]+"\\"+schema["track_id"]+".mid",midi.content)
 
-            raw_midi_path = setting["import_midi"]["download_location"]
-            import_midi_url = setting["import_midi"]["download_url"]
 
-            if library.file.file_does_not_exists(raw_midi_path+schema['track_id']+".mid"):
+    return app.comment.returnMessage("Track Added: "+schema["track_id"])
 
-                midi = library.parser.request_data_from_url(import_midi_url+schema['track_id'])
-                library.file.createFile(raw_midi_path+schema["track_id"]+".mid",midi.content)
-                library.comment.returnMessage("Adding Song: " + raw_midi_path+schema['track_id']+".mid")
-
+for schema in library.json.import_json(app.settings["sources"]["midi_list_tidy"]["json"]):
+    time.sleep(10)
+    import_midi_files(schema)
