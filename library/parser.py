@@ -69,4 +69,6 @@ def regex(data,schema):
 
 
 def sanitize(value):
+
     return re.findall("[-)(a-zA-Z0-9 =>.$£':;?&,é]+", value)[0]
+

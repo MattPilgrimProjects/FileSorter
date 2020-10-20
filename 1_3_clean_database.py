@@ -66,6 +66,8 @@ def clear_database():
             if stats > 90:
                 library.comment.returnUpdateMessage("Added:"+ group["track_id"]+"                                              ")
                 manual_search.append({
+                    "url_artist":schema["url"].split("/")[1],
+                    "url_track":schema["url"].split("/")[2],
                     "source":group["source"],
                     "artist":group["artist"],
                     "track":group["track"],
