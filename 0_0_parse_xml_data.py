@@ -5,7 +5,7 @@ import library.cron
 
 def parse_xml_data():
 
-    root = app.xml.importXML(app.settings["xml_catalog"]["xml_file"])
+    root = app.xml.importXML("S:\Midi-Library\karaokeversion_catalog_en_GBP0.xml")
 
     array=[]
 
@@ -17,22 +17,25 @@ def parse_xml_data():
 
             for song in songs.iter("song"):
 
-                for url in song.iter("url"):
+                song_title_tag = song.find("name").text
 
-                    pass
+                url = app.parser.find_and_replace_array(song.find("url").text,app.settings["xml_catalog"]["replace"])
 
-                for song_title in song.iter('name'):
+                for files in song.iter("files"):
 
-                    song_title_tag = song_title.text
+                    for file_content in files:
 
-                    pass
+                        print(file_content)
 
-                    url = app.parser.find_and_replace_array(url.text,app.settings["xml_catalog"]["replace"])
-                   
-                    array.append({
-                            "artist":library.parser.sanitize(artist_name_tag),
-                            "track": library.parser.sanitize(song_title_tag),
-                            "url": url
+                    
+
+                
+
+      
+                array.append({
+                        "artist":library.parser.sanitize(artist_name_tag),
+                        "track": library.parser.sanitize(song_title_tag),
+                        "url": url
                     })
     return array
 
