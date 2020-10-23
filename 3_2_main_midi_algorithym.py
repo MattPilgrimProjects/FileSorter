@@ -32,27 +32,30 @@ for setting in app.settings['stage']:
     
     for filename in app.scan.scan_file_recursively(setting["raw_midi_to_json"]+"*.json"):
 
-        array=[]
-        note_array=[]
-        channel_array=[]
-
-        
         keyword = app.parser.find_and_replace_array(filename,{
-           setting["raw_midi_to_json"]:"",
-            ".json":""
-        })
+            setting["raw_midi_to_json"]:"",
+                ".json":""
+            })
 
-        app.comment.returnMessage("Proccessing: "+keyword+".json") 
-        
-        minimize_array={}
+        if library.file.file_exists(filename):
+          
+            if library.json.import_json(filename) ==None:
+                library.comment.returnMessage("Error on "+ filename)
+            else:
+                array=[]
+                note_array=[]
+                channel_array=[]          
 
-        for channel in library.json.import_json(filename):
+                app.comment.returnMessage("Proccessing: "+filename)   
+                
+                minimize_array={}
 
-            minimize_array[channel['channel']]=destinct(channel["body"])
+                for channel in library.json.import_json(filename):                   
 
-        array.append(minimize_array)
+                    minimize_array[channel['channel']]=destinct(channel["body"])
 
-
-        app.json.export_json(setting["midi_body_structure"]+keyword+".json",array)   
+            array.append(minimize_array)
+                    
+        app.json.export_json(setting["midi_body_structure"]+keyword+".json",array[0])   
         app.comment.returnMessage(setting["midi_body_structure"]+keyword+".json")   
   

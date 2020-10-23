@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup, SoupStrainer
 import requests
 import random
 import re
+import numpy
 
 def parseLinksFromHTML(file,attribute):
     http = httplib2.Http()
@@ -71,4 +72,20 @@ def regex(data,schema):
 def sanitize(value):
 
     return re.findall("[-)(a-zA-Z0-9 =>.$£':;?&,é]+", value)[0]
+
+
+def distinct(array):
+    
+    a = numpy.array(array)
+    unique, counts = numpy.unique(a, return_counts=True) 
+
+    test =  dict(zip(unique, counts))
+
+    return_array_2={}
+
+    for key,value in test.items():
+
+        return_array_2[key]=str(value)
+
+    return return_array_2
 

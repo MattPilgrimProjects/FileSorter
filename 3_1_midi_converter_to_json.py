@@ -16,7 +16,7 @@ for setting in app.setup['stage']:
         json_output = setting['raw_midi_to_json']+track_id+".json"
         
 
-        if library.file.file_exists(filename):
+        if library.file.file_exists(filename) and library.file.file_does_not_exists(json_output):
 
             app.comment.returnMessage("Processing => "+filename)
 
