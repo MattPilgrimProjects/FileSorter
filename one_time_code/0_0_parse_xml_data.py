@@ -21,6 +21,8 @@ def parse_xml_data():
 
                 url = app.parser.find_and_replace_array(song.find("url").text,app.settings["xml_catalog"]["replace"])
 
+                print(url)
+
                 array.append({
                         "artist":library.parser.sanitize(artist_name_tag),
                         "track": library.parser.sanitize(song_title_tag),

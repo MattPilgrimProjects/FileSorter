@@ -20,11 +20,12 @@ def importCSV(filename):
                     move_directory = sortFilePath(library["SORT_FILEPATH"],row)
                     move_filename = move_directory+row["NAME"]+row['FILE_EXTENSION']
 
-                    
-
                     if tb.file_does_not_exists(move_filename) and tb.file_exists(original_filename) and "%" not in move_filename:
+                        
+                        
+
                         try:
-                            tb.create_recursive_diretory(move_directory)
+                            library.create_recursive_directory(move_directory)
                         except(FileNotFoundError):
                             tb.returnMessage("Unable to create Directory")
 

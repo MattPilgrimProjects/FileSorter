@@ -16,7 +16,7 @@ def import_midi_files(schema):
         library.file.createFile(app.settings["sources"]["midi_location"]+schema["source"]+"\\"+schema["track_id"]+".mid",midi.content)
 
 
-    return app.comment.returnMessage("Track Added: "+schema["track_id"])
+    return app.comment.returnMessage("Track Added: "+app.settings["sources"]["midi_location"]+schema["source"]+"\\"+schema["track_id"]+".mid")
 
 for schema in library.json.import_json(app.settings["sources"]["midi_list_tidy"]["json"]):
     time.sleep(10)

@@ -64,7 +64,8 @@ def clear_database():
                 stats = app.parser.match_percentage(split_url,schema["url"])
 
             if stats > 90:
-                library.comment.returnUpdateMessage("Added:"+ group["track_id"]+"                                              ")
+
+                library.comment.returnUpdateMessage("Added:"+ schema["url"]+"                                              ")
                 manual_search.append({
                     "url_artist":schema["url"].split("/")[1],
                     "url_track":schema["url"].split("/")[2],
@@ -76,7 +77,7 @@ def clear_database():
                     "original_url":schema["url"],
                     "stats":stats
                 })
-    return manual_search
+    return None
 
 app.comment.returnMessage("Start")
 app.json.export_json(app.settings["sources"]["midi_list_tidy"]["json"],clear_database())

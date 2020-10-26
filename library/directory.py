@@ -1,6 +1,6 @@
 import os
 
-def create_recursive_diretory(path):
+def create_recursive_directory(path):
     try:
         os.makedirs(path, exist_ok=True)
     except OSError:

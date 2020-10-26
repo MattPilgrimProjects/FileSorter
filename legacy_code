@@ -45,3 +45,14 @@
 
 
 # ?aff=948
+
+
+,
+        {
+            "title":"sortmusic",
+            "search_url":"https://www.sortmusic.com/_%ArtistInitial%/%Artist%-free-midi-files,len.html",
+            "download_url":"http://www.sortmusic.com/_&ArtistInitial&/%Artist%-midi-file,ti%SongTitle%,len.html"
+        }
+
+
+        def keyword_random():

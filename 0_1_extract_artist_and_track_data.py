@@ -10,7 +10,6 @@ def songs(artist):
     return return_handler(artist,artist["songs"]["song"])
 
 def return_handler(artist,song):
-
     return {
         "song_id":library.parser.sanitize(song["@id"]),
         "artist": library.parser.sanitize(artist["name"]),

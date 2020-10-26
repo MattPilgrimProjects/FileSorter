@@ -141,6 +141,12 @@ for filename in library.scan.scan_file_recursively("S:\\Midi-Library\\raw_midi_b
 
     data = remove_filepath.split("\\")
 
+    library.json.export_json(app.settings["raw_key_signatures"]+data[0]+"\\"+data[1]+".json",{
+        "result":return_key_signature(filename)
+    })
+
+    library.comment.returnMessage("Exported: "+ app.settings["raw_key_signatures"]+data[0]+"\\"+data[1]+".json")
+
     array.append({
         "source":data[0],
         "id":data[1],

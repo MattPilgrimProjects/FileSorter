@@ -15,7 +15,7 @@ def createCSVHeader(filepath, header):
 
 def importCSVData(filename):
     returnFile=[]
-    with open(filename) as csv_file:
+    with open(filename, encoding="utf8") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         for row in csv_reader:
             returnFile.append(row) 
@@ -23,6 +23,7 @@ def importCSVData(filename):
 
 def export_csv(filename,header,data):
     writer = createCSVHeader(filename,header)
+    
     for row in data:
 
         writer.writerow(row)
