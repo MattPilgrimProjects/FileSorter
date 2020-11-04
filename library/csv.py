@@ -21,6 +21,14 @@ def importCSVData(filename):
             returnFile.append(row) 
         return returnFile
 
+def import_csv(filename):
+    returnFile=[]
+    with open(filename, encoding="utf8") as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            returnFile.append(row) 
+        return returnFile
+
 def export_csv(filename,header,data):
     writer = createCSVHeader(filename,header)
     

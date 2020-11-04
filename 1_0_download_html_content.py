@@ -2,44 +2,34 @@ import app
 import library.cron
 import library.comment
 import time
+import library
 
-def download_html_content(keyword,schema):
+def download_html_content(search_url,save_location):
 
-    library.comment.returnMessage("Processing => "+keyword + " - " +schema["title"])  
-
-    search_url = schema['search_url'] + keyword
-
-    href_save_location = schema['href_save_location']
-
-    href_save_file = href_save_location+keyword+".html"
-
-    library.directory.create_recursive_directory(href_save_location)
-
-    library.directory.create_recursive_directory(schema["processed_href"]["move_to"])
+    library.comment.returnMessage("Processing => "+search_url)  
 
     contents = library.url.returnURLContent(search_url)
 
-    library.file.createFile(href_save_file,contents)
+    library.file.createFile(save_location,contents)
 
-    library.comment.returnMessage("Download Content => "+href_save_file)   
+    library.comment.returnMessage("Download Content => "+save_location)   
 
     return None
 
 
 compressed_keyword_array = library.json.import_json(app.settings['keyword_list_export']['compressed'])
 
-for schema in app.settings["stage"]:
 
-    for keyword in compressed_keyword_array:
 
-        if library.file.file_does_not_exists(schema["href_save_location"]+keyword+".html"):
-            
+for keyword in compressed_keyword_array:
 
-            time.sleep(41.6)
-            download_html_content(keyword,schema)
-            
+        for schema in app.settings["stage"]:
 
-        pass
+            if library.file.file_exists(schema["href_save_location"]+keyword+".html"):
+                pass
+            else:
+                time.sleep(3)
+                download_html_content(schema["search_url"]+keyword,schema["href_save_location"]+keyword+".html")
 
-    
+
 

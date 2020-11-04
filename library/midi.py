@@ -2,6 +2,7 @@ import json
 import mido
 
 
+
 def midi_range_array_by_note():
     return{
             "C":"0",
@@ -370,43 +371,67 @@ def export_processed_content(mid,process_filename):
     return array
 
 
-def read_midi(filename):
+def read_midi(filename,channel_name):
 
     array=[]
     mid = mido.MidiFile(filename)
 
+    
+
     for i, track in enumerate(mid.tracks):
         
-        channel = 'Track {}: {}'.format(i, track.name)
+        channel = track.name
 
         note_array=[]
+
+        raw_msg=""
+
+        raw_data=[]
+        
 
         for msg in track:
             
             msg = str(msg)
-                
+
+            
+            
+             
             if "note_on " in msg:
                 note_array.append(msg.split("note=")[1].split(" ")[0])
-         
 
-                # 
-        array.append({
-                "channel":channel,
-                "body":note_array
-            })
+            if "program_change" in msg:
+                raw_msg = msg.split("program=")[1].split(" ")[0]
+            
+           
+        
+
+            if "note_on" not in msg :
+                raw_data.append(msg)
+         
+            if raw_msg=="0" and "channel=9" in msg:
+                raw_msg="Dr"
+
+            if raw_msg=="0" and "channel=9" not in msg:
+                raw_msg="1"
+
+        if note_array:        
+            array.append({
+                    "channel":channel,
+                    "body":note_array,
+                    "instrument":channel_name[raw_msg],
+                    "raw":raw_data
+                })
+        else:
+            pass
     return array
   
 
-def return_notes_and_channels(midi_filename,track_id):
+def return_notes_and_channels(midi_filename,track_id,channel_name):
 
     try:
-        mid = read_midi(midi_filename)
-    except EOFError:
-        pass
-    except TypeError:
-        pass
-    except OSError:
-        pass
+        mid = read_midi(midi_filename,channel_name)
+    except:
+        print("File Error " + midi_filename)     
     else:
         return mid
 

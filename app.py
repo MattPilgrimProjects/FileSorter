@@ -1,28 +1,6 @@
 import library.json
 import library.parser
-import library.xml
-import library.json
-import library.directory
-import library.comment
-import library.file
-import library.url
-import library.scan
-import library.csv
-import library.tb
-import library.midi
 
-
-directory = library.directory
-xml = library.xml
-json = library.json
-comment = library.comment
-parser = library.parser
-file = library.file
-url = library.url
-scan = library.scan
-csv = library.csv
-tb = library.tb
-midi = library.midi
 
 setup = library.json.import_json("settings.json")
 

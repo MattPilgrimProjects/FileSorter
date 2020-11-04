@@ -1,43 +1,28 @@
 import app
-import library.json
+import library.comment
 import library.scan
 import library.file
-import library.comment
-
-import numpy
-
-def destinct(array):
-   
-    a = numpy.array(array)
-    unique, counts = numpy.unique(a, return_counts=True) 
-
-    test =  dict(zip(unique, counts))
-
-    return_array_2={}
-
-    for key,value in test.items():
-
-        return_array_2[key]=str(value)
-
-    return return_array_2
-
-###########################################################################
+import library.csv
+    
+instrument_type_array = library.json.import_json("S:\\Midi-Library\\instruments_types.json")
 
 main_array=[]
 
-app.comment.returnMessage("Starting")   
+csv_data=[]
+
+library.comment.returnMessage("Starting")   
 
 for setting in app.settings['stage']:
 
     
-    for filename in app.scan.scan_file_recursively(setting["raw_midi_to_json"]+"*.json"):
+    for filename in library.scan.scan_file_recursively(setting["raw_midi_to_json"]+"*.json"):
 
-        keyword = app.parser.find_and_replace_array(filename,{
+        keyword = library.parser.find_and_replace_array(filename,{
             setting["raw_midi_to_json"]:"",
                 ".json":""
             })
 
-        if library.file.file_exists(filename):
+        if library.file.file_exists(filename) and library.file.file_does_not_exists(setting["midi_body_structure"]+keyword+".json"):
           
             if library.json.import_json(filename) ==None:
                 library.comment.returnMessage("Error on "+ filename)
@@ -46,16 +31,52 @@ for setting in app.settings['stage']:
                 note_array=[]
                 channel_array=[]          
 
-                app.comment.returnMessage("Proccessing: "+filename)   
+                library.comment.returnUpdateMessage("Proccessing: "+filename)   
                 
                 minimize_array={}
 
-                for channel in library.json.import_json(filename):                   
+                num=0
 
-                    minimize_array[channel['channel']]=destinct(channel["body"])
+                for channel in library.json.import_json(filename): 
+
+                    num = num+1
+
+                    channel_return="-"
+                    
+
+                    # for midi_array in ["BASS","Bass","bass","Acoustic Bass","Electric Bass (finger)","Electric Bass (pick)","Fretless Bass","Slap Bass 1","Slap Bass 2","Synth Bass","Synth Bass 2"]:
+                  
+                    #     if midi_array in channel['channel']:
+                    #         channel_return = "Bass"
+                    #     else:
+                    #         pass
+                    
+                    
+                    category_match=instrument_type_array[channel['instrument']]
+
+                             
+                    csv_data.append({
+                        "old_channel":channel['channel'],
+                        "possible_match":channel['instrument'],
+                        "category_match":category_match,
+                        "check_data":setting["import_midi"]["download_location"]+keyword+".mid",
+                        "check_json_data":filename
+                    })
+
+                        
+                    if channel["body"]:
+                        minimize_array[str(num)+": "+category_match]=library.parser.distinct(channel["body"])
+                    else:
+                        pass
 
             array.append(minimize_array)
                     
-        app.json.export_json(setting["midi_body_structure"]+keyword+".json",array[0])   
-        app.comment.returnMessage(setting["midi_body_structure"]+keyword+".json")   
+            library.json.export_json(setting["midi_body_structure"]+keyword+".json",array[0])   
+            library.comment.returnUpdateMessage(setting["midi_body_structure"]+keyword+".json                                ")   
+        else:
+            pass
   
+library.csv.export_csv("S:\\Midi-Library\\draft_channel_check.csv",["old_channel","possible_match","category_match","check_data","check_json_data"],csv_data)
+library.comment.returnMessage("Completed")
+library.file.execute("S:\\Midi-Library\\draft_channel_check.csv")
+

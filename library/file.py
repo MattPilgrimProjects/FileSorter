@@ -28,3 +28,6 @@ def file_remove(filename):
 
 def move_file(original_location,new_location):
     return shutil.move(original_location,new_location)
+
+def execute(filename):
+    return os.system(filename)

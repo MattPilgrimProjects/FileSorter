@@ -1,10 +1,11 @@
 import app
-import library
+import library.scan 
+import library.comment
 
 
 def return_key_signature(filename):
 
-    library.comment.returnMessage("Processing:"+filename)
+    library.comment.returnUpdateMessage("Processing:"+filename)
 
     file_content = library.json.import_json(filename)
 
@@ -20,9 +21,6 @@ def return_key_signature(filename):
         "B Major":["B", "C#/Db", "D#/Eb", "E", "F#/Gb", "G#/Ab", "A#/Bb"]
     }
 
-    minor_scales={
-        "B Minor":["B","C#/Db","D", "E","F#/Gb", "G","A"]
-    }
 
     full_chord_array=[]
     full_notes_list=[]
@@ -30,6 +28,8 @@ def return_key_signature(filename):
     full_list_of_notes_after_max_found=[]
 
     for channel,note_array in file_content.items():
+
+        channel = channel
 
         most_used_note_array=[]
 
@@ -107,8 +107,7 @@ def return_key_signature(filename):
         pass
 
 
-    return_all_notes_result=[]
-
+ 
     for midi_note,count in library.parser.distinct(full_list_of_notes_after_max_found).items():
 
         if count == max(return_all_notes):
@@ -117,18 +116,16 @@ def return_key_signature(filename):
 
             if midi_note in major:
                 return major
-                # print(diatonic_scale[major])
             else:
                 return midi_note+" Minor"
-                # print(minor_scales[midi_note+" Minor"])
-                
-                pass
+              
+
 
     
 
         pass
 
-
+###########################################################################################################
 
 array=[]
 
@@ -145,7 +142,7 @@ for filename in library.scan.scan_file_recursively("S:\\Midi-Library\\raw_midi_b
         "result":return_key_signature(filename)
     })
 
-    library.comment.returnMessage("Exported: "+ app.settings["raw_key_signatures"]+data[0]+"\\"+data[1]+".json")
+    library.comment.returnUpdateMessage("Exported: "+ app.settings["raw_key_signatures"]+data[0]+"\\"+data[1]+".json                                     ")
 
     array.append({
         "source":data[0],
@@ -154,5 +151,6 @@ for filename in library.scan.scan_file_recursively("S:\\Midi-Library\\raw_midi_b
     })
 
 library.json.export_json("S:\\Midi-Library\\sources\\key_signature_list.json",array)
+library.comment.returnMessage("Completed")
 
  

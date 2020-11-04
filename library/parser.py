@@ -73,6 +73,10 @@ def sanitize(value):
 
     return re.findall("[-)(a-zA-Z0-9 =>.$£':;?&,é]+", value)[0]
 
+def filename_sanitize(value):
+    return re.findall("[a-zA-Z0-9]+", value)
+
+
 
 def distinct(array):
     
