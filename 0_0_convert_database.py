@@ -9,7 +9,7 @@ database_output   = app.settings["api"][0]["output"]["json"]
 
 return_music_content = library.xml.xml_to_dictionary(database_filename)
 
-app.json.export_json(
+library.json.export_json(
     database_output,
     return_music_content
     )

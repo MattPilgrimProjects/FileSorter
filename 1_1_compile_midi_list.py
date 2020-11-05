@@ -1,5 +1,9 @@
 import app
-import library
+import library.scan 
+import library.file
+import library.parser
+import library.csv
+import library.comment
 
 def processed_to_csv(filename,schema):
 
@@ -9,7 +13,7 @@ def processed_to_csv(filename,schema):
 
     match_array = schema["processed_href"]["match"]
 
-    for link in app.parser.parseLinksFromHTML(filename,search_attribute):
+    for link in library.parser.parseLinksFromHTML(filename,search_attribute):
 
         for match in match_array:
         
@@ -17,11 +21,11 @@ def processed_to_csv(filename,schema):
 
                 data = str(link)
 
-                data = app.parser.regex(data,schema)
+                data = library.parser.regex(data,schema)
 
                 raw_data = data.strip()+"=>"+schema['title']
 
-                if app.parser.hasNumbers(raw_data) and raw_data!="":
+                if library.parser.hasNumbers(raw_data) and raw_data!="":
                     return_array.append(raw_data) 
                                
                 pass
@@ -29,6 +33,8 @@ def processed_to_csv(filename,schema):
     return return_array
 
 return_array=[]
+
+library.comment.returnMessage("Start")
 
 for schema in app.settings["stage"]:
 
@@ -44,7 +50,7 @@ for schema in app.settings["stage"]:
         })
 
 
-        if library.file.file_does_not_exists(csv_filename):
+        if library.file.file_does_not_exists(csv_filename) and library.file.file_exists(filename):
 
             body=[]
 
@@ -52,10 +58,12 @@ for schema in app.settings["stage"]:
                 body.append({"href":value})
 
             library.csv.export_csv(csv_filename,["href"],body)
-            library.comment.returnMessage("Processed to: "+csv_filename)
+            library.comment.returnUpdateMessage("Processing")
         else:
             pass
 
     pass
 
 pass
+
+library.comment.returnMessage("Completed")

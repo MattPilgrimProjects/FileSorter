@@ -1,7 +1,11 @@
 import app
 # import re
-import library
+
 import time
+import library.csv
+import library.comment
+import library.scan
+import library.file
 
 # This is significantly longer to run so ideally run at midnight (takes around 2 hours to compile)
 
@@ -49,7 +53,7 @@ def clear_database(track_list,midi_list):
 
     for schema in library.json.import_json(track_list):
 
-        array_content = app.csv.importCSVData(midi_list)
+        array_content = library.csv.importCSVData(midi_list)
 
         for array_value in array_content:
 
@@ -66,7 +70,7 @@ def clear_database(track_list,midi_list):
 
                 split_url = group["url"].replace("/","-").split("-")
 
-                stats = app.parser.match_percentage(split_url,schema["url"])
+                stats = library.parser.match_percentage(split_url,schema["url"])
 
                 if stats >= 92:
 
@@ -102,7 +106,7 @@ for track_list in library.scan.scan_file_recursively(app.settings["api"][0]["par
 
         if library.file.file_exists(track_list) and library.file.file_exists(midi_list) and library.file.file_does_not_exists(schema["track_to_midi"]["output"]["csv"]+keyword+".csv"):
 
-            app.csv.export_csv(schema["track_to_midi"]["output"]["csv"]+keyword+".csv",["source","artist","track","track_id","check_url","original_url","stats"],clear_database(track_list,midi_list))
+            library.csv.export_csv(schema["track_to_midi"]["output"]["csv"]+keyword+".csv",["source","artist","track","track_id","check_url","original_url","stats"],clear_database(track_list,midi_list))
             
             library.comment.returnUpdateMessage("Completed " + schema["track_to_midi"]["output"]["csv"]+keyword+".csv                                       ")
         else:

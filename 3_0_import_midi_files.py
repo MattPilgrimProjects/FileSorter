@@ -1,5 +1,8 @@
 import app
-import library
+import library.scan
+import library.csv
+import library.file
+import library.comment
 
 import time
 
@@ -10,7 +13,7 @@ def import_midi_files(url,midi_location):
     midi = library.parser.request_data_from_url(url)
     library.file.createFile(midi_location,midi.content)
 
-    return app.comment.returnMessage("Track Added: "+midi_location)
+    return library.comment.returnMessage("Track Added: "+midi_location)
 
 
 
@@ -29,7 +32,7 @@ for stage in app.settings["stage"]:
                 if library.file.file_exists(midi_location):
                     pass
                 else:
-                    time.sleep(5.3)
+                    time.sleep(3.3)
                     url = stage["download_url"]+csv_row[3]
                     import_midi_files(url,midi_location)
                     pass

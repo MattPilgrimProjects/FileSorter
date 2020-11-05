@@ -1,7 +1,8 @@
 import app
 import library
 import library.file
-
+import library.comment
+import library.directory
 
 array=[]
 
@@ -14,6 +15,8 @@ for schema in library.json.import_json(app.settings["live_database"]):
 
     if library.file.file_exists(app.settings["raw_key_signatures"]+schema["source"]+"//"+schema["track_id"]+".json"):
         return_key_data = library.json.import_json(app.settings["raw_key_signatures"]+schema["source"]+"//"+schema["track_id"]+".json")
+
+    library.directory.create_recursive_directory(app.settings["live_api"]+schema["url"])
 
     library.json.export_json(app.settings["live_api"]+schema["url"]+"//profile.json",{
         "artist":schema['artist'],

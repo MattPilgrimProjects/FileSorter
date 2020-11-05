@@ -1,5 +1,7 @@
 import app
-import library
+import library.parser
+import library.comment
+import library.csv
 
 converted_database = app.settings["api"][0]["output"]["json"]
 
@@ -11,7 +13,7 @@ def songs(artist):
 
 def return_handler(artist,song):
 
-    url = app.parser.find_and_replace_array(song['url'],{
+    url = library.parser.find_and_replace_array(song['url'],{
             "http://www.karaoke-version.com/mp3-backingtrack":"",
             ".html":"",
         })
@@ -20,10 +22,7 @@ def return_handler(artist,song):
         # "song_id":library.parser.sanitize(song["@id"]),
         "artist": library.parser.sanitize(artist["name"]),
         "track": library.parser.sanitize(song['name']),
-        "url": url,
-        "url_artist":url.split("/")[1],
-        "url_track":url.split("/")[2],
-        "source":{}
+        "url": url
     }
 
 def songs_array(artist):
@@ -51,6 +50,7 @@ for artist in library.json.import_json(converted_database)["artists"]["artist"]:
     pass
 
 library.json.export_json(export_location,array)
+library.csv.export_csv("tracklist.csv",["artist","track","url"],array)
 library.comment.returnMessage("Completed: "+export_location)
 
 

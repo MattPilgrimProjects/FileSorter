@@ -93,3 +93,6 @@ def distinct(array):
 
     return return_array_2
 
+def create_filename(csv_row):
+
+    return csv_row[1:].replace("/","-")+".json"

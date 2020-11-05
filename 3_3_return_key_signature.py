@@ -1,11 +1,10 @@
 import app
 import library.scan 
 import library.comment
+import library.file
 
 
 def return_key_signature(filename):
-
-    library.comment.returnUpdateMessage("Processing:"+filename)
 
     file_content = library.json.import_json(filename)
 
@@ -120,9 +119,6 @@ def return_key_signature(filename):
                 return midi_note+" Minor"
               
 
-
-    
-
         pass
 
 ###########################################################################################################
@@ -130,6 +126,7 @@ def return_key_signature(filename):
 array=[]
 
 for filename in library.scan.scan_file_recursively("S:\\Midi-Library\\raw_midi_body_structure\\*\\*.json"):
+    
 
     remove_filepath = library.parser.find_and_replace_array(filename,{
         "S:\\Midi-Library\\raw_midi_body_structure\\":"",
@@ -138,19 +135,17 @@ for filename in library.scan.scan_file_recursively("S:\\Midi-Library\\raw_midi_b
 
     data = remove_filepath.split("\\")
 
-    library.json.export_json(app.settings["raw_key_signatures"]+data[0]+"\\"+data[1]+".json",{
-        "result":return_key_signature(filename)
-    })
+    if library.file.file_does_not_exists(app.settings["raw_key_signatures"]+data[0]+"\\"+data[1]+".json"):
 
-    library.comment.returnUpdateMessage("Exported: "+ app.settings["raw_key_signatures"]+data[0]+"\\"+data[1]+".json                                     ")
+        library.json.export_json(app.settings["raw_key_signatures"]+data[0]+"\\"+data[1]+".json",{
+            "result":return_key_signature(filename)
+        })
 
-    array.append({
-        "source":data[0],
-        "id":data[1],
-        "result":return_key_signature(filename)
-    })
+        library.comment.returnUpdateMessage("Processing")
+    
+    else:
+        pass
 
-library.json.export_json("S:\\Midi-Library\\sources\\key_signature_list.json",array)
-library.comment.returnMessage("Completed")
+library.comment.returnMessage("Completed   ")
 
  

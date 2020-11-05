@@ -31,7 +31,7 @@ for setting in app.settings['stage']:
                 note_array=[]
                 channel_array=[]          
 
-                library.comment.returnUpdateMessage("Proccessing: "+filename)   
+                library.comment.returnMessage("Proccessing: "+filename)   
                 
                 minimize_array={}
 
@@ -72,11 +72,11 @@ for setting in app.settings['stage']:
             array.append(minimize_array)
                     
             library.json.export_json(setting["midi_body_structure"]+keyword+".json",array[0])   
-            library.comment.returnUpdateMessage(setting["midi_body_structure"]+keyword+".json                                ")   
+            library.comment.returnMessage(setting["midi_body_structure"]+keyword+".json                                ")   
         else:
             pass
   
 library.csv.export_csv("S:\\Midi-Library\\draft_channel_check.csv",["old_channel","possible_match","category_match","check_data","check_json_data"],csv_data)
 library.comment.returnMessage("Completed")
-library.file.execute("S:\\Midi-Library\\draft_channel_check.csv")
+
 
