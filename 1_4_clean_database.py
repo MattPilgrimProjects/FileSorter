@@ -1,5 +1,6 @@
 import app
-import library
+import library.scan
+import library.csv
 
 
 def manual_check_handler(csv_row):
@@ -36,7 +37,7 @@ for schema in app.settings["stage"]:
                     "artist":csv_row[1],
                     "track":csv_row[2],
                     "track_id":csv_row[3],
-                    "url":csv_row[4],
+                    "url":csv_row[5].replace(".html",""),
                     "stat":csv_row[6]
                 })
 

@@ -10,7 +10,7 @@ def create_filename(csv_row):
 
     return csv_row[1:].replace("/","-")+".json"
 
-for csv_row in library.csv.import_csv("dev.csv"):
+for csv_row in library.csv.import_csv("live_api.csv"):
     
     
 
@@ -33,7 +33,7 @@ for csv_row in library.csv.import_csv("dev.csv"):
                 ('market','US'),
                 ('include_external','audio')
             )
-            library.cron.delay(5)
+            library.cron.delay(1)
             content = library.url.spotify_web_api(params,app.settings["spotify"]["auth"])
             library.json.export_json(filename,content)
 

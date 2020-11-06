@@ -18,3 +18,17 @@ def spotify_web_api(params,auth):
     response = requests.get('https://api.spotify.com/v1/search', headers=headers, params=params)
 
     return response.json()
+
+def youtube_web_api(params,auth):
+
+    headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': auth
+    }
+
+    response = requests.get('https://youtube.googleapis.com/youtube/v3/search', headers=headers, params=params)
+
+    return response.json()
+
+    

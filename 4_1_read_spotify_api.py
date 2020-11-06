@@ -13,7 +13,7 @@ def export_data(filename,return_filename):
 
 
         if schema["album"]["images"]:
-            album_cover = schema["album"]["images"][1]["url"]
+            album_cover = schema["album"]["images"][0]["url"]
         else:
             album_cover = ""
 
