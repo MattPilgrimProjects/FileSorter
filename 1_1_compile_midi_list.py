@@ -49,8 +49,7 @@ for schema in app.settings["stage"]:
             ".html":".csv"
         })
 
-
-        if library.file.file_does_not_exists(csv_filename) and library.file.file_exists(filename):
+        if library.file.file_does_not_exists(csv_filename) and library.file.file_exists(filename) :
 
             body=[]
 
@@ -58,7 +57,7 @@ for schema in app.settings["stage"]:
                 body.append({"href":value})
 
             library.csv.export_csv(csv_filename,["href"],body)
-            library.comment.returnUpdateMessage("Processing")
+            library.comment.returnMessage("Processing: " + csv_filename)
         else:
             pass
 

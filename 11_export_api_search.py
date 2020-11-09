@@ -25,6 +25,6 @@ for filename in library.scan.scan_file_recursively(app.settings["live_api"]+"/*/
             })
 
 library.json.export_json(app.settings["www"],array)
-library.csv.export_csv("live_api.csv",["artist","track","url","url_artist","url_track"],array)
+library.csv.export_csv(app.settings["reporting"]["export_api_search"],["artist","track","url","url_artist","url_track"],array)
 library.comment.returnMessage("Completed")
  

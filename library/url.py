@@ -1,6 +1,9 @@
 import urllib.request
 import ssl
 import requests
+import library.file
+import library.comment
+
 
 def returnURLContent(url):
     ssl._create_default_https_context = ssl._create_unverified_context
@@ -31,4 +34,18 @@ def youtube_web_api(params,auth):
 
     return response.json()
 
+
+def download_html_content(search_url,save_location):
+
+    library.comment.returnMessage("Processing => "+search_url)
+
+    contents = returnURLContent(search_url)
+
+    library.file.createFile(save_location,contents)
+
+    library.comment.returnMessage("Download Content => "+save_location)   
+ 
+    library.comment.returnMessage("---")
+
+    return None
     

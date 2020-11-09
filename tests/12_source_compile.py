@@ -6,9 +6,6 @@ import library.parser
 import library.file
 import library.comment
 
-
-
-
 def check_file_match(track_id):
 
     source=[]
@@ -26,13 +23,12 @@ def check_file_match(track_id):
 
     return source
 
-
-
-
 #########################################################
 
 multi_line=[]
 artist_array=[]
+
+full_source_list=[]
 
 library.comment.returnMessage("Start")
 
@@ -52,25 +48,21 @@ for schema in app.settings["stage"]:
             artist_array.append(csv_row[1]+"=>"+csv_row[2]+"=>"+csv_row[5].replace(".html",""))
             multi_line.append(csv_row[1]+"=>"+csv_row[2]+"=>"+csv_row[5].replace(".html","")+"=>"+csv_row[0]+"=>"+source_match)
            
-            
+      
 dev=[]   
 
 for artist in library.parser.remove_duplicates_from_array(artist_array):
 
-    
-
     for line in multi_line:
 
         sources=[]
-
 
         if artist in line:
             sources.append(line.replace(artist,""))
         else:
             sources=""
             pass
-
-       
+     
         if sources =="":
             pass
         else:
@@ -93,15 +85,11 @@ for artist in library.parser.remove_duplicates_from_array(artist_array):
         "freemidi":array_return[4]
 
     })
-      
-       
+           
     pass
     
-
 pass
            
-
-library.csv.export_csv("dev.csv",["artist","track","url","midiworld","freemidi"],dev)
+library.csv.export_csv(app.settings["reporting"]["source_compile"],["artist","track","url","midiworld","freemidi"],dev)
 
 library.comment.returnMessage("Finished")
-

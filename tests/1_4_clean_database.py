@@ -30,8 +30,8 @@ for schema in app.settings["stage"]:
 
     for filename in library.scan.scan_file_recursively(directory+"*.csv"):
 
-        for csv_row in library.csv.importCSVData(filename):
-
+        for csv_row in library.csv.importCSVData(filename):               
+                
                 array.append({
                     "source":csv_row[0],
                     "artist":csv_row[1],
@@ -40,8 +40,6 @@ for schema in app.settings["stage"]:
                     "url":csv_row[5].replace(".html",""),
                     "stat":csv_row[6]
                 })
-
-         
               
 library.json.export_json(app.settings["sources"]["midi_list_tidy"]["json"],array)
-# library.csv.export_csv("S:\\Desktop\\manual_review.csv",["source","check_url","original_url","stats"],manual_check)
+

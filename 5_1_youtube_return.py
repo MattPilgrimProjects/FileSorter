@@ -6,23 +6,65 @@ import library.cron
 import library.url
 import library.comment
 
+def create_filename(csv_row):
 
+    return csv_row[1:].replace("/","-")+".json"
+
+for csv_row in library.csv.import_csv("live_api.csv"):
+    
+    
+
+    if csv_row[0]!="artist":
+
+        artist = csv_row[0] 
+        track = csv_row[1]
+
+        filename = app.settings["youtube"]["export"]+create_filename(csv_row[2])
+
+        library.comment.returnMessage("Processing "+filename)
+
+        if library.file.file_exists(filename):
+            library.comment.returnMessage("Already added")
+        else:
             params = (
                 ('q', artist+" "+track),
                 ('part', 'snippet'),
-                ('key', '')
+                ('key', app.settings["youtube"]["api"])
             )
-            library.cron.delay(1)
-            content = library.url.youtube_web_api(params,app.settings["spotify"]["auth"])
+            library.cron.delay(5)
+            content = library.url.youtube_web_api(params,app.settings["youtube"]["auth"])
             library.json.export_json(filename,content)
 
             library.comment.returnMessage("Added "+filename)
 
 
 
-#             GET https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=Slipknot%20Wait%20And%20Bleed&key=[YOUR_API_KEY] HTTP/1.1
 
-# Authorization: Bearer [YOUR_ACCESS_TOKEN]
-# Accept: application/json
 
-# ?part=snippet&q=Slipknot%20Wait%20And%20Bleed&key=[YOUR_API_KEY]
+
+
+
+
+
+
+
+
+
+
+# artist = "Slipknot"
+# track= "Wait And Bleed"
+
+# filename="youtube.json"
+
+# params = (
+#     ('q', artist+" "+track),
+#     ('part', 'snippet'),
+#     ('key', app.settings["youtube"]["api"])
+# )
+            
+# library.cron.delay(1)
+# content = library.url.youtube_web_api(params,app.settings["youtube"]["auth"])
+# library.json.export_json(filename,content)
+
+# library.comment.returnMessage("Added "+filename)
+

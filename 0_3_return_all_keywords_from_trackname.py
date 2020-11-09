@@ -1,5 +1,6 @@
 import app
-import library
+import library.comment
+import library.file
 
 export_location = app.settings["sources"]["track_list"]["json"]
 create_directory_location = app.settings["api"][0]["output"]["localpath"]

@@ -14,6 +14,7 @@ def download_html_content(search_url,save_location):
     library.file.createFile(save_location,contents)
 
     library.comment.returnMessage("Download Content => "+save_location)   
+    library.comment.returnMessage("---")
 
     return None
 
@@ -29,7 +30,7 @@ for keyword in compressed_keyword_array:
             if library.file.file_exists(schema["href_save_location"]+keyword+".html"):
                 pass
             else:
-                time.sleep(3)
+                time.sleep(1)
                 download_html_content(schema["search_url"]+keyword,schema["href_save_location"]+keyword+".html")
 
 

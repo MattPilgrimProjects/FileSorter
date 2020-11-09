@@ -27,12 +27,15 @@ for stage in app.settings["stage"]:
 
             if csv_row[0] !="source":
 
+               
+
                 midi_location = app.settings["sources"]["midi_location"]+csv_row[0]+"\\"+csv_row[3]+".mid"
 
                 if library.file.file_exists(midi_location):
+                   
                     pass
                 else:
-                    time.sleep(3.3)
+                    time.sleep(1)
                     url = stage["download_url"]+csv_row[3]
                     import_midi_files(url,midi_location)
                     pass

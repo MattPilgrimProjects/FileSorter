@@ -26,7 +26,7 @@ for setting in app.setup['stage']:
 
             library.json.export_json(json_output,midi_data)
 
-            library.comment.returnMessage("Converting" + json_output)
+            library.comment.returnMessage("Converting " + json_output)
      
         else:
             pass

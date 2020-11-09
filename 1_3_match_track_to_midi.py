@@ -19,6 +19,12 @@ def midiworld(schema,data):
 
         track_id = schema.replace(" ("+artist+") - ","").replace("=>midiworld","").replace(track,"")
 
+        if "AC" in schema and "AC" in data["artist"]:
+            print(schema)
+            print(data)
+            print("---")
+       
+
         return{
         "artist":data["artist"],
         "track":data["track"],
@@ -59,7 +65,6 @@ def clear_database(track_list,midi_list):
 
             array_value = array_value[0]
 
-                    
             if "=>freemidi" in array_value: 
                 group = freemidi(array_value,schema)
             else:
@@ -75,7 +80,7 @@ def clear_database(track_list,midi_list):
                 if stats >= 92:
 
                     manual_search.append({
-                            "source":group["source"],
+                            "source":group["source"] ,
                             "artist":group["artist"],
                             "track":group["track"],
                             "track_id":group["track_id"],
@@ -104,11 +109,13 @@ for track_list in library.scan.scan_file_recursively(app.settings["api"][0]["par
 
         midi_list = schema["keywords"]["output"]["csv"]+keyword+".csv"
 
-        if library.file.file_exists(track_list) and library.file.file_exists(midi_list) and library.file.file_does_not_exists(schema["track_to_midi"]["output"]["csv"]+keyword+".csv"):
+        track_to_midi_output = schema["track_to_midi"]["output"]["csv"]+keyword+".csv"
+
+        if library.file.file_exists(track_list) and library.file.file_exists(midi_list) and library.file.file_does_not_exists(track_to_midi_output):
 
             library.csv.export_csv(schema["track_to_midi"]["output"]["csv"]+keyword+".csv",["source","artist","track","track_id","check_url","original_url","stats"],clear_database(track_list,midi_list))
             
-            library.comment.returnUpdateMessage("Completed " + schema["track_to_midi"]["output"]["csv"]+keyword+".csv                                       ")
+            library.comment.returnMessage("Completed " + schema["track_to_midi"]["output"]["csv"]+keyword+".csv                                       ")
         else:
             pass
  
