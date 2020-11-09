@@ -17,6 +17,16 @@ def return_artists_from_database():
     
     return library.parser.remove_duplicates_from_array(array)
 
+def output_handler(return_artist,row,high_percentage_match,low_percentage_match):
+    return{
+            "artist":return_artist,
+            "raw_artist":row["artist"],
+            "url":row["url"],
+            "high":high_percentage_match,
+            "low":low_percentage_match
+    }
+
+
 def database_match_artist(perfect_filepath,high_filepath,medium_filepath,alphabet):
     for row in library.json.import_json("S:\\Midi-Library\\artist\\freemidi\\"+alphabet+".json"):
 
@@ -27,31 +37,16 @@ def database_match_artist(perfect_filepath,high_filepath,medium_filepath,alphabe
     
                 if low_percentage_match == 100.0 and high_percentage_match == 100.0:
 
-                    perfect_match_array.append({
-                        "artist":return_artist,
-                        "raw_artist":row["artist"],
-                        "url":row["url"],
-                        "high":high_percentage_match,
-                        "low":low_percentage_match
-                    })
+                    perfect_match_array.append(output_handler(return_artist,row,high_percentage_match,low_percentage_match))
+                    
                 elif high_percentage_match >= 90 and high_percentage_match != 100.0:
                     
-                    high_match_array.append({
-                        "artist":return_artist,
-                        "raw_artist":row["artist"],
-                        "url":row["url"],
-                        "high":high_percentage_match,
-                        "low":low_percentage_match
-                    })
+                    high_match_array.append(output_handler(return_artist,row,high_percentage_match,low_percentage_match))
 
                 elif high_percentage_match >= 80 and low_percentage_match >= 50:
-                    medium_match_array.append({
-                        "artist":return_artist,
-                        "raw_artist":row["artist"],
-                        "url":row["url"],
-                        "high":high_percentage_match,
-                        "low":low_percentage_match
-                    })
+
+                    medium_match_array.append(output_handler(return_artist,row,high_percentage_match,low_percentage_match))
+
                 else:
                     pass
           

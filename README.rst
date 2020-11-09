@@ -3,3 +3,4 @@ The data collected comprises of entirely MIDI files which are analysed and the r
 Key Music Finder wants to teach users about that the fundamentals of music in a way that does not tell the user to read note by note the correctly but instead, allow for flexible learning based scales and array of possible chord progressions. It also opens the door to uniquely tailor the characterisation of performance / practice to be more fluid and stylistic to the individual musician. 
 We want to expand the system once enough data is collected to find emotions patterns within notation structure and the significance it serves to convey the given “feel” of music. 
 The final goal of this project is providing the data accumulated to be used by everyone as an completely open source API . 
+

@@ -2,6 +2,8 @@ import app
 import library.scan
 import library.parser
 import library.json
+import library.comment
+import library.file
 
 export_location = app.settings["sources"]["track_list"]["json"]
 
@@ -12,11 +14,7 @@ def return_tracks_from_database():
     
     return library.parser.remove_duplicates_from_array(array)
 
-
-for filename_raw in library.scan.scan_file_recursively("S:\\Website Projects\\live\\freemidi\\artist\\*\\*.html"):
-
-    filename = filename_raw.replace("S:\\Website Projects\\","http://localhost/")
-
+def convert_to_json(filename,output_filepath):
     part_5=[]
 
     for header in library.parser.parseLinksFromHTML(filename,"h1"):
@@ -39,7 +37,21 @@ for filename_raw in library.scan.scan_file_recursively("S:\\Website Projects\\li
 
     output_filepath = filename_raw.replace("S:\\Website Projects\\live\\freemidi\\artist\\","Z:\\tracks\\freemidi\\").replace(".html",".json")
 
-    library.json.export_json(output_filepath,part_5)
-    print(output_filepath)
-    print("---")
-    # print(part_5)
+    return library.json.export_json(output_filepath,part_5)
+
+    
+#################################################################################################################################################
+
+for filename_raw in library.scan.scan_file_recursively("S:\\Website Projects\\live\\freemidi\\artist\\*\\*.html"):
+
+    filename = filename_raw.replace("S:\\Website Projects\\","http://localhost/")
+
+    output_filepath = filename_raw.replace("S:\\Website Projects\\live\\freemidi\\artist\\","Z:\\tracks\\freemidi\\").replace(".html",".json")
+
+    if library.file.file_exists(output_filepath):
+        library.comment.returnMessage("File already Exists: "+output_filepath)
+        pass
+    else:
+        convert_to_json(filename,output_filepath)
+        library.comment.returnMessage("Adding file: "+output_filepath)
+
