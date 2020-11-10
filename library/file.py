@@ -31,3 +31,16 @@ def move_file(original_location,new_location):
 
 def execute(filename):
     return os.system(filename)
+
+
+def file_update(filename,content):
+
+    with open('S:\\Desktop\\results.txt') as books:
+        lines = books.readlines()
+
+    for line in content:
+
+        lines.append("\n"+line)
+
+    with open('S:\\Desktop\\results.txt', 'w') as sortedbooks:
+        sortedbooks.writelines(lines)

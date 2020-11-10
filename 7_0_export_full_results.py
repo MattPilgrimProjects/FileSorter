@@ -109,7 +109,8 @@ youtube_track_list="S:\\Midi-Library\\youtube\\track_list\\"
 
 ########################################################################################################################
 
-library.comment.returnMessage("Start")
+
+start = library.comment.returnMessage("Start")
 
 for original_list in library.scan.import_json_from_directory_recursively(app.settings["sources"]["track_list"]["json"]):      
 
@@ -146,4 +147,82 @@ for original_list in library.scan.import_json_from_directory_recursively(app.set
     })
 
 library.json.export_json("full_list.json",output)
-library.comment.returnMessage("Completed")
+end = library.comment.returnMessage("Completed")
+
+###################################################################################################################################################################################
+
+score_sources_freemidi_midi=0
+
+score_sources_freemidi_json=0
+
+score_parsed_freemidi_compile_midi_file=0
+
+score_parsed_freemidi_key_signature_created=0
+
+score_api_sources_spotify_raw_data=0
+
+score_api_sources_spotify_album_list=0
+
+score_api_sources_spotify_track_list=0
+
+score_api_sources_youtube_raw_data=0
+
+score_api_sources_youtube_track_list=0
+
+total=0
+
+for items in library.json.import_json("full_list.json"):
+
+    total=total+1
+
+    freemidi_sources = items["sources"]["freemidi"]
+
+    freemidi_parsed = items["parsed"]["freemidi"]
+
+    
+    if freemidi_sources["midi"]: score_sources_freemidi_midi=score_sources_freemidi_midi+1
+    
+    if freemidi_sources["json"]: score_sources_freemidi_json=score_sources_freemidi_json+1
+
+    if freemidi_parsed["compile_midi_file"]: score_parsed_freemidi_compile_midi_file=score_parsed_freemidi_compile_midi_file+1
+    
+    if freemidi_parsed["key_signature_created"]: score_parsed_freemidi_key_signature_created=score_parsed_freemidi_key_signature_created+1
+
+
+    spotify =items["api_sources"]["spotify"] 
+
+    if spotify["raw_data"]: score_api_sources_spotify_raw_data=score_api_sources_spotify_raw_data+1
+
+    if spotify["album_list"]: score_api_sources_spotify_album_list=score_api_sources_spotify_album_list+1
+
+    if spotify["track_list"]: score_api_sources_spotify_track_list=score_api_sources_spotify_track_list+1
+
+    youtube = items["api_sources"]["youtube"]
+
+    if youtube["raw_data"]: score_api_sources_youtube_raw_data=score_api_sources_youtube_raw_data+1
+
+    if youtube["track_list"]: score_api_sources_youtube_track_list=score_api_sources_youtube_track_list+1
+
+
+library.file.file_update("S:\\Desktop\\results.txt",{
+    "",
+    "##################################################"
+    "Start Time: "+start,
+    "End Time: "+end,
+    "---",
+    "Sources from Freemidi midi: "+str(score_sources_freemidi_midi)+"/"+str(total),
+    "Sources from Freemidi json: "+str(score_sources_freemidi_json)+"/"+str(total),
+    "---",
+    "Parsed Freemidi content: "+str(score_parsed_freemidi_compile_midi_file)+"/"+str(total),
+    "Parsed Freemidi key signature: "+str(score_parsed_freemidi_key_signature_created)+"/"+str(total),    
+    "---",
+    "Spotify raw data: "+str(score_api_sources_spotify_raw_data)+"/"+str(total),
+    "Spotify album list: "+str(score_api_sources_spotify_album_list)+"/"+str(total),
+    "Spotify track list: "+str(score_api_sources_spotify_track_list)+"/"+str(total),
+    "---",
+    "Youtube raw data: "+str(score_api_sources_youtube_raw_data)+"/"+str(total),
+    "Youtube track list: "+str(score_api_sources_youtube_track_list)+"/"+str(total),
+    ""
+})
+
+
