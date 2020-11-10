@@ -1,59 +1,149 @@
-  
-# Part 3 - Match artist with database
+import app
+import library.scan
+import library.json
+import library.file
+import library.comment
+import library.url
 
-def match_artist_with_database(part_2):
-    part_3 =[]
-    for artist_data in part_2:
+track_profiles = library.scan.import_json_from_directory_recursively("S:\\Midi-Library\\tracks\\freemidi\\*\\*\\*.json")
 
-        part_3.append(artist_data["url"])
+artist_profiles = library.scan.import_json_from_directory_recursively("S:\\Midi-Library\\artist\\freemidi\\processed\\*.json")
 
-    return part_3
+output=[]
 
-part_3 = match_artist_with_database(part_2)
+def freemidi_json(original_list,file_extension):
 
-#Part 4 - download all artist content
+    artist=[]
 
-def download_all_artist_content(alphabet,part_3):
-    
-    for url in part_3:
-        if library.file.file_exists("S:\\Website Projects\\live\\freemidi\\artist\\"+alphabet+"\\"+url+".html"):
-            pass
+    for test in artist_profiles:
+
+        if test["artist"] == original_list["artist"]:
+            artist.append(test['raw_artist'])
         else:
-            library.cron.delay(5)
-            library.url.download_html_content("https://freemidi.org/"+url,"S:\\Website Projects\\live\\freemidi\\artist\\"+alphabet+"\\"+url+".html")
+            pass 
+
+    hyperlink=[]
+
+    for profile in track_profiles:
         
-download_all_artist_content(alphabet,part_3)
+        if original_list["track"] == profile["track"] and profile["raw_artist"] in artist:
+            
+            filename = profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_midi\\freemidi\\processed\\json\\").replace("\\","/")+".json"
 
-#Part 5 - Extract track id from artist pages
+            if library.file.file_exists(filename):
+                hyperlink.append(filename)
+            else:
+                pass
 
-def extrack_track_id_from_artist_pages(alphabet):
+        else:
+            pass
 
-    part_5=[]
+    return hyperlink
 
-    for filename in library.scan.scan_file_recursively("S:\\Website Projects\\live\\freemidi\\artist\\"+alphabet+"\\*.html"):
+def freemidi_key_signature_filename(profile):
+    return profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_key_signatures\\freemidi\\").replace("\\","/")+".json"
 
-        filename = filename.replace("S:\\Website Projects\\","http://localhost/")
+def freemidi_compile_midi_filename(profile):
+    return profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_midi_body_structure\\freemidi\\").replace("\\","/")+".json"
 
-        for header in library.parser.parseLinksFromHTML(filename,"h1"):
-            header = str(header)
-            artist = header.replace('<h1><span style="font-size:32px;background-color:rgba(255,255,255,.85);padding:5px;overflow:hidden"> ',"").replace(' Midi<span id="bandinfo" style="display:none">band info</span></span></h1>',"")
-    
-        for row in library.parser.parseLinksFromHTML(filename,"a"):
+def freemidi_json_filename(profile):
+    return profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_midi\\freemidi\\processed\\json\\").replace("\\","/")+".json"
 
-            row = str(row)
+def freemidi_midi_filename(profile):
+    return profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_midi\\freemidi\\processed\\").replace("\\","/")+".mid"
 
-            if "download3" in row:
-                
-                filename = row.replace("\n","").replace('<a href="download3-','').replace('" itemprop="url">','').replace("</a>","").split("-")[0]
-                track=row.split(">")[1].replace("\n","").replace("</a","")
+def freemidi(original_list,file_extension):
 
-                part_5.append({
-                    "artist":artist,
-                    "track":track,
-                    "download_url":"https://freemidi.org/getter-"+filename
-                })
-    
-    return library.json.export_json("S:\\Midi-Library\\artist\\freemidi\\"+alphabet+".json",part_5)
+    artist=[]
 
-        
-extrack_track_id_from_artist_pages(alphabet)    
+    for test in artist_profiles:
+
+        if test["artist"] == original_list["artist"]:
+            artist.append(test['raw_artist'])
+        else:
+            pass 
+
+    hyperlink=[]
+
+    for profile in track_profiles:
+
+        if original_list["track"] == profile["track"] and profile["raw_artist"] in artist:
+
+            if file_extension=="midi": filename = freemidi_midi_filename(profile)
+            if file_extension=="json": filename = freemidi_json_filename(profile)
+            if file_extension=="compile_midi_file": filename = freemidi_compile_midi_filename(profile)
+            if file_extension=="key_signature_created": filename = freemidi_key_signature_filename(profile)
+ 
+            if library.file.file_exists(filename):
+                hyperlink.append(filename)
+            else:
+                pass
+
+        else:
+            pass
+
+    return hyperlink
+
+def api_file_check(directory,url):
+
+    filename = url[1:].replace("/","-")+".json"
+
+    filepath = directory.replace("\\","/")+filename
+
+    if library.file.file_exists(filepath):
+        return filepath
+    else:
+        return ""
+
+
+########################################################################################################################
+
+# Filepath Setup
+
+spotify_raw_data = "S:\\Midi-Library\\spotify\\raw_data\\"
+spotify_album_list = "S:\\Midi-Library\\spotify\\album_list\\"
+spotify_track_list = "S:\\Midi-Library\\spotify\\track_list\\"
+
+youtube_raw_data="S:\\Midi-Library\\youtube\\raw_data\\"
+youtube_track_list="S:\\Midi-Library\\youtube\\track_list\\"
+
+########################################################################################################################
+
+library.comment.returnMessage("Start")
+
+for original_list in library.scan.import_json_from_directory_recursively(app.settings["sources"]["track_list"]["json"]):      
+
+    output.append({   
+        "artist":original_list["artist"],
+        "track":original_list["track"],
+        "url":original_list["url"],
+        "sources":{
+            "freemidi":{
+                "midi":freemidi(original_list,"midi"),
+                "json":freemidi(original_list,"json")
+            }
+        },
+        "parsed":{
+            "freemidi":{
+                "compile_midi_file":freemidi(original_list,"compile_midi_file"),
+                "key_signature_created":freemidi(original_list,"key_signature_created")
+            }
+        },
+        "api_sources":{
+            "spotify":{
+                "raw_data":api_file_check(spotify_raw_data,original_list["url"]),
+                "album_list":api_file_check(spotify_album_list,original_list["url"]),
+                "track_list":api_file_check(spotify_track_list,original_list["url"])
+            },
+            "youtube":{
+                "raw_data":api_file_check(youtube_raw_data,original_list["url"]),
+                "track_list":api_file_check(youtube_track_list,original_list["url"])
+            },
+            "karaoke_version":{
+                "affiliate_link":"https://www.karaoke-version.com/afflink.html?aff=948&action=redirect&part=custom&song="+original_list["track"]+"&artist="+original_list["artist"]
+            }
+        }
+    })
+
+library.json.export_json("full_list.json",output)
+library.comment.returnMessage("Completed")

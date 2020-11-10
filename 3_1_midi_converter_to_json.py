@@ -5,20 +5,26 @@ import library.comment
 import library.scan
 import library.file
 
+def return_filename(filepath,file_extension):
+    
+    return library.parser.find_and_replace_array(filename,{
+            filepath:"",
+            file_extension:""
+    })
+
+#############################################################################
+
 channel_name  = library.json.import_json("S:\\Midi-Library\\instruments.json")
 
 library.comment.returnMessage("Start")
 
 for setting in app.setup['stage']:
 
-    for filename in library.scan.scan_file_recursively(setting["import_midi"]["download_location"]+"*.mid"):
+    for filename in library.scan.scan_file_recursively("S:\\Midi-Library\\raw_midi\\freemidi\\processed\\"+"*.mid"):
 
-        track_id = library.parser.find_and_replace_array(filename,{
-            setting["import_midi"]["download_location"]:"",
-            ".mid":""
-        })
+        track_id = return_filename(filename,".mid")
         
-        json_output = setting['raw_midi_to_json']+track_id+".json"
+        json_output = "S:\\Midi-Library\\raw_midi\\freemidi\\processed\\json\\"+track_id+".json"
 
         if library.file.file_exists(filename) and library.file.file_does_not_exists(json_output):
 

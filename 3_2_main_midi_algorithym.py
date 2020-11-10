@@ -15,10 +15,10 @@ library.comment.returnMessage("Starting")
 for setting in app.settings['stage']:
 
     
-    for filename in library.scan.scan_file_recursively(setting["raw_midi_to_json"]+"*.json"):
+    for filename in library.scan.scan_file_recursively("S:\\Midi-Library\\raw_midi\\freemidi\\processed\\json\\*.json"):
 
         keyword = library.parser.find_and_replace_array(filename,{
-            setting["raw_midi_to_json"]:"",
+            "S:\\Midi-Library\\raw_midi\\freemidi\\processed\\json\\":"",
                 ".json":""
             })
 

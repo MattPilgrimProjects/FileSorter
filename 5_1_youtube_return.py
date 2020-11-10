@@ -10,7 +10,7 @@ def create_filename(csv_row):
 
     return csv_row[1:].replace("/","-")+".json"
 
-for csv_row in library.csv.import_csv("live_api.csv"):
+for csv_row in library.csv.import_csv("S:\\Midi-Library\\reporting\\live_api.csv"):
     
     
 
