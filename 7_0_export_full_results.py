@@ -109,8 +109,8 @@ youtube_track_list="S:\\Midi-Library\\youtube\\track_list\\"
 
 ########################################################################################################################
 
-
-start = library.comment.returnMessage("Start")
+start = library.comment.get_current_date()
+library.comment.returnMessage("Start")
 
 for original_list in library.scan.import_json_from_directory_recursively(app.settings["sources"]["track_list"]["json"]):      
 
@@ -147,7 +147,9 @@ for original_list in library.scan.import_json_from_directory_recursively(app.set
     })
 
 library.json.export_json("full_list.json",output)
-end = library.comment.returnMessage("Completed")
+
+end = library.comment.get_current_date()
+library.comment.returnMessage("Completed")
 
 ###################################################################################################################################################################################
 
@@ -204,8 +206,7 @@ for items in library.json.import_json("full_list.json"):
     if youtube["track_list"]: score_api_sources_youtube_track_list=score_api_sources_youtube_track_list+1
 
 
-library.file.file_update("S:\\Desktop\\results.txt",{
-    "",
+library.file.file_update("S:\\Desktop\\results.txt",[
     "##################################################",
     "Start Time: "+start,
     "End Time: "+end,
@@ -223,6 +224,6 @@ library.file.file_update("S:\\Desktop\\results.txt",{
     "Youtube raw data: "+str(score_api_sources_youtube_raw_data)+"/"+str(total),
     "Youtube track list: "+str(score_api_sources_youtube_track_list)+"/"+str(total),
     ""
-})
+])
 
 

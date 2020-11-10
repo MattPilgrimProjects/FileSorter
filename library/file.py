@@ -39,7 +39,6 @@ def file_update(filename,content):
         lines = books.readlines()
 
     for line in content:
-
         lines.append("\n"+line)
 
     with open('S:\\Desktop\\results.txt', 'w') as sortedbooks:

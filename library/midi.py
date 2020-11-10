@@ -426,7 +426,7 @@ def read_midi(filename,channel_name):
     return array
   
 
-def return_notes_and_channels(midi_filename,track_id,channel_name):
+def return_notes_and_channels(midi_filename,channel_name):
 
     try:
         mid = read_midi(midi_filename,channel_name)
