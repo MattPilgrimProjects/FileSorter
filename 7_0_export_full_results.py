@@ -206,7 +206,7 @@ for items in library.json.import_json("full_list.json"):
 
 library.file.file_update("S:\\Desktop\\results.txt",{
     "",
-    "##################################################"
+    "##################################################",
     "Start Time: "+start,
     "End Time: "+end,
     "---",

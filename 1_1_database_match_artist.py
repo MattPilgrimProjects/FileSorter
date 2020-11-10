@@ -91,7 +91,6 @@ for filename in library.scan.scan_file_recursively("Z:\\artist\\freemidi\\proces
         if library.file.file_exists(html):
             pass
         else:
-            library.cron.delay(1)
             library.url.download_html_content("https://freemidi.org/"+row["url"],html)
 
 ############################################################################################################################
