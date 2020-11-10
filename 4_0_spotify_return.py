@@ -10,34 +10,31 @@ def create_filename(csv_row):
 
     return csv_row[1:].replace("/","-")+".json"
 
-for csv_row in library.csv.import_csv("live_api.csv"):
-    
-    
+for row in library.json.import_json("S:\\Midi-Library\\sources\\track_list.json"):
 
-    if csv_row[0]!="artist":
+    artist = row["artist"] 
+    track = row["track"]
+    url = row["url"]
 
-        artist = csv_row[0] 
-        track = csv_row[1]
+    filename = app.settings["spotify"]["export"]+create_filename(url)
 
-        filename = app.settings["spotify"]["export"]+create_filename(csv_row[2])
-
+    if library.file.file_exists(filename):
+        pass
+    else:
         library.comment.returnMessage("Processing "+filename)
 
-        if library.file.file_exists(filename):
-            library.comment.returnMessage("Already added")
-        else:
-            params = (
-                ('q', artist+" "+track),
-                ('type', 'track,artist'),
-                ('limit', '20'),
-                ('market','US'),
-                ('include_external','audio')
-            )
-            library.cron.delay(1)
-            content = library.url.spotify_web_api(params,app.settings["spotify"]["auth"])
-            library.json.export_json(filename,content)
+        params = (
+            ('q', artist+" "+track),
+            ('type', 'track,artist'),
+            ('limit', '20'),
+            ('market','US'),
+            ('include_external','audio')
+        )
+    
+        content = library.url.spotify_web_api(params,app.settings["spotify"]["auth"])
+        library.json.export_json(filename,content)
 
-            library.comment.returnMessage("Added "+filename)
+        library.comment.returnMessage("Added "+filename)
 
 
         

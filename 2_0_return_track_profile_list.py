@@ -49,7 +49,6 @@ for filename_raw in library.scan.scan_file_recursively("S:\\Website Projects\\li
     output_filepath = filename_raw.replace("S:\\Website Projects\\live\\freemidi\\artist\\","Z:\\tracks\\freemidi\\").replace(".html",".json")
 
     if library.file.file_exists(output_filepath):
-        library.comment.returnMessage("File already Exists: "+output_filepath)
         pass
     else:
         convert_to_json(filename,output_filepath)

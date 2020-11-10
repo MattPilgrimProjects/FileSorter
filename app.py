@@ -2,9 +2,9 @@ import library.json
 import library.parser
 
 
-setup = library.json.import_json("settings.json")
+setup = library.json.import_json("S:\\Projects\\settings.json")
 
-settings = library.json.import_json("settings.json")
+settings = library.json.import_json("S:\\Projects\\settings.json")
 
 
 def import_config(filename):
