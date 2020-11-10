@@ -2,6 +2,10 @@ import os
 import shutil
 from pathlib import Path
 
+import library.parser
+import library.file
+import library.comment
+
 def file_exists(filename):
     if os.path.exists(filename):
         return True
@@ -43,3 +47,12 @@ def file_update(filename,content):
 
     with open('S:\\Desktop\\results.txt', 'w') as sortedbooks:
         sortedbooks.writelines(lines)
+
+def import_midi_files(url,midi_location):
+
+    library.comment.returnMessage("Processing: "+url)
+
+    midi = library.parser.request_data_from_url(url)
+    library.file.createFile(midi_location,midi.content)
+
+    return library.comment.returnMessage("Track Added: "+midi_location)
