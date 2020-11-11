@@ -6,7 +6,7 @@ import library.cron
 import library.url
 import library.comment
 
-import sys
+
 
 def create_filename(csv_row):
 
@@ -26,7 +26,7 @@ for row in library.json.import_json("S:\\Midi-Library\\sources\\track_list.json"
     if library.file.file_exists(filename):
         pass
     else:
-        library.comment.returnMessage("Processing "+filename)
+        
 
         params = (
             ('q', artist+" "+track),
@@ -35,13 +35,14 @@ for row in library.json.import_json("S:\\Midi-Library\\sources\\track_list.json"
             ('market','US'),
             ('include_external','audio')
         )
-        library.cron.delay(5)
+        # library.cron.delay(5)
         content = library.url.spotify_web_api(params,auth)
         if content:
+            library.comment.returnMessage("Processing "+filename)
             library.json.export_json(filename,content)
             library.comment.returnMessage("Added "+filename)
         else:
-            sys.exit()
+            pass
 
 
         
