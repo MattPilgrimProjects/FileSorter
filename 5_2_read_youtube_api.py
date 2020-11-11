@@ -23,8 +23,7 @@ def export_data(filename,return_filename):
 
 
         json_data.append({
-                "title":schema["snippet"]["title"],
-                "id":videoId
+                "href":videoId
   
         })
 

@@ -21,20 +21,21 @@ for csv_row in library.csv.import_csv("S:\\Midi-Library\\reporting\\live_api.csv
 
         filename = app.settings["youtube"]["export"]+create_filename(csv_row[2])
 
-        library.comment.returnMessage("Processing "+filename)
+        
 
         if library.file.file_exists(filename):
             library.comment.returnMessage("Already added")
         else:
+            
             params = (
                 ('q', artist+" "+track),
                 ('part', 'snippet'),
                 ('key', app.settings["youtube"]["api"])
             )
-            library.cron.delay(5)
+            library.cron.delay(1)
+            library.comment.returnMessage("Processing "+filename)
             content = library.url.youtube_web_api(params,app.settings["youtube"]["auth"])
             library.json.export_json(filename,content)
-
             library.comment.returnMessage("Added "+filename)
 
 

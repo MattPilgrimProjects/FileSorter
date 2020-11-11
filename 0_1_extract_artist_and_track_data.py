@@ -19,7 +19,6 @@ def return_handler(artist,song):
         })
 
     return {
-        # "song_id":library.parser.sanitize(song["@id"]),
         "artist": artist["name"],
         "track": song['name'],
         "url": url

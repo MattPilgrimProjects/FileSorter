@@ -20,7 +20,10 @@ def spotify_web_api(params,auth):
 
     response = requests.get('https://api.spotify.com/v1/search', headers=headers, params=params)
 
-    return response.json()
+    if response.status_code ==200:
+        return None
+    else:
+        return response.json()
 
 def youtube_web_api(params,auth):
 

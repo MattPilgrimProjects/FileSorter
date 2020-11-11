@@ -32,27 +32,27 @@ def export_data(filename,return_filename):
 
     json_data=[]  
 
-    for schema in data["tracks"]["items"]:
+    if  data["tracks"]["items"]:
+        artist = data["tracks"]["items"][0]["artists"][0]["name"]
 
+        for schema in data["tracks"]["items"]:
+                
 
-        if schema["album"]["images"]:
-            album_cover = schema["album"]["images"][0]["url"]
-        else:
-            album_cover = ""
+            if schema["album"]["images"]:
+                album_cover = schema["album"]["images"][0]["url"]
+            else:
+                album_cover = ""
 
-
-        json_data.append({
-                "artist":schema["album"]["artists"][0]["name"],
-                "album_artwork":album_cover,
-                "album":schema["album"]["name"],
-                "check_url":"https://www.amazon.co.uk/s?k="+schema["album"]["artists"][0]["name"]+"+"+schema["album"]["name"],
-                "url":""
-        })
-
-
-        pass
-
-
+            if artist == schema["album"]["artists"][0]["name"]:
+           
+                json_data.append({
+                            "artist":schema["album"]["artists"][0]["name"],
+                            "album_artwork":album_cover,
+                            "album":schema["album"]["name"],
+                            "check_url":"https://www.amazon.co.uk/s?k="+schema["album"]["artists"][0]["name"]+"+"+schema["album"]["name"],
+                            "url":""
+                })
+       
     return library.json.export_json(app.settings["spotify"]["album_list"]+return_filename,json_data)
     
 
@@ -62,7 +62,10 @@ for filename in library.scan.scan_file_recursively(app.settings["spotify"]["expo
 
     return_filename = filename.replace(app.settings["spotify"]["export"],"")
 
-    export_data_single(filename,return_filename)
+    if library.file.file_exists(app.settings["spotify"]["track_list"]+return_filename):
+        pass
+    else:
+        export_data_single(filename,return_filename)
 
     if library.file.file_exists(app.settings["spotify"]["album_list"]+return_filename):
         pass

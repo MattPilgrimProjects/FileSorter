@@ -226,4 +226,5 @@ library.file.file_update("S:\\Desktop\\results.txt",[
     ""
 ])
 
+library.file.execute("S:\\Desktop\\results.txt")
 

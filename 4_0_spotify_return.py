@@ -6,9 +6,14 @@ import library.cron
 import library.url
 import library.comment
 
+import sys
+
 def create_filename(csv_row):
 
     return csv_row[1:].replace("/","-")+".json"
+
+print("Enter the auth token:")
+auth = "Bearer "+input()
 
 for row in library.json.import_json("S:\\Midi-Library\\sources\\track_list.json"):
 
@@ -30,11 +35,13 @@ for row in library.json.import_json("S:\\Midi-Library\\sources\\track_list.json"
             ('market','US'),
             ('include_external','audio')
         )
-    
-        content = library.url.spotify_web_api(params,app.settings["spotify"]["auth"])
-        library.json.export_json(filename,content)
-
-        library.comment.returnMessage("Added "+filename)
+        library.cron.delay(5)
+        content = library.url.spotify_web_api(params,auth)
+        if content:
+            library.json.export_json(filename,content)
+            library.comment.returnMessage("Added "+filename)
+        else:
+            sys.exit()
 
 
         

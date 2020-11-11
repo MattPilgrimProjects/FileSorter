@@ -20,7 +20,6 @@ for row in library.scan.import_json_from_directory_recursively("S:\\Midi-Library
         library.comment.returnMessage(new_location)
     else:
         library.cron.delay(5)
-
         library.file.import_midi_files(row['url'],new_location)
  
         pass
