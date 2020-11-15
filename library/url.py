@@ -3,6 +3,14 @@ import ssl
 import requests
 import library.file
 import library.comment
+import sys
+
+def check_for_status_code_error(response):
+    if response.status_code ==200:
+        return response.json()
+    else:
+        print("Import Error" + str(response.status_code))
+        return sys.exit()
 
 
 def returnURLContent(url):
@@ -20,10 +28,9 @@ def spotify_web_api(params,auth):
 
     response = requests.get('https://api.spotify.com/v1/search', headers=headers, params=params)
 
-    if response.status_code ==200:
-        return response.json()
-    else:
-        print("Import Error" + response.status_code)
+    return check_for_status_code_error(response)
+
+ 
 
 def youtube_web_api(params,auth):
 
@@ -35,7 +42,7 @@ def youtube_web_api(params,auth):
 
     response = requests.get('https://youtube.googleapis.com/youtube/v3/search', headers=headers, params=params)
 
-    return response.json()
+    return check_for_status_code_error(response)
 
 
 def download_html_content(search_url,save_location):

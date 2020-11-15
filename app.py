@@ -6,6 +6,24 @@ setup = library.json.import_json("P:\\settings.json")
 
 settings = library.json.import_json("P:\\settings.json")
 
+directory_import_path = settings["source"]["freemidi"]["directory"]["import"]
+
+artist_download_path = settings["source"]["freemidi"]["artist"]["download"]
+artist_import_path = settings["source"]["freemidi"]["artist"]["import"]
+artist_localhost_path = settings["source"]["freemidi"]["artist"]["localhost"]
+artist_library_path = settings["source"]["freemidi"]["artist"]["library"]
+artist_processed_path = settings["source"]["freemidi"]["artist"]["processed"]
+artist_pagination_list = settings["source"]["freemidi"]["artist"]["pagenation"]
+
+track_library_path = settings["source"]["freemidi"]["tracks"]["library"]
+track_import_path = settings["source"]["freemidi"]["tracks"]["import"]
+
+
+midi_download_path = settings["source"]["freemidi"]["midi"]["download"]
+midi_library_path = settings["source"]["freemidi"]["midi"]["library"]
+
+export_location = settings["sources"]["track_list"]["json"]
+
 
 def import_config(filename):
     return library.json.import_json(filename)

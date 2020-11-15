@@ -4,6 +4,7 @@ import library.scan
 import library.directory
 import library.file
 import library.cron
+import library.csv
 
 def export_profile(content):
 
@@ -66,21 +67,6 @@ for content in library.json.import_json("full_list.json"):
     if content["api_sources"]["spotify"]["album_list"] and content["api_sources"]["spotify"]["track_list"] and content["api_sources"]["youtube"]["track_list"] and library.file.file_exists("S:/Website Projects/api"+content["url"]):
         export_sidebar(content)
 
+
+library.csv.export_csv("Z:\\apple_music\\raw_data\\apple.csv",["artist","track","url"],www_export)
 library.json.export_json("S:/Website Projects/api/www.json",www_export)
-
-
-
-# profile=[
-#     artist,
-#     track,
-#     audio_data,
-#     key_signature
-# ]
-
-# sidebar=[
-#     playback
-#     spotify->href
-#     youtube->href
-#     apple_music->href
-#     album_list
-# ]

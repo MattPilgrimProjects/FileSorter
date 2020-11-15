@@ -8,11 +8,10 @@ import library.cron
 import library.directory
 import library.url
 
-export_location = app.settings["sources"]["track_list"]["json"]
 
 def return_artists_from_database():
     array=[]
-    for row in library.json.import_json(export_location):
+    for row in library.json.import_json(app.export_location):
         array.append(row["artist"])
     
     return library.parser.remove_duplicates_from_array(array)
@@ -28,7 +27,7 @@ def output_handler(return_artist,row,high_percentage_match,low_percentage_match)
 
 
 def database_match_artist(perfect_filepath,high_filepath,medium_filepath,alphabet):
-    for row in library.json.import_json("S:\\Midi-Library\\artist\\freemidi\\"+alphabet+".json"):
+    for row in library.json.import_json(app.artist_library_path+alphabet+".json"):
 
             for return_artist in return_artists_from_database():
 
@@ -51,9 +50,9 @@ def database_match_artist(perfect_filepath,high_filepath,medium_filepath,alphabe
                     pass
           
            
-    library.json.export_json("Z:\\artist\\freemidi\\processed\\"+alphabet+"_perfect_match.json",perfect_match_array)
-    library.json.export_json("Z:\\artist\\freemidi\\processed\\"+alphabet+"_high_match.json",high_match_array)
-    library.json.export_json("Z:\\artist\\freemidi\\processed\\"+alphabet+"_medium_match.json",medium_match_array)
+    library.json.export_json(app.artist_processed_path+alphabet+"_perfect_match.json",perfect_match_array)
+    library.json.export_json(app.artist_processed_path+alphabet+"_high_match.json",high_match_array)
+    library.json.export_json(app.artist_processed_path+alphabet+"_medium_match.json",medium_match_array)
     library.comment.returnMessage(alphabet+" updated")  
 
     return None   
@@ -66,9 +65,9 @@ for alphabet in ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p"
     high_match_array=[]
     medium_match_array=[]
 
-    perfect_filepath= "Z:\\artist\\freemidi\\processed\\"+alphabet+"_perfect_match.json"
-    high_filepath = "Z:\\artist\\freemidi\\processed\\"+alphabet+"_high_match.json"
-    medium_filepath = "Z:\\artist\\freemidi\\processed\\"+alphabet+"_medium_match.json"
+    perfect_filepath= app.artist_processed_path+alphabet+"_perfect_match.json"
+    high_filepath = app.artist_processed_path+alphabet+"_high_match.json"
+    medium_filepath = app.artist_processed_path+alphabet+"_medium_match.json"
 
     if library.file.file_exists(perfect_filepath) and library.file.file_exists(high_filepath) and library.file.file_exists(medium_filepath):
         pass
@@ -78,20 +77,27 @@ for alphabet in ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p"
 
 ############################################################################################################################
 
-for filename in library.scan.scan_file_recursively("Z:\\artist\\freemidi\\processed\\*.json"):
+for filename in library.scan.scan_file_recursively(app.artist_processed_path+"*.json"):
 
-    alphabet = filename.replace("Z:\\artist\\freemidi\\processed\\","").split("_")[0]
+    alphabet = filename.replace(app.artist_processed_path,"").split("_")[0]
     
     for row in library.json.import_json(filename):
 
-        library.directory.create_recursive_directory("S:\\Website Projects\\live\\freemidi\\artist\\"+alphabet)
+        library.directory.create_recursive_directory(app.artist_download_path+alphabet)
 
-        html = "S:\\Website Projects\\live\\freemidi\\artist\\"+alphabet+"\\"+row["url"]+".html"
+        html = app.artist_download_path+alphabet+"\\"+row["url"]+".html"
 
-        if library.file.file_exists(html):
-            pass
-        else:
-            library.url.download_html_content("https://freemidi.org/"+row["url"],html)
+        for pagenation in app.artist_pagination_list:
+
+            url = row["url"]+pagenation
+            html_local = html.replace(".html",pagenation+".html")
+
+            if library.file.file_exists(html_local):
+                pass
+            else:
+                library.cron.delay(2)
+                library.url.download_html_content(app.track_import_path+url,html_local)
+        
 
 ############################################################################################################################
 

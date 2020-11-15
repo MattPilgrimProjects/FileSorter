@@ -2,6 +2,7 @@ import app
 import library.scan 
 import library.comment
 import library.file
+import controllers.return_key_signature
 
 
 def return_key_signature(filename):
@@ -111,14 +112,8 @@ def return_key_signature(filename):
 
         if count == max(return_all_notes):
 
+            return controllers.return_key_signature.structure(midi_note)
     
-
-            if midi_note in major:
-                return major
-            else:
-                return midi_note+" Minor"
-              
-
         pass
 
 ###########################################################################################################

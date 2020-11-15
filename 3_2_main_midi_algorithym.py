@@ -23,10 +23,10 @@ for setting in app.settings['stage']:
             })
 
         if library.file.file_exists(filename) and library.file.file_does_not_exists(setting["midi_body_structure"]+keyword+".json"):
-          
-            if library.json.import_json(filename) ==None:
-                library.comment.returnMessage("Error on "+ filename)
-            else:
+        
+         
+            if library.json.import_json(filename):
+
                 array=[]
                 note_array=[]
                 channel_array=[]          
@@ -69,10 +69,10 @@ for setting in app.settings['stage']:
                     else:
                         pass
 
-            array.append(minimize_array)
+                array.append(minimize_array)
                     
-            library.json.export_json(setting["midi_body_structure"]+keyword+".json",array[0])   
-            library.comment.returnMessage(setting["midi_body_structure"]+keyword+".json                                ")   
+                library.json.export_json(setting["midi_body_structure"]+keyword+".json",array[0])   
+                library.comment.returnMessage(setting["midi_body_structure"]+keyword+".json                                ")   
         else:
             pass
   

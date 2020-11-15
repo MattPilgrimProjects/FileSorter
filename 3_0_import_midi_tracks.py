@@ -6,18 +6,18 @@ import library.comment
 import library.cron
 import library.url
 
-for row in library.scan.import_json_from_directory_recursively("S:\\Midi-Library\\tracks\\freemidi\\*\\*\\*.json"):
+import sys
 
-    filename = row["url"].replace("https://freemidi.org/getter-","")
-    
-    original_location = "S:\\Midi-Library\\raw_midi\\freemidi\\"+filename+".mid"
-    
-    new_location = "S:\\Midi-Library\\raw_midi\\freemidi\\processed\\getter-"+filename+".mid"
+source="freemidi"
 
-    if library.file.file_exists("S:\\Midi-Library\\raw_midi\\freemidi\\"+filename+".mid"):
+for row in library.scan.import_json_from_directory_recursively(app.track_library_path+"\\*\\*\\*.json"):
 
-        library.file.move_file(original_location,new_location)
-        library.comment.returnMessage(new_location)
+    filename = row["url"].replace(app.track_import_path,"")
+
+    new_location = "S:\\Midi-Library\\raw_midi\\"+source+"\\processed\\"+filename+".mid"
+
+    if library.file.file_exists(new_location):
+        pass
     else:
         library.cron.delay(5)
         library.file.import_midi_files(row['url'],new_location)

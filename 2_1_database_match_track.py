@@ -12,7 +12,7 @@ import library.url
 
 def return_tracks_from_database(artist_array):
 
-    export_location = app.settings["sources"]["track_list"]["json"]
+    export_location = app.export_location
 
     array=[]
     
@@ -70,12 +70,12 @@ def percentage_matcher_module(filename,artist_list):
 
 def file_output_setup(level,filename,artist_list):
 
-    create_artist_directory = filename.replace(".json","\\").replace(filename,"S:\\Midi-Library\\tracks\\freemidi")
+    create_artist_directory = filename.replace(".json","\\").replace(filename,app.track_library_path)
 
     if library.file.file_exists(create_artist_directory+level+".json"):
         pass
     elif percentage_matcher_module(filename,artist_list)[level]:  
-        library.directory.create_recursive_directory(create_artist_directory) 
+         
         library.json.export_json(create_artist_directory+level+".json",percentage_matcher_module(filename,artist_list)[level])
         library.comment.returnMessage("Completed: " + create_artist_directory+level+".json")
     else:
@@ -84,12 +84,12 @@ def file_output_setup(level,filename,artist_list):
 def load(alphabet):
     artistList=[]
 
-    for row in library.scan.import_json_from_directory_recursively("S:\\Midi-Library\\artist\\freemidi\\processed\\"+alphabet+"_*.json"):
+    for row in library.scan.import_json_from_directory_recursively(app.artist_processed_path+alphabet+"_*.json"):
         artistList.append(row["artist"])
 
     artist_array = return_tracks_from_database(artistList)
 
-    for filename in library.scan.scan_file_recursively("S:\\Midi-Library\\tracks\\freemidi\\"+alphabet+"\\artist-*.json"):
+    for filename in library.scan.scan_file_recursively(app.track_library_path+alphabet+"\\artist-*.json"):
 
         file_output_setup("perfect",filename,artist_array)
         file_output_setup("high",filename,artist_array)
@@ -97,8 +97,9 @@ def load(alphabet):
 
 ##########################################################################################################################
 
-for alphabet in ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]:
+for alphabet in ["0","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]:
 
+    
     load(alphabet)
 
 

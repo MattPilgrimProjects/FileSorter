@@ -5,11 +5,9 @@ import library.json
 import library.comment
 import library.file
 
-export_location = app.settings["sources"]["track_list"]["json"]
-
 def return_tracks_from_database():
     array=[]
-    for row in library.json.import_json(export_location):
+    for row in library.json.import_json(app.export_location):
         array.append(row["track"])
     
     return library.parser.remove_duplicates_from_array(array)
@@ -35,18 +33,18 @@ def convert_to_json(filename,output_filepath):
                 "download_url":"https://freemidi.org/getter-"+filename
                 })
 
-    output_filepath = filename_raw.replace("S:\\Website Projects\\live\\freemidi\\artist\\","Z:\\tracks\\freemidi\\").replace(".html",".json")
+    output_filepath = filename_raw.replace(app.artist_download_path,app.track_library_path).replace(".html",".json")
 
     return library.json.export_json(output_filepath,part_5)
 
     
 #################################################################################################################################################
 
-for filename_raw in library.scan.scan_file_recursively("S:\\Website Projects\\live\\freemidi\\artist\\*\\*.html"):
+for filename_raw in library.scan.scan_file_recursively(app.artist_download_path+"*\\*.html"):
 
     filename = filename_raw.replace("S:\\Website Projects\\","http://localhost/")
 
-    output_filepath = filename_raw.replace("S:\\Website Projects\\live\\freemidi\\artist\\","Z:\\tracks\\freemidi\\").replace(".html",".json")
+    output_filepath = filename_raw.replace(app.artist_download_path,app.track_library_path).replace(".html",".json")
 
     if library.file.file_exists(output_filepath):
         pass
