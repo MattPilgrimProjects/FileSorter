@@ -16,6 +16,9 @@ def check_for_status_code_error(response):
 def returnURLContent(url):
     ssl._create_default_https_context = ssl._create_unverified_context
     response = urllib.request.urlopen(url)
+
+    print(response.getcode())
+
     return response.read()
 
 def spotify_web_api(params,auth):

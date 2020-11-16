@@ -430,8 +430,10 @@ def return_notes_and_channels(midi_filename,channel_name):
 
     try:
         mid = read_midi(midi_filename,channel_name)
-    except:
-        print("File Error " + midi_filename)     
+    except Exception as e:
+        print("File Error " + midi_filename+ ":"+str(e))   
+        return None
+
     else:
         return mid
 

@@ -202,3 +202,7 @@ def high_match_percentage(string_1,string_2):
                 match=match
 
         return match/range_value*100
+
+
+def return_alphabet():
+    return ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]

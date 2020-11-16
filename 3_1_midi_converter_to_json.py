@@ -28,11 +28,7 @@ for filename in library.scan.scan_file_recursively("S:\\Midi-Library\\raw_midi\\
 
         midi_data = library.midi.return_notes_and_channels(filename,channel_name)
 
-        if midi_data:
-            library.json.export_json(json_output,midi_data)
-        else:
-            pass
-
+        library.json.export_json(json_output,midi_data)
         library.comment.returnMessage("Converting " + json_output)
      
     else:

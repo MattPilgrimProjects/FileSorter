@@ -49,7 +49,7 @@ for artist in library.json.import_json(converted_database)["artists"]["artist"]:
     pass
 
 library.json.export_json(export_location,array)
-library.csv.export_csv(app.settings["reporting"]["extract_artist_and_tracks"],["artist","track","url"],array)
+
 library.comment.returnMessage("Completed: "+export_location)
 
 

@@ -100,6 +100,9 @@ def api_file_check(directory,url):
 
 # Filepath Setup
 
+
+apple_track_list = "S:\\Midi-Library\\apple_music\\track_list\\"
+
 spotify_raw_data = "S:\\Midi-Library\\spotify\\raw_data\\"
 spotify_album_list = "S:\\Midi-Library\\spotify\\album_list\\"
 spotify_track_list = "S:\\Midi-Library\\spotify\\track_list\\"
@@ -139,6 +142,9 @@ for original_list in library.scan.import_json_from_directory_recursively(app.set
             "youtube":{
                 "raw_data":api_file_check(youtube_raw_data,original_list["url"]),
                 "track_list":api_file_check(youtube_track_list,original_list["url"])
+            },
+            "apple":{
+                "track_list":api_file_check(apple_track_list,original_list["url"])
             },
             "karaoke_version":{
                 "affiliate_link":"https://www.karaoke-version.com/afflink.html?aff=948&action=redirect&part=custom&song="+original_list["track"]+"&artist="+original_list["artist"]

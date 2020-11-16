@@ -74,10 +74,12 @@ def file_output_setup(level,filename,artist_list):
 
     if library.file.file_exists(create_artist_directory+level+".json"):
         pass
-    elif percentage_matcher_module(filename,artist_list)[level]:  
-         
+    elif percentage_matcher_module(filename,artist_list)[level]: 
+
+        library.directory.create_recursive_directory(create_artist_directory)
         library.json.export_json(create_artist_directory+level+".json",percentage_matcher_module(filename,artist_list)[level])
         library.comment.returnMessage("Completed: " + create_artist_directory+level+".json")
+
     else:
         pass
 
@@ -94,6 +96,7 @@ def load(alphabet):
         file_output_setup("perfect",filename,artist_array)
         file_output_setup("high",filename,artist_array)
         file_output_setup("medium",filename,artist_array)
+        library.comment.returnMessage("Processed: "+ filename)
 
 ##########################################################################################################################
 

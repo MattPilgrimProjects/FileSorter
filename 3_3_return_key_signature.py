@@ -9,7 +9,7 @@ def return_key_signature(filename):
 
     file_content = library.json.import_json(filename)
 
-    midi_channels = library.json.import_json("midi.json")
+    midi_channels = library.json.import_json("P:\\midi.json")
 
     diatonic_scale={
         "C Major":["C","D","E","F","G","A","B"],

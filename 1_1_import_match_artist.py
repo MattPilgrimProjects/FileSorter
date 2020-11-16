@@ -87,10 +87,13 @@ for filename in library.scan.scan_file_recursively(app.artist_processed_path+"*.
 
         html = app.artist_download_path+alphabet+"\\"+row["url"]+".html"
 
-        for pagenation in app.artist_pagination_list:
+        for i in range(8):
 
-            url = row["url"]+pagenation
-            html_local = html.replace(".html",pagenation+".html")
+            page = app.artist_pagination_list.replace("[i]",str(i))
+   
+            url = row["url"]+page
+
+            html_local = html.replace(".html",page+".html")
 
             if library.file.file_exists(html_local):
                 pass

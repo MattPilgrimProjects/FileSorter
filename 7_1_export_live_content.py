@@ -34,6 +34,7 @@ def export_sidebar(content):
             "playback":{
                 "spotify":library.json.import_json(content["api_sources"]["spotify"]["track_list"]),
                 "youtube":library.json.import_json(content["api_sources"]["youtube"]["track_list"]),
+                "apple":library.json.import_json(content["api_sources"]["apple_music"]["track_list"]),
                 "album_list":library.json.import_json(content["api_sources"]["spotify"]["album_list"])
             },
             "adverts":content["api_sources"]["karaoke_version"]["affiliate_link"]
