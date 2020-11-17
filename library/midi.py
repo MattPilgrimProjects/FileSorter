@@ -1,6 +1,6 @@
 import json
 import mido
-
+import library.json
 
 
 def midi_range_array_by_note():
@@ -371,12 +371,15 @@ def export_processed_content(mid,process_filename):
     return array
 
 
-def read_midi(filename,channel_name):
+def read_midi(filename):
+
+    channel_name  = library.json.import_json("S:\\Midi-Library\\instruments.json")
+    instrumental_type = library.json.import_json("S:\\Midi-Library\\instruments_types.json")
 
     array=[]
     mid = mido.MidiFile(filename)
 
-    
+    midi_channels = library.json.import_json("P:\\midi.json")
 
     for i, track in enumerate(mid.tracks):
         
@@ -392,44 +395,37 @@ def read_midi(filename,channel_name):
         for msg in track:
             
             msg = str(msg)
-
-            
-            
              
             if "note_on " in msg:
-                note_array.append(msg.split("note=")[1].split(" ")[0])
+                note_array.append(midi_channels[msg.split("note=")[1].split(" ")[0]])
 
             if "program_change" in msg:
                 raw_msg = msg.split("program=")[1].split(" ")[0]
-            
-           
-        
-
-            if "note_on" not in msg :
-                raw_data.append(msg)
+  
+            raw_data.append(msg)
          
-            if raw_msg=="0" and "channel=9" in msg:
+            if "channel=9" in msg:
                 raw_msg="Dr"
 
-            if raw_msg=="0" and "channel=9" not in msg:
-                raw_msg="1"
+
 
         if note_array:        
             array.append({
                     "channel":channel,
-                    "body":note_array,
+                    "body":library.parser.distinct(note_array),
+                    "category":instrumental_type[channel_name[raw_msg]],
                     "instrument":channel_name[raw_msg],
-                    "raw":raw_data
+                    
                 })
         else:
             pass
     return array
   
 
-def return_notes_and_channels(midi_filename,channel_name):
+def return_notes_and_channels(midi_filename):
 
     try:
-        mid = read_midi(midi_filename,channel_name)
+        mid = read_midi(midi_filename)
     except Exception as e:
         print("File Error " + midi_filename+ ":"+str(e))   
         return None

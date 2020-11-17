@@ -21,6 +21,7 @@ track_import_path = settings["source"]["freemidi"]["tracks"]["import"]
 
 midi_download_path = settings["source"]["freemidi"]["midi"]["download"]
 midi_library_path = settings["source"]["freemidi"]["midi"]["library"]
+midi_processed_path = settings["source"]["freemidi"]["midi"]["processed"]
 
 export_location = settings["sources"]["track_list"]["json"]
 

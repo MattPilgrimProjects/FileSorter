@@ -12,6 +12,8 @@ csv_data=[]
 
 library.comment.returnMessage("Starting")   
 
+
+
 for setting in app.settings['stage']:
 
     
@@ -65,6 +67,15 @@ for setting in app.settings['stage']:
 
                         
                     if channel["body"]:
+                        
+                        convert_to_note_dictionary=[]
+
+                        print(channel["body"])
+
+                        # for note_number,note in library.json.import_json("P:\\midi.json"):
+                        #     convert_to_note_dictionary.append()
+
+
                         minimize_array[str(num)+": "+category_match]=library.parser.distinct(channel["body"])
                     else:
                         pass

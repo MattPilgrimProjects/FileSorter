@@ -4,23 +4,15 @@ import library.comment
 import library.file
 import controllers.return_key_signature
 
+from scipy import stats
+
+diatonic_scale=library.json.import_json("Z:\\circle_of_fifths.json")
 
 def return_key_signature(filename):
 
     file_content = library.json.import_json(filename)
 
     midi_channels = library.json.import_json("P:\\midi.json")
-
-    diatonic_scale={
-        "C Major":["C","D","E","F","G","A","B"],
-        "D Major":["D", "E","F#/Gb", "G","A", "B", "C#/Db"],
-        "E Major":["E", "F#/Gb", "G#/Ab", "A", "B", "C#/Db", "D#/Eb"],
-        "F Major":["F","G","A","A#/Bb","C","D","E"],
-        "G Major":["G","A","B","C","D","E","F#/Gb"],
-        "A Major":["A","B","C#/Db","D","E","F#/Gb","G#/Ab"],
-        "B Major":["B", "C#/Db", "D#/Eb", "E", "F#/Gb", "G#/Ab", "A#/Bb"]
-    }
-
 
     full_chord_array=[]
     full_notes_list=[]
@@ -119,28 +111,148 @@ def return_key_signature(filename):
 ###########################################################################################################
 
 array=[]
+def return_note_array(array):
+    note_array=[]
+    for note in array:
+        note_array.append(library.parser.remove_integers(note))
+    return note_array
 
-for filename in library.scan.scan_file_recursively("S:\\Midi-Library\\raw_midi_body_structure\\*\\*.json"):
+def match_key_tester(array,item):
+    start=0
+    overall=0
+
+    for note in return_note_array(item):
+
+        overall=overall+1
+
+        if note in array:
+            start = start+1             
     
+    return start/overall*100
+       
+def overall_scale_matcher(total_result):
 
-    remove_filepath = library.parser.find_and_replace_array(filename,{
-        "S:\\Midi-Library\\raw_midi_body_structure\\":"",
-        ".json":""
-    })
+    percentage_array=[]
 
-    data = remove_filepath.split("\\")
+    for test in total_result:
+        for new in test:
+            for scale,percetange in new.items():
+                percentage_array.append(percetange)
+               
+    max_value = max(percentage_array)
 
-    if library.file.file_does_not_exists(app.settings["raw_key_signatures"]+data[0]+"\\"+data[1]+".json"):
+    scale_match=[]
 
-        library.json.export_json(app.settings["raw_key_signatures"]+data[0]+"\\"+data[1]+".json",{
-            "result":return_key_signature(filename)
-        })
 
-        library.comment.returnUpdateMessage("Processing")
+    for test in total_result:
+        for new in test:
+            for scale,percetange in new.items():
+
+                if int(percetange) == int(max_value):
+                    scale_match.append(scale)
+            
+                else:
+                    pass
+
+    return library.parser.distinct(scale_match)
+
+
+def return_key_signature_2(filename):
+
+    array=[]
+
+    total_result=[]
+
+    total_note_count=[]
     
-    else:
+    for item in filename:
+
+        for key,count in item["body"].items():
+            total_note_count.append(key)
+            
+        channel_array=[]
+        
+        result=[]
+
+        for scale in diatonic_scale:
+            result.append({scale:match_key_tester(diatonic_scale[scale],item["body"])})
+            channel_array.append({scale:match_key_tester(diatonic_scale[scale],item["body"])})
         pass
 
-library.comment.returnMessage("Completed   ")
+        total_result.append(result)
+
+        array.append({
+            item["category"]:channel_array
+        })
+
+    ##########################################################################################
+    number_match=[]
+
+    for scale,number in overall_scale_matcher(total_result).items():
+        number_match.extend(number)
+
+    
+    return_array=[] 
+
+    for scale,number in overall_scale_matcher(total_result).items():
+        
+
+        if max(number_match) in number:
+
+            note_array=[]
+
+            
+
+            for i in range(1,7):
+
+                for note in diatonic_scale[scale]:
+                    note_array.append(note+str(i))
+                 
+            return_array.append({
+                scale:note_array
+            })
+    
+    
+
+    return return_array
+
+for filename in library.scan.scan_file_recursively("Z:\\raw_midi\\freemidi\\processed\\json\\*.json"):
+
+    remove_filepath = library.parser.find_and_replace_array(filename,{
+        "Z:\\raw_midi\\freemidi\\processed\\json\\":"S:\\Midi-Library\\raw_midi_body_structure\\freemidi\\"
+    })
+
+    if library.file.file_exists(filename) and library.json.import_json(filename):
+
+        data = library.json.import_json(filename)
+    
+        library.json.export_json(remove_filepath,{
+            "href":return_key_signature_2(data)
+        })
+
+        library.comment.returnMessage("Completed :"+remove_filepath)
+    else:
+        pass
+    
+
+#     remove_filepath = library.parser.find_and_replace_array(filename,{
+#         "S:\\Midi-Library\\raw_midi_body_structure\\":"",
+#         ".json":""
+#     })
+
+#     data = remove_filepath.split("\\")
+
+#     if library.file.file_does_not_exists(app.settings["raw_key_signatures"]+data[0]+"\\"+data[1]+".json"):
+
+#         library.json.export_json(app.settings["raw_key_signatures"]+data[0]+"\\"+data[1]+".json",{
+#             "result":return_key_signature_2(filename)
+#         })
+
+#         library.comment.returnUpdateMessage("Processing")
+    
+#     else:
+#         pass
+
+# library.comment.returnMessage("Completed   ")
 
  

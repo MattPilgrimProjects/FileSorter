@@ -206,3 +206,14 @@ def high_match_percentage(string_1,string_2):
 
 def return_alphabet():
     return ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
+
+
+def return_filename(filename,filepath,file_extension):
+
+    return find_and_replace_array(filename,{
+            filepath:"",
+            file_extension:""
+    })
+
+def remove_integers(string):
+    return ''.join([i for i in string if not i.isdigit()]) 

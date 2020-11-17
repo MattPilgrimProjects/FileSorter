@@ -49,7 +49,7 @@ for artist in library.json.import_json(converted_database)["artists"]["artist"]:
     pass
 
 library.json.export_json(export_location,array)
-
+library.csv.export_csv("Z:\\apple_music\\raw_data\\apple.csv",["artist","track","url"],array)
 library.comment.returnMessage("Completed: "+export_location)
 
 

@@ -177,6 +177,8 @@ score_api_sources_youtube_raw_data=0
 
 score_api_sources_youtube_track_list=0
 
+score_api_sources_apple_track_list=0
+
 total=0
 
 for items in library.json.import_json("full_list.json"):
@@ -211,8 +213,12 @@ for items in library.json.import_json("full_list.json"):
 
     if youtube["track_list"]: score_api_sources_youtube_track_list=score_api_sources_youtube_track_list+1
 
+    apple_music = items["api_sources"]["apple"]
 
-library.file.file_update("S:\\Desktop\\results.txt",[
+    if apple_music["track_list"]: score_api_sources_apple_track_list=score_api_sources_apple_track_list+1
+
+
+library.file.file_update("S:\\Desktop\\results.txt",[ 
     "##################################################",
     "Start Time: "+start,
     "End Time: "+end,
@@ -229,6 +235,8 @@ library.file.file_update("S:\\Desktop\\results.txt",[
     "---",
     "Youtube raw data: "+str(score_api_sources_youtube_raw_data)+"/"+str(total),
     "Youtube track list: "+str(score_api_sources_youtube_track_list)+"/"+str(total),
+    "---",
+    "Apple Music track list: "+str(score_api_sources_apple_track_list)+"/"+str(total),
     ""
 ])
 

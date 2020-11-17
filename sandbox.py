@@ -28,5 +28,4 @@ array=[]
 
 array.append(controllers.return_key_signature.structure("C"))
 
-library.json.export_json("Z:\\circle_of_fifths.json",array)
 
