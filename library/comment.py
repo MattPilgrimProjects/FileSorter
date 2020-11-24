@@ -5,7 +5,7 @@ def get_current_date():
     return now.strftime("%H:%M:%S")
 
 def returnMessage(text):
-    return print(get_current_date() +" => "+ text)
+    return print(get_current_date() +" => "+ text+"                                                    ")
 
 def returnUpdateMessage(text):
-    return print(get_current_date() +" => "+ text,end="\r")
+    return print(get_current_date() +" => "+ text+"                                                    ",end="\r")

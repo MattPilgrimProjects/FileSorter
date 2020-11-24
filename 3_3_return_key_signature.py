@@ -138,8 +138,9 @@ def overall_scale_matcher(total_result):
         for new in test:
             for scale,percetange in new.items():
                 percentage_array.append(percetange)
-               
-    max_value = max(percentage_array)
+
+    if percentage_array:
+        max_value = max(percentage_array)
 
     scale_match=[]
 
@@ -156,6 +157,45 @@ def overall_scale_matcher(total_result):
 
     return library.parser.distinct(scale_match)
 
+def closest_match_handler(total_note_count):
+    max_array=[]
+    
+    for key,value in library.parser.distinct(total_note_count).items():
+        max_array.append(int(value))
+
+    max_value=0
+
+    if max_array: max_value = max(max_array)
+
+    scale_return=[]
+
+    for key,value in library.parser.distinct(total_note_count).items():
+        if max_value == int(value):
+            scale_return.append(key)
+    
+    return scale_return
+
+def closest_match_handler_dictionary(array):
+
+    return_rating_array=[]
+
+    for item in array:
+        for key,value in item.items():
+            return_rating_array.append(value)
+
+    max_value=0
+    if max(return_rating_array):
+        max_value=max(return_rating_array)
+
+    result=[]
+    for item in array:
+        for key,value in item.items():
+            if int(max_value) == int(value):
+                    result.append({key:value})
+     
+
+    return result
+
 
 def return_key_signature_2(filename):
 
@@ -164,57 +204,29 @@ def return_key_signature_2(filename):
     total_result=[]
 
     total_note_count=[]
-    
+
     for item in filename:
 
-        for key,count in item["body"].items():
-            total_note_count.append(key)
+        if item["category"] !="Drum Kit":
             
-        channel_array=[]
-        
-        result=[]
-
-        for scale in diatonic_scale:
-            result.append({scale:match_key_tester(diatonic_scale[scale],item["body"])})
-            channel_array.append({scale:match_key_tester(diatonic_scale[scale],item["body"])})
-        pass
-
-        total_result.append(result)
-
-        array.append({
-            item["category"]:channel_array
-        })
-
-    ##########################################################################################
-    number_match=[]
-
-    for scale,number in overall_scale_matcher(total_result).items():
-        number_match.extend(number)
-
+            for key,count in item["body"].items():
+                 total_note_count.append(library.parser.remove_integers(key))
     
-    return_array=[] 
+    result=[]
+    overall=[]
 
-    for scale,number in overall_scale_matcher(total_result).items():
-        
+    for scale in diatonic_scale:
+        overall.append(total_note_count)
+        result.append({scale:library.parser.match_percentage(diatonic_scale[scale],total_note_count)})
 
-        if max(number_match) in number:
 
-            note_array=[]
+    return{
+        "note_list":total_note_count,
+        "max":closest_match_handler(total_note_count),
+        "matching":result,
+        "closest_scale_match":closest_match_handler_dictionary(result)
+    } 
 
-            
-
-            for i in range(1,7):
-
-                for note in diatonic_scale[scale]:
-                    note_array.append(note+str(i))
-                 
-            return_array.append({
-                scale:note_array
-            })
-    
-    
-
-    return return_array
 
 for filename in library.scan.scan_file_recursively("Z:\\raw_midi\\freemidi\\processed\\json\\*.json"):
 
@@ -224,6 +236,8 @@ for filename in library.scan.scan_file_recursively("Z:\\raw_midi\\freemidi\\proc
 
     if library.file.file_exists(filename) and library.json.import_json(filename):
 
+        library.comment.returnMessage("Processing :"+filename)
+    
         data = library.json.import_json(filename)
     
         library.json.export_json(remove_filepath,{
@@ -231,28 +245,6 @@ for filename in library.scan.scan_file_recursively("Z:\\raw_midi\\freemidi\\proc
         })
 
         library.comment.returnMessage("Completed :"+remove_filepath)
+        library.comment.returnMessage("---")
     else:
         pass
-    
-
-#     remove_filepath = library.parser.find_and_replace_array(filename,{
-#         "S:\\Midi-Library\\raw_midi_body_structure\\":"",
-#         ".json":""
-#     })
-
-#     data = remove_filepath.split("\\")
-
-#     if library.file.file_does_not_exists(app.settings["raw_key_signatures"]+data[0]+"\\"+data[1]+".json"):
-
-#         library.json.export_json(app.settings["raw_key_signatures"]+data[0]+"\\"+data[1]+".json",{
-#             "result":return_key_signature_2(filename)
-#         })
-
-#         library.comment.returnUpdateMessage("Processing")
-    
-#     else:
-#         pass
-
-# library.comment.returnMessage("Completed   ")
-
- 

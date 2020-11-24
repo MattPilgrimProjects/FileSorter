@@ -40,10 +40,8 @@ for filename in library.scan.scan_file_recursively(app.settings["youtube"]["expo
 
     return_filename = filename.replace(app.settings["youtube"]["export"],"")
 
-    if library.file.file_exists(app.settings["youtube"]["track_list"]+return_filename):
-        pass
-    else:
-        export_data(filename,return_filename)
+    #If exists, then write over existing content 
+    export_data(filename,return_filename)
 
         
 

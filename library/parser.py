@@ -217,3 +217,57 @@ def return_filename(filename,filepath,file_extension):
 
 def remove_integers(string):
     return ''.join([i for i in string if not i.isdigit()]) 
+
+def remove_duplicates_from_dictionary(dictionary):
+
+    array=[]
+
+    for value in dictionary:
+        array.append(str(value))
+
+    result =remove_duplicates_from_array(array)
+
+    return_array=[]
+    for value in result:
+        return_array.append(eval(value))
+
+    return return_array
+
+
+def album(target_list,dictionary,stack_value):
+
+    artwork_array=[]
+
+    for value in dictionary:
+
+        if target_list["artist"] == value["artist"] and target_list["album"] == value["album"]:
+            artwork_array.append(value[stack_value])
+        
+    return artwork_array
+
+def compress_dictionary(dictionary):
+
+    artwork=[]
+    
+    for target_list in dictionary:
+
+        
+
+        artwork.append({
+            "artist":target_list["artist"],
+            "album":target_list["album"],
+            "album_artwork": album(target_list,dictionary,"album_artwork"),
+            "url":target_list["url"]
+            
+       })
+
+    return remove_duplicates_from_dictionary(artwork) 
+        
+    
+     
+
+            
+            
+
+    
+  

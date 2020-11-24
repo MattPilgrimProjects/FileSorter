@@ -41,10 +41,10 @@ def freemidi_json(original_list,file_extension):
     return hyperlink
 
 def freemidi_key_signature_filename(profile):
-    return profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_key_signatures\\freemidi\\").replace("\\","/")+".json"
+    return profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_midi_body_structure\\freemidi\\").replace("\\","/")+".json"
 
 def freemidi_compile_midi_filename(profile):
-    return profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_midi_body_structure\\freemidi\\").replace("\\","/")+".json"
+    return profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_midi\\freemidi\\processed\\json\\").replace("\\","/")+".json"
 
 def freemidi_json_filename(profile):
     return profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_midi\\freemidi\\processed\\json\\").replace("\\","/")+".json"
@@ -152,7 +152,7 @@ for original_list in library.scan.import_json_from_directory_recursively(app.set
         }
     })
 
-library.json.export_json("full_list.json",output)
+library.json.export_json("Z:\\full_list.json",output)
 
 end = library.comment.get_current_date()
 library.comment.returnMessage("Completed")
@@ -181,7 +181,7 @@ score_api_sources_apple_track_list=0
 
 total=0
 
-for items in library.json.import_json("full_list.json"):
+for items in library.json.import_json("Z:\\full_list.json"):
 
     total=total+1
 
