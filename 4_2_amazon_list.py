@@ -7,102 +7,67 @@ import library.csv
 import library.directory
 
 import sys
-
-def export_data(filename):
-
-    data = library.json.import_json(filename)
-
-    library.comment.returnUpdateMessage("Processing " + filename)
-
-    json_data = []
-
-    if data["tracks"]["items"]:
-        artist = data["tracks"]["items"][0]["artists"][0]["name"]
-
-        for schema in data["tracks"]["items"]:
-
-            if schema["album"]["images"]:
-                album_cover = schema["album"]["images"][0]["url"]
-            else:
-                album_cover = ""
-
-            if artist == schema["album"]["artists"][0]["name"]:
-
-                json_data.append({
-                    "artist": schema["album"]["artists"][0]["name"],
-                    "album": schema["album"]["name"],
-                    "album_artwork": album_cover,
-                    "url": "https://www.amazon.co.uk/s?k="+schema["album"]["artists"][0]["name"]+"+"+schema["album"]["name"],
-                    "path":filename
-                })
-    return json_data
-###
-
-
-
-### 
-
-for filename in library.scan.scan_file_recursively("S:\\Website Projects\\api\\*\\*\\profile.json"):
-
-    remove_directory = library.parser.find_and_replace_array(filename,{
-        "S:\\Website Projects\\api\\":"",
-        "\\profile":""
+def change_to_url(value):
+    return library.parser.find_and_replace_array(value.lower(),{
+        " ":"-",
+        '"':'',
+        "'":"",
+        "/":"",
+        ":":"",
+        "?":"",
+        "(":"",
+        ")":"",
+        "lÃ¸vÃ«":"",
+        "---":"-",
+        "&":"and",
+        ".":"",
+        ",":""
     })
 
-    new_file = remove_directory.replace("\\","-")
 
-    album_list = "Z:\\amazon\\album_list\\"+new_file
-    raw_data = "Z:\\spotify\\raw_data\\"+new_file
+def do_not_use_after_first_use():
+    raw=[]
 
-    if library.file.file_exists(album_list):      
-        pass
-    else:  
+    for filename in library.scan.scan_file_recursively("S:\\Website Projects\\api\\*\\*\\profile.json"):
+
+        remove_directory = library.parser.find_and_replace_array(filename,{
+                "S:\\Website Projects\\api\\":"",
+                "\\profile":""
+        })
+
+        new_file = remove_directory.replace("\\","-")
+
+        raw_data = "Z:\\spotify\\album_list\\"+new_file
+
+        if library.file.file_exists(raw_data):
+
+            array=[]
+
+            for data in library.json.import_json(raw_data):
+
+                array.append({
+                        "artist": data["artist"],
+                        "album":data["album"],
+                        "src": "https://www.amazon.co.uk/s?k="+data["artist"]+" "+data["album"]+"&i=popular",
+                        "href":"",
+                        "album_artwork":data["album_artwork"],
+                })
+                   
+
+            raw.extend(array)
+        else:
+            pass
         
-        export = export_data(raw_data)
+    library.json.export_json("Z:\\amazon\\api.json",library.parser.remove_duplicates_from_dictionary(raw))
 
-        library.json.export_json(album_list,library.parser.compress_dictionary(export))
+# do_not_use_after_first_use()
 
+for data in library.json.import_json("Z:\\amazon\\api.json"):
 
-####
+    url = change_to_url(data["artist"]+"-"+data["album"])+".json"
 
-return_list=[]
+    if data["href"] and library.file.file_does_not_exists("Z:\\amazon\\processed\\"+url):
+        
+        library.json.export_json("Z:\\amazon\\processed\\"+url,[data])
 
-# for data in library.scan.import_json_from_directory_recursively("Z:\\amazon\\album_list\\*.json"):
-
-#     print(data)
-
-#     sys.exit()
-
-    # filepath = filename.replace("Z:\\amazon\\album_list\\","")
-
-    # print(filepath)
-
-#     for data in library.json.import_json(filename):
-
-#         if library.file.file_exists("Z:\\amazon\\processed\\"+filepath):
-#             pass
-#         else:
-
-#             return_list.append({
-#                 "filepath":filepath,
-#                 "artist":data["artist"],
-#                 "album":data["album"],
-#                 "url":data["url"]
-#             })
-
-
-# library.csv.export_csv("Z:\\amazon\\raw_data.csv",["filepath","artist","album","url"],return_list)
-
-##
-
-# for data in library.csv.import_csv("Z:\\amazon\\checked.csv"):
-
-#     if library.file.file_exists("Z:\\amazon\\processed\\"+data[0]) or data[4]=="click" or data[0]=="filepath":
-#         pass
-#     else:
-#         library.json.export_json("Z:\\amazon\\processed\\"+data[0],{
-#             "artist":data[1],
-#             "track":data[2],
-#             "href":data[4]
-#         })
-#         pass
+   

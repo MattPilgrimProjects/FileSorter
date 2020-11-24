@@ -52,11 +52,12 @@ def export_data(filename):
                 json_data.append({
                     "artist": schema["album"]["artists"][0]["name"],
                     "album": schema["album"]["name"],
-                    "album_artwork": album_cover,
-                    "url": "https://www.amazon.co.uk/s?k="+schema["album"]["artists"][0]["name"]+"+"+schema["album"]["name"]
+                    "album_artwork": album_cover
                 })
     return json_data
 
+
+library.comment.returnMessage("Start")
 
 for filename in library.scan.scan_file_recursively(app.settings["spotify"]["export"]+"*.json"):
 
@@ -71,30 +72,6 @@ for filename in library.scan.scan_file_recursively(app.settings["spotify"]["expo
         library.json.export_json(app.settings["spotify"]["album_list"]+return_filename, library.parser.compress_dictionary(export))
 
     
-
 library.comment.returnMessage("---------")
 
-for filename in library.scan.scan_file_recursively(app.settings["spotify"]["album_list"]+"*.json"):
-
-    print(filename)
-
-
-# raw=[]
-
-# for data in library.scan.import_json_from_directory_recursively():
-
-    
-
-#     raw.append({
-#         "artist":data["artist"],
-#         "album":data["album"],
-#         "url":data["url"]
-#     })
-
-# library.csv.export_csv("Z:\\spotify\\result.csv",["artist","album","url"],library.parser.remove_duplicates_from_dictionary(raw))
-
-
-
-
-
-# library.comment.returnMessage("Completed")
+library.comment.returnMessage("Completed")

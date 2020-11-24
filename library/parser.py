@@ -251,23 +251,16 @@ def compress_dictionary(dictionary):
     
     for target_list in dictionary:
 
-        
-
         artwork.append({
             "artist":target_list["artist"],
             "album":target_list["album"],
-            "album_artwork": album(target_list,dictionary,"album_artwork"),
-            "url":target_list["url"]
-            
+            "album_artwork": album(target_list,dictionary,"album_artwork")[0],
+           
        })
 
     return remove_duplicates_from_dictionary(artwork) 
         
-    
      
-
-            
-            
 
     
   
