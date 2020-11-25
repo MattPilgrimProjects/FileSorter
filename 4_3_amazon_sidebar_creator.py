@@ -59,8 +59,8 @@ for filename in library.scan.scan_file_recursively("S:\\Website Projects\\MusicK
                     "album_artwork":album_data["album_artwork"]
                 })
 
-
-    library.json.export_json("Z:\\amazon\\sidebar\\"+filename["sources"],array)
+    if array:
+        library.json.export_json("Z:\\amazon\\sidebar\\"+filename["sources"],array)
      
 
  

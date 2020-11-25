@@ -5,8 +5,10 @@ import library.file
 import library.comment
 import library.csv
 
-def export_data_single(filename, return_filename):
+def export_data_single(filename):
     library.comment.returnMessage("Processing " + filename)
+
+    data = library.json.import_json(filename)
 
     json_data = []
 
@@ -25,8 +27,7 @@ def export_data_single(filename, return_filename):
     else:
         output = json_data[0]
 
-    library.json.export_json(
-        app.settings["spotify"]["track_list"]+return_filename, output)
+    return output
 
 
 def export_data(filename):
@@ -68,9 +69,13 @@ for filename in library.scan.scan_file_recursively(app.settings["spotify"]["expo
         pass
     else:
         export = export_data(filename)
-
         library.json.export_json(app.settings["spotify"]["album_list"]+return_filename, library.parser.compress_dictionary(export))
 
+    if library.file.file_exists(app.settings["spotify"]["track_list"]+return_filename):
+        pass
+    else:
+        export = export_data_single(filename)
+        library.json.export_json(app.settings["spotify"]["track_list"]+return_filename,export)
     
 library.comment.returnMessage("---------")
 
