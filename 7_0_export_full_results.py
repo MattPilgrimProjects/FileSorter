@@ -110,6 +110,8 @@ spotify_track_list = "S:\\Midi-Library\\spotify\\track_list\\"
 youtube_raw_data="S:\\Midi-Library\\youtube\\raw_data\\"
 youtube_track_list="S:\\Midi-Library\\youtube\\track_list\\"
 
+amazon_album_list="S:\\Midi-Library\\amazon\\sidebar\\"
+
 ########################################################################################################################
 
 start = library.comment.get_current_date()
@@ -138,6 +140,9 @@ for original_list in library.scan.import_json_from_directory_recursively(app.set
                 "raw_data":api_file_check(spotify_raw_data,original_list["url"]),
                 "album_list":api_file_check(spotify_album_list,original_list["url"]),
                 "track_list":api_file_check(spotify_track_list,original_list["url"])
+            },
+            "amazon":{
+                "album_list":api_file_check(amazon_album_list,original_list["url"])
             },
             "youtube":{
                 "raw_data":api_file_check(youtube_raw_data,original_list["url"]),
@@ -179,6 +184,8 @@ score_api_sources_youtube_track_list=0
 
 score_api_sources_apple_track_list=0
 
+score_api_sources_amazon_album_list=0
+
 total=0
 
 for items in library.json.import_json("Z:\\full_list.json"):
@@ -217,6 +224,8 @@ for items in library.json.import_json("Z:\\full_list.json"):
 
     if apple_music["track_list"]: score_api_sources_apple_track_list=score_api_sources_apple_track_list+1
 
+    if items["api_sources"]["amazon"]["album_list"]: score_api_sources_amazon_album_list = score_api_sources_amazon_album_list+1
+
 
 library.file.file_update("S:\\Desktop\\results.txt",[ 
     "##################################################",
@@ -237,7 +246,9 @@ library.file.file_update("S:\\Desktop\\results.txt",[
     "Youtube track list: "+str(score_api_sources_youtube_track_list)+"/"+str(total),
     "---",
     "Apple Music track list: "+str(score_api_sources_apple_track_list)+"/"+str(total),
-    ""
+    "---",
+    "Amazon Album list: "+str(score_api_sources_amazon_album_list)+"/"+str(total),
+    "----"
 ])
 
 library.file.execute("S:\\Desktop\\results.txt")

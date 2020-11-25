@@ -259,6 +259,20 @@ def compress_dictionary(dictionary):
        })
 
     return remove_duplicates_from_dictionary(artwork) 
+
+
+def global_return_path(filename):
+    filename_only = find_and_replace_array(filename,{
+        "S:\\Website Projects\\MusicKeyFinder\\resources\\api\\":"",
+        "\\profile.json":""
+    })
+
+    return {
+        "artist":filename_only.split("\\")[0],
+        "track":filename_only.split("\\")[1],
+        "sources":filename_only.replace("\\","-")+".json",
+        "path":filename_only.replace("\\","/")
+    }
         
      
 

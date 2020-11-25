@@ -12,7 +12,7 @@ def change_to_url(value):
         " ":"-",
         '"':'',
         "'":"",
-        "/":"",
+        "/":"-",
         ":":"",
         "?":"",
         "(":"",
@@ -25,49 +25,48 @@ def change_to_url(value):
     })
 
 
+def href_return(filepath):
+
+    if library.file.file_exists("Z:\\amazon\\processed\\"+filepath):
+        href = library.json.import_json("Z:\\amazon\\processed\\"+filepath)[0]["href"]
+    else:
+        href=""
+
+    return href
+
 def do_not_use_after_first_use():
     raw=[]
 
-    for filename in library.scan.scan_file_recursively("S:\\Website Projects\\api\\*\\*\\profile.json"):
+    for schema in library.scan.import_json_from_directory_recursively(app.settings["sources"]["track_list"]["json"]):
 
-        remove_directory = library.parser.find_and_replace_array(filename,{
-                "S:\\Website Projects\\api\\":"",
-                "\\profile":""
-        })
+        url = schema["url"].split("/")[1]+"-"+schema["url"].split("/")[2]
+        path = schema["url"].split("/")[1]+"/"+schema["url"].split("/")[2]
+    
+        spotify_data = "Z:/spotify/album_list/"+url+".json"
 
-        new_file = remove_directory.replace("\\","-")
+        api_return = "S:/Website Projects/MusicKeyFinder/resources/api/"+path+"/profile.json"
 
-        raw_data = "Z:\\spotify\\album_list\\"+new_file
-
-        if library.file.file_exists(raw_data):
+        if library.file.file_exists(api_return) and library.file.file_exists(spotify_data):
 
             array=[]
 
-            for data in library.json.import_json(raw_data):
-
+            for data in library.json.import_json(spotify_data):
+                
                 array.append({
                         "artist": data["artist"],
                         "album":data["album"],
                         "src": "https://www.amazon.co.uk/s?k="+data["artist"]+" "+data["album"]+"&i=popular",
-                        "href":"",
-                        "album_artwork":data["album_artwork"],
+                        "href":href_return(schema["url"].split("/")[1]+"-"+change_to_url(data["album"])+".json"),
+                        "album_artwork":data["album_artwork"]
                 })
-                   
+
 
             raw.extend(array)
+
+            
         else:
             pass
-        
+
     library.json.export_json("Z:\\amazon\\api.json",library.parser.remove_duplicates_from_dictionary(raw))
 
-# do_not_use_after_first_use()
-
-for data in library.json.import_json("Z:\\amazon\\api.json"):
-
-    url = change_to_url(data["artist"]+"-"+data["album"])+".json"
-
-    if data["href"] and library.file.file_does_not_exists("Z:\\amazon\\processed\\"+url):
-        
-        library.json.export_json("Z:\\amazon\\processed\\"+url,[data])
-
-   
+do_not_use_after_first_use()
