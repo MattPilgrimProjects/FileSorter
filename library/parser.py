@@ -112,20 +112,28 @@ def match_array_length(value,range_value):
 
     return value
 
+def return_low_value_by_array(value_1,value_2):
+    if len(value_1) <= len(value_2):
+        return value_1
+    
+    if len(value_1) >= len(value_2):
+        return value_2
 
 def low_match_percentage(string_1,string_2):
 
-    array_1 = string_1.split()
-    array_2 = string_2.split()
+    array_1 = string_1.split("-")
+    array_2 = string_2.split("-")
 
     match=0
     overall=0
 
     high_value = return_highest_value_by_array(array_1,array_2)
- 
+    low_value = return_low_value_by_array(array_1,array_2)
+
+
     for i in high_value:
 
-        if i in array_1 or i.title() in array_1:
+        if i in low_value or i.title() in low_value:
             match=match+1
             overall=overall+1
         else:
@@ -276,5 +284,21 @@ def global_return_path(filename):
         
      
 
-    
+def change_to_url(value):
+    return find_and_replace_array(value.lower(),{
+        " ":"-",
+        '"':'',
+        "'":"",
+        "/":"-",
+        ":":"",
+        "?":"",
+        "(":"",
+        ")":"",
+        "lÃ¸vÃ«":"",
+        "---":"-",
+        "&":"and",
+        ".":"",
+        ",":"",
+        "é":"e"
+    })
   

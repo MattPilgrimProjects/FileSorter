@@ -3,6 +3,7 @@ import ssl
 import requests
 import library.file
 import library.comment
+import library.cron
 import sys
 
 def check_for_status_code_error(response):
@@ -16,8 +17,6 @@ def check_for_status_code_error(response):
 def returnURLContent(url):
     ssl._create_default_https_context = ssl._create_unverified_context
     response = urllib.request.urlopen(url)
-
-    print(response.getcode())
 
     return response.read()
 
@@ -50,15 +49,25 @@ def youtube_web_api(params,auth):
 
 def download_html_content(search_url,save_location):
 
+    search_url = search_url.replace(" ","%20")
+
+    library.cron.delay(5)
+
     library.comment.returnMessage("Processing => "+search_url)
 
-    contents = returnURLContent(search_url)
+    try: 
+        returnURLContent(search_url)
+    except:
+        library.comment.returnMessage("Error => "+search_url)
+    else:
 
-    library.file.createFile(save_location,contents)
+        contents = returnURLContent(search_url)
 
-    library.comment.returnMessage("Download Content => "+save_location)   
- 
-    library.comment.returnMessage("---")
+        library.file.createFile(save_location,contents)
+
+        library.comment.returnMessage("Download Content => "+save_location)   
+    
+        library.comment.returnMessage("---")
 
     return None
     

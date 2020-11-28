@@ -49,7 +49,11 @@ for artist in library.json.import_json(converted_database)["artists"]["artist"]:
     pass
 
 library.json.export_json(export_location,array)
-library.csv.export_csv("Z:\\apple_music\\raw_data\\apple.csv",["artist","track","url"],array)
 library.comment.returnMessage("Completed: "+export_location)
 
+artist_list=[]
+for data in array:
+    artist_list.append(data["artist"])
 
+library.json.export_json("Z:\\sources\\artist_list.json",library.parser.remove_duplicates_from_array(artist_list))
+library.comment.returnMessage("Completed: "+"Z:\\sources\\artist_list.json")

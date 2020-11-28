@@ -56,3 +56,6 @@ def import_midi_files(url,midi_location):
     library.file.createFile(midi_location,midi.content)
 
     return library.comment.returnMessage("Track Added: "+midi_location)
+
+def copy_file(from_location,to_location):
+    return shutil.copyfile(from_location,to_location)
