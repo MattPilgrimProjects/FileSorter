@@ -34,6 +34,15 @@ def songs_array(artist):
        
     return array
 
+def output_handler(data):
+    return{
+                "artist":data["artist"],
+                "track":data["track"],
+                "url":data["url"],
+                "filename_artist":data["url"].split("/")[1],
+                "filename_track":data["url"].split("/")[2],
+    }
+
 array=[]
 
 for artist in library.json.import_json(converted_database)["artists"]["artist"]:
@@ -41,19 +50,13 @@ for artist in library.json.import_json(converted_database)["artists"]["artist"]:
     try:
         artist["songs"]["song"]["name"]
     except TypeError:
-        for function_result in songs_array(artist):
-            array.append(function_result)
+        for data in songs_array(artist):
+            array.append(output_handler(data))
             pass
     else:
-        array.append(songs(artist))
+        array.append(output_handler(songs(artist)))
     pass
 
 library.json.export_json(export_location,array)
 library.comment.returnMessage("Completed: "+export_location)
 
-artist_list=[]
-for data in array:
-    artist_list.append(data["artist"])
-
-library.json.export_json("Z:\\sources\\artist_list.json",library.parser.remove_duplicates_from_array(artist_list))
-library.comment.returnMessage("Completed: "+"Z:\\sources\\artist_list.json")

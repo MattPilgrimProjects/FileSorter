@@ -67,37 +67,83 @@ def export_handler(option,source,parse,split,midipath):
             })
     return library.json.export_json("Z:\\parsed\\dev\\"+source+".json",midi_list)
 
-
 def match_amount_high(string,array):
 
-    high=[]
-    medium=[]
+    if library.file.file_exists("S:\\Website Projects\\live\\freemidi\\"+string+".html"):
+        return "match"
 
+    medium=[]
     low=[]
 
     for data in array:
-
         if library.parser.low_match_percentage(string,data) >= 50:
             low.append({data:library.parser.low_match_percentage(string,data)})
 
         if library.parser.high_match_percentage(string,data) == 100.0:
-            return data
-        
+            return data  
         elif library.parser.high_match_percentage(string,data) >= 80.0:
             medium.append({data:library.parser.high_match_percentage(string,data)})
         else:
             pass
 
-    return {
-        "high":medium,
-        "low":low
-     
-    }
+    if medium and low:
+        return {
+            "high":medium,
+            "low":low
+        
+        }
+    else:
+        return "no match"
 
+def artist_list_return():
+    artist_list=[]
+    for artist in library.json.import_json("Z:\\sources\\track_list.json"):
+
+        if library.file.file_does_not_exists("S:\\Website Projects\\live\\freemidi\\"+artist["filename_artist"]+".html"):
+            artist_list.append(artist["filename_artist"])
+        pass
+    
+    return library.parser.remove_duplicates_from_array(artist_list)
+
+def artist_match_algorithm():
+
+    artist_list = artist_list_return()
+
+    return_array=[]
+
+    for url in library.json.import_json("Z:\\parsed\\dev\\freemidi_search.json"):
+
+        remove_artist_id = url.replace("https://freemidi.org/artist-","").split("-")[0]
+
+        data = url.replace("https://freemidi.org/artist-"+remove_artist_id+"-","")
+
+        stats=match_amount_high(data,artist_list)
+
+        if stats in ["no match","match"]:
+            pass
+        else:
+            return_array.append({
+                    "match":data,
+                    "url":url,
+                    "stats":stats,
+                            
+            })
+    
+        
+    library.json.export_json("Z:\\parsed\\dev\\match.json",return_array)
+
+
+def import_artist_profile():
+
+    for data in library.json.import_json("Z:\\parsed\\dev\\match.json"):
+        if isinstance(data["stats"], str) and library.file.file_does_not_exists("S:\\Website Projects\\live\\freemidi\\"+data["stats"]+".html"): 
+            library.url.download_html_content(data["url"],"S:\\Website Projects\\live\\freemidi\\"+data["stats"]+".html")
+         
+
+
+#################################
 
 library.comment.returnMessage("Start")
-
-
 
 # export_handler("live","freemidi_search","a","</a>",
 # {
@@ -109,41 +155,11 @@ library.comment.returnMessage("Start")
 #     }
 # })
 
-## Create song track per artist
+library.comment.returnMessage("Import artist profile")
 
-library.comment.returnMessage("Create song track per artist")
+library.comment.returnMessage("Match artist to database")
+import_artist_profile()
+artist_match_algorithm()
+import_artist_profile()
 
-artist_list=[]
-for artist in library.json.import_json("Z:\\sources\\artist_list.json"):
-    artist_list.append(library.parser.change_to_url(artist))
-    
-    pass
-
-return_array=[]
-
-for url in library.json.import_json("Z:\\parsed\\dev\\freemidi_search.json"):
-
-    rename = url.replace("https://freemidi.org/","S:\\Website Projects\\live\\freemidi\\")+".html"
-
-    remove_artist_id = url.replace("https://freemidi.org/artist-","").split("-")[0]
-
-    data = url.replace("https://freemidi.org/artist-"+remove_artist_id+"-","")
-
-    stats=match_amount_high(data,artist_list)
-
-    return_array.append({
-                "match":data,
-                "url":url,
-                "stats":stats,
-                
-    })
-
-    if data == stats and library.file.file_does_not_exists(rename):
-        library.url.download_html_content(url,rename)
- 
-
-    library.comment.returnMessage("Processing: "+data)
-
-
-
-library.json.export_json("Z:\\parsed\\dev\\match.json",return_array)
+library.comment.returnMessage("Completed")
