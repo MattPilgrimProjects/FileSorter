@@ -9,25 +9,27 @@ import library.scan
 
 import sys
 
-for filename in library.scan.scan_file_recursively("S:\\Website Projects\\MusicKeyFinder\\resources\\api\\*\\*\\profile.json"):
+track_database = app.settings["track_database"]
+source_path = app.settings["youtube"]["source"]
+auth = app.settings["youtube"]["auth"]
+api_key = app.settings["youtube"]["api"]
 
-    api = library.parser.global_return_path(filename) 
+for data in library.json.import_json(track_database):
 
-    for key,data in library.json.import_json(filename).items():
-        if key=="artist": artist = data
-        if key=="track" :  track= data
-    
+    filename = data["filename"]+".json"
+    artist = data["artist"]
+    track = data["track"]
 
-    if library.file.file_exists("Z:\\youtube\\raw_data\\"+api["sources"]):
+    if library.file.file_exists(source_path+filename):
         library.comment.returnMessage("Already added")
     else:
         params = (
                 ('q', artist+" "+track),
                 ('part', 'snippet'),
-                ('key', app.settings["youtube"]["api"])
+                ('key', api_key)
             )
-        library.cron.delay(1)
-        library.comment.returnMessage("Processing "+"Z:\\youtube\\raw_data\\"+api["sources"])
-        content = library.url.youtube_web_api(params,app.settings["youtube"]["auth"])
-        library.json.export_json("Z:\\youtube\\raw_data\\"+api["sources"],content)
-        library.comment.returnMessage("Added "+"Z:\\youtube\\raw_data\\"+api["sources"])
+        library.cron.delay(2)
+        library.comment.returnMessage("Processing "+source_path+filename)
+        content = library.url.youtube_web_api(params,auth)
+        library.json.export_json(source_path+filename,content)
+        library.comment.returnMessage("Added "+source_path+filename)

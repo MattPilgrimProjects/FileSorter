@@ -3,6 +3,7 @@ import ssl
 import requests
 import library.file
 import library.comment
+import library.parser
 import library.cron
 import sys
 
@@ -20,19 +21,20 @@ def returnURLContent(url):
 
     return response.read()
 
-def spotify_web_api(params,auth):
+def spotify_web_api(web,params,auth):
+
+    library.cron.delay(2)
 
     headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': auth,
     }
-
-    response = requests.get('https://api.spotify.com/v1/search', headers=headers, params=params)
+    
+    response = requests.get(web, headers=headers, params=params)
 
     return check_for_status_code_error(response)
 
- 
 
 def youtube_web_api(params,auth):
 
@@ -49,9 +51,7 @@ def youtube_web_api(params,auth):
 
 def download_html_content(search_url,save_location):
 
-    search_url = search_url.replace(" ","%20")
-
-    library.cron.delay(5)
+    library.cron.delay(2)
 
     library.comment.returnMessage("Processing => "+search_url)
 
@@ -68,6 +68,25 @@ def download_html_content(search_url,save_location):
         library.comment.returnMessage("Download Content => "+save_location)   
     
         library.comment.returnMessage("---")
+
+    return None
+
+def last_fm_api(search_url,save_location):
+
+    library.cron.delay(2)
+
+    try: 
+        returnURLContent(search_url)
+    except:
+        library.comment.returnMessage("Error => "+search_url)
+    else:
+
+        contents = returnURLContent(search_url)
+
+        library.file.createFile(save_location,contents)
+
+        library.comment.returnMessage("Download Content => "+save_location)   
+
 
     return None
     

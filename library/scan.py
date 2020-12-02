@@ -23,3 +23,15 @@ def import_json_from_directory_recursively(filepath):
             array.append(schema)
 
     return array
+
+def import_json_from_directory_recursively_items(filepath):
+    array=[]
+    for filename in scan_file_recursively(filepath):
+
+        for schema in library.json.import_json(filename).items():
+            array.append({
+                "filename":filename,
+                "data":schema
+                })
+
+    return array

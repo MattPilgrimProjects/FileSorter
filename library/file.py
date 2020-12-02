@@ -31,7 +31,12 @@ def file_remove(filename):
     return shutil.rmtree(filename)
 
 def move_file(original_location,new_location):
-    return shutil.move(original_location,new_location)
+    try:
+        shutil.move(original_location,new_location)
+    except FileNotFoundError:
+        library.comment.returnMessage("File does not exist")
+    else:
+        return shutil.move(original_location,new_location)
 
 def execute(filename):
     return os.system(filename)
@@ -49,6 +54,8 @@ def file_update(filename,content):
         sortedbooks.writelines(lines)
 
 def import_midi_files(url,midi_location):
+
+    library.cron.delay(5)
 
     library.comment.returnMessage("Processing: "+url)
 

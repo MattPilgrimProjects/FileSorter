@@ -396,29 +396,29 @@ def read_midi(filename):
             
             msg = str(msg)
              
-            if "note_on " in msg:
-                note_array.append(midi_channels[msg.split("note=")[1].split(" ")[0]])
+            # if "note_on " in msg:
+            #     note_array.append(midi_channels[msg.split("note=")[1].split(" ")[0]])
 
-            if "program_change" in msg:
-                raw_msg = msg.split("program=")[1].split(" ")[0]
+            # if "program_change" in msg:
+            #     raw_msg = msg.split("program=")[1].split(" ")[0]
   
-            raw_data.append(msg)
+            # raw_data.append(msg)
          
-            if "channel=9" in msg:
-                raw_msg="Dr"
+            # if "channel=9" in msg:
+            #     raw_msg="Dr"
 
+            array.append(msg)
 
-
-        if note_array:        
-            array.append({
-                    "channel":channel,
-                    "body":library.parser.distinct(note_array),
-                    "category":instrumental_type[channel_name[raw_msg]],
-                    "instrument":channel_name[raw_msg],
+        # if note_array:        
+        #     array.append({
+        #             "channel":channel,
+        #             "body":library.parser.distinct(note_array),
+        #             "category":instrumental_type[channel_name[raw_msg]],
+        #             "instrument":channel_name[raw_msg],
                     
-                })
-        else:
-            pass
+        # #         })
+        # else:
+        #     pass
     return array
   
 

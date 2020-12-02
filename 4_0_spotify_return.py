@@ -28,7 +28,7 @@ for filename in library.scan.scan_file_recursively("S:\\Website Projects\\MusicK
             ('include_external','audio')
         )
         library.cron.delay(1)
-        content = library.url.spotify_web_api(params,auth)
+        content = library.url.spotify_web_api("https://api.spotify.com/v1/search",params,auth)
         if content:
             library.comment.returnMessage("Processing "+filename)
             library.json.export_json(filename,content)

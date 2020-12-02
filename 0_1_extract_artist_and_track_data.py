@@ -3,9 +3,9 @@ import library.parser
 import library.comment
 import library.csv
 
-converted_database = app.settings["api"][0]["output"]["json"]
+converted_database = app.settings["karaokeversion"]["output"]
 
-export_location = app.settings["sources"]["track_list"]["json"]
+export_location = app.settings["karaokeversion"]["compressed"]
 
 def songs(artist):
 
