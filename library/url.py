@@ -10,10 +10,12 @@ import sys
 def check_for_status_code_error(response):
     if response.status_code ==200:
         return response.json()
-    else:
-        print("Import Error" + str(response.status_code))
-        return sys.exit()
-
+    
+    if response.status_code ==401:
+        print("Import Error " + str(response.status_code) + "Token Expiration")
+        sys.exit()
+    
+  
 
 def returnURLContent(url):
     ssl._create_default_https_context = ssl._create_unverified_context
@@ -23,14 +25,14 @@ def returnURLContent(url):
 
 def spotify_web_api(web,params,auth):
 
-    library.cron.delay(2)
+    library.cron.delay(1)
 
     headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': auth,
     }
-    
+
     response = requests.get(web, headers=headers, params=params)
 
     return check_for_status_code_error(response)

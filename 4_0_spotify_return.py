@@ -4,6 +4,7 @@ import library.json
 import library.cron
 import library.url
 import library.comment
+import library.scan
 
 print("Enter the auth token:")
 auth = "Bearer "+input()
@@ -18,7 +19,7 @@ for filename in library.scan.scan_file_recursively("S:\\Website Projects\\MusicK
     
 
     if library.file.file_exists("Z:\\spotify\\raw_data\\"+api["sources"]):
-        library.comment.returnMessage("Already added")
+        pass
     else:
         params = (
             ('q', artist+" "+track),

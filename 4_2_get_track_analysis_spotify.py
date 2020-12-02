@@ -12,17 +12,17 @@ export_path = app.settings["spotify"]["export"]
 def get_track_analysis():
     for data in library.json.import_json(track_database):
 
-        for category, schema in library.json.import_json(export_path+data["filename"]+".json").items():
+        if library.file.file_exists(export_path+data["filename"]+".json"):
+            for category, schema in library.json.import_json(export_path+data["filename"]+".json").items():
 
-            if library.file.file_does_not_exists(track_analysis_path+data["filename"]+".json"):
-
-                if category == "tracks":
-                    if schema["items"]:
-                        track_id = schema["items"][0]["id"]
-                        return_data = library.url.spotify_web_api(
-                            "https://api.spotify.com/v1/audio-analysis/"+track_id, [], auth)
-                        library.json.export_json(
-                            track_analysis_path+data["filename"]+".json", return_data)
+                if library.file.file_does_not_exists(track_analysis_path+data["filename"]+".json"):
+                    if category == "tracks":
+                        if schema["items"]:
+                            track_id = schema["items"][0]["id"]
+                            return_data = library.url.spotify_web_api(
+                                "https://api.spotify.com/v1/audio-analysis/"+track_id, [], auth)
+                            library.json.export_json(
+                                track_analysis_path+data["filename"]+".json", return_data)
 
 ##############################################################
 
