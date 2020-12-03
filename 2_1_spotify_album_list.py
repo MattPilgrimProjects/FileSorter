@@ -1,33 +1,13 @@
 import app
-import library.scan
-import library.json
 import library.file
+import library.json
+import library.cron
+import library.url
 import library.comment
-import library.csv
+import library.scan
+import sys
 
-def export_data_single(filename):
-    library.comment.returnMessage("Processing " + filename)
-
-    data = library.json.import_json(filename)
-
-    json_data = []
-
-    for schema in data["tracks"]["items"]:
-
-        json_data.append({
-            "href": schema["external_urls"]["spotify"]+"?highlight="+schema["uri"]
-        })
-
-        pass
-
-    try:
-        json_data[0]
-    except:
-        output = {}
-    else:
-        output = json_data[0]
-
-    return output
+track_database = app.settings["track_database"]
 
 
 def export_data(filename):
@@ -69,14 +49,9 @@ for filename in library.scan.scan_file_recursively(app.settings["spotify"]["expo
         pass
     else:
         export = export_data(filename)
-        library.json.export_json(app.settings["spotify"]["album_list"]+return_filename, library.parser.compress_dictionary(export))
+        library.json.export_json(
+            app.settings["spotify"]["album_list"]+return_filename, library.parser.compress_dictionary(export))
 
-    if library.file.file_exists(app.settings["spotify"]["track_list"]+return_filename):
-        pass
-    else:
-        export = export_data_single(filename)
-        library.json.export_json(app.settings["spotify"]["track_list"]+return_filename,export)
-    
 library.comment.returnMessage("---------")
 
 library.comment.returnMessage("Completed")

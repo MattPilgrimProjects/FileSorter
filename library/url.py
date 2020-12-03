@@ -11,9 +11,8 @@ def check_for_status_code_error(response):
     if response.status_code ==200:
         return response.json()
     
-    if response.status_code ==401:
-        print("Import Error " + str(response.status_code) + "Token Expiration")
-        sys.exit()
+    print("Import Error " + str(response.status_code))
+    sys.exit()
     
   
 
