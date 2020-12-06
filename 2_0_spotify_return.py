@@ -18,8 +18,6 @@ for data in library.json.import_json(track_database):
 
     filepath = "Z:\\spotify\\raw_data\\"+data["filename"]+".json"
 
-    old_filepath = "Z:\\spotify\\raw_data_2\\"+data["filename"]+".json"
-
     if library.file.file_does_not_exists(filepath):
         params = (
             ('q', artist+" "+track),
@@ -30,3 +28,5 @@ for data in library.json.import_json(track_database):
         )
         content = library.url.spotify_web_api("https://api.spotify.com/v1/search",params,auth)
         library.json.export_json(filepath,content)
+        library.comment.returnUpdateMessage("Added: "+filepath)
+

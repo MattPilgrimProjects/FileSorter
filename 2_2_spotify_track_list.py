@@ -6,7 +6,7 @@ import library.comment
 import library.csv
 
 def export_data_single(filename):
-    library.comment.returnMessage("Processing " + filename)
+    library.comment.returnUpdateMessage("Processing " + filename)
 
     data = library.json.import_json(filename)
 

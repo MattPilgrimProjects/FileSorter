@@ -24,7 +24,7 @@ def returnURLContent(url):
 
 def spotify_web_api(web,params,auth):
 
-    library.cron.delay(1)
+    # library.cron.delay(1)
 
     headers = {
         'Accept': 'application/json',
@@ -74,7 +74,7 @@ def download_html_content(search_url,save_location):
 
 def last_fm_api(search_url,save_location):
 
-    library.cron.delay(2)
+    library.cron.delay(1)
 
     try: 
         returnURLContent(search_url)

@@ -4,252 +4,82 @@ import library.json
 import library.file
 import library.comment
 import library.url
+import library.directory
+import sys
 
-track_profiles = library.scan.import_json_from_directory_recursively("S:\\Midi-Library\\tracks\\freemidi\\*\\*\\*.json")
+track_database = app.settings["track_database"]
+live_database = "S:\\Website Projects\\MusicKeyFinder\\resources\\api\\"
+key_signature = "S:\\Midi-Library\\spotify\\key_signature\\"
+amazon_album_list  =app.settings["amazon"]["output"]
+spotify_track_list = app.settings["spotify"]["track_list"]
+youtube_track_list = app.settings["youtube"]["track_list"]
+apple_music_track_list = app.settings["apple_music"]["track_list"]
 
-artist_profiles = library.scan.import_json_from_directory_recursively("S:\\Midi-Library\\artist\\freemidi\\processed\\*.json")
 
-output=[]
+for data in library.json.import_json(track_database):
 
-def freemidi_json(original_list,file_extension):
+    profile = live_database+data["filename_artist"]+"\\"+data["filename_track"]+"\\profile.json"
+    sidebar = live_database+data["filename_artist"]+"\\"+data["filename_track"]+"\\sidebar.json"
+    spotify_source = spotify_track_list+data["filename"]+".json"
+    youtube_source = youtube_track_list+data["filename"]+".json"
+    amazon_source = amazon_album_list+data["filename"]+".json"
+    apple_music_source = apple_music_track_list+data["filename"]+".json"
 
-    artist=[]
+    if library.file.file_exists(key_signature+data["filename"]+".json"):
+        library.directory.create_recursive_directory(live_database+data["url"])
+        # library.comment.returnMessage("Adding Profile "+data["filename"])
 
-    for test in artist_profiles:
-
-        if test["artist"] == original_list["artist"]:
-            artist.append(test['raw_artist'])
-        else:
-            pass 
-
-    hyperlink=[]
-
-    for profile in track_profiles:
+        library.json.export_json(profile,{
+            "artist":data["artist"],
+            "track":data["track"],
+            "content":library.json.import_json(key_signature+data["filename"]+".json")
+        })
         
-        if original_list["track"] == profile["track"] and profile["raw_artist"] in artist:
-            
-            filename = profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_midi\\freemidi\\processed\\json\\").replace("\\","/")+".json"
+    if library.file.file_exists(amazon_source) and library.file.file_exists(youtube_source) and library.file.file_exists(spotify_source):
 
-            if library.file.file_exists(filename):
-                hyperlink.append(filename)
-            else:
-                pass
+        library.directory.create_recursive_directory(live_database+data["url"])
 
+        # library.comment.returnMessage("Adding Sidebar "+data["filename"])
+
+        if library.file.file_exists(apple_music_source):
+            apple = library.json.import_json(apple_music_source)
         else:
-            pass
+            apple = library.json.import_json("Z:\\apple_music\\unprocessed\\"+data["filename"]+".json")
 
-    return hyperlink
-
-def freemidi_key_signature_filename(profile):
-    return profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_midi_body_structure\\freemidi\\").replace("\\","/")+".json"
-
-def freemidi_compile_midi_filename(profile):
-    return profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_midi\\freemidi\\processed\\json\\").replace("\\","/")+".json"
-
-def freemidi_json_filename(profile):
-    return profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_midi\\freemidi\\processed\\json\\").replace("\\","/")+".json"
-
-def freemidi_midi_filename(profile):
-    return profile["url"].replace("https://freemidi.org/","S:\\Midi-Library\\raw_midi\\freemidi\\processed\\").replace("\\","/")+".mid"
-
-def freemidi(original_list,file_extension):
-
-    artist=[]
-
-    for test in artist_profiles:
-
-        if test["artist"] == original_list["artist"]:
-            artist.append(test['raw_artist'])
-        else:
-            pass 
-
-    hyperlink=[]
-
-    for profile in track_profiles:
-
-        if original_list["track"] == profile["track"] and profile["raw_artist"] in artist:
-
-            if file_extension=="midi": filename = freemidi_midi_filename(profile)
-            if file_extension=="json": filename = freemidi_json_filename(profile)
-            if file_extension=="compile_midi_file": filename = freemidi_compile_midi_filename(profile)
-            if file_extension=="key_signature_created": filename = freemidi_key_signature_filename(profile)
- 
-            if library.file.file_exists(filename):
-                hyperlink.append(filename)
-            else:
-                pass
-
-        else:
-            pass
-
-    return hyperlink
-
-def api_file_check(directory,url):
-
-    filename = url[1:].replace("/","-")+".json"
-
-    filepath = directory.replace("\\","/")+filename
-
-    if library.file.file_exists(filepath):
-        return filepath
-    else:
-        return ""
-
-
-########################################################################################################################
-
-# Filepath Setup
-
-
-apple_track_list = "S:\\Midi-Library\\apple_music\\track_list\\"
-
-spotify_raw_data = "S:\\Midi-Library\\spotify\\raw_data\\"
-spotify_album_list = "S:\\Midi-Library\\spotify\\album_list\\"
-spotify_track_list = "S:\\Midi-Library\\spotify\\track_list\\"
-
-youtube_raw_data="S:\\Midi-Library\\youtube\\raw_data\\"
-youtube_track_list="S:\\Midi-Library\\youtube\\track_list\\"
-
-amazon_album_list="S:\\Midi-Library\\amazon\\sidebar\\"
-
-########################################################################################################################
-
-start = library.comment.get_current_date()
-library.comment.returnMessage("Start")
-
-for original_list in library.scan.import_json_from_directory_recursively(app.settings["sources"]["track_list"]["json"]):      
-
-    output.append({   
-        "artist":original_list["artist"],
-        "track":original_list["track"],
-        "url":original_list["url"],
-        "sources":{
-            "freemidi":{
-                "midi":freemidi(original_list,"midi"),
-                "json":freemidi(original_list,"json")
-            }
-        },
-        "parsed":{
-            "freemidi":{
-                "compile_midi_file":freemidi(original_list,"compile_midi_file"),
-                "key_signature_created":freemidi(original_list,"key_signature_created")
-            }
-        },
-        "api_sources":{
-            "spotify":{
-                "raw_data":api_file_check(spotify_raw_data,original_list["url"]),
-                "album_list":api_file_check(spotify_album_list,original_list["url"]),
-                "track_list":api_file_check(spotify_track_list,original_list["url"])
+        library.json.export_json(sidebar,{
+            "sources":{
+                "spotify":library.json.import_json(spotify_source),
+                "youtube":library.json.import_json(youtube_source),
+                "apple_music":apple
             },
-            "amazon":{
-                "album_list":api_file_check(amazon_album_list,original_list["url"])
-            },
-            "youtube":{
-                "raw_data":api_file_check(youtube_raw_data,original_list["url"]),
-                "track_list":api_file_check(youtube_track_list,original_list["url"])
-            },
-            "apple":{
-                "track_list":api_file_check(apple_track_list,original_list["url"])
-            },
-            "karaoke_version":{
-                "affiliate_link":"https://www.karaoke-version.com/afflink.html?aff=948&action=redirect&part=custom&song="+original_list["track"]+"&artist="+original_list["artist"]
-            }
-        }
-    })
+            "album_list":library.json.import_json(amazon_source),
+            "adverts":"https://www.karaoke-version.com/afflink.html?aff=948&action=redirect&part=custom&song="+data["track"]+"&artist="+data["artist"]
+        })
 
-library.json.export_json("Z:\\full_list.json",output)
+array=[]
 
-end = library.comment.get_current_date()
+for data in library.json.import_json(track_database):
+
+    profile = live_database+data["filename_artist"]+"\\"+data["filename_track"]+"\\profile.json"
+    sidebar = live_database+data["filename_artist"]+"\\"+data["filename_track"]+"\\sidebar.json"
+
+    if library.file.file_exists(profile) and library.file.file_exists(sidebar):
+        array.append({
+            "artist":data["artist"],
+            "track":data["track"],
+            "url":data["url"]
+        })
+
+library.json.export_json(live_database+"www.json",array)
 library.comment.returnMessage("Completed")
-
-###################################################################################################################################################################################
-
-score_sources_freemidi_midi=0
-
-score_sources_freemidi_json=0
-
-score_parsed_freemidi_compile_midi_file=0
-
-score_parsed_freemidi_key_signature_created=0
-
-score_api_sources_spotify_raw_data=0
-
-score_api_sources_spotify_album_list=0
-
-score_api_sources_spotify_track_list=0
-
-score_api_sources_youtube_raw_data=0
-
-score_api_sources_youtube_track_list=0
-
-score_api_sources_apple_track_list=0
-
-score_api_sources_amazon_album_list=0
-
-total=0
-
-for items in library.json.import_json("Z:\\full_list.json"):
-
-    total=total+1
-
-    freemidi_sources = items["sources"]["freemidi"]
-
-    freemidi_parsed = items["parsed"]["freemidi"]
-
-    
-    if freemidi_sources["midi"]: score_sources_freemidi_midi=score_sources_freemidi_midi+1
-    
-    if freemidi_sources["json"]: score_sources_freemidi_json=score_sources_freemidi_json+1
-
-    if freemidi_parsed["compile_midi_file"]: score_parsed_freemidi_compile_midi_file=score_parsed_freemidi_compile_midi_file+1
-    
-    if freemidi_parsed["key_signature_created"]: score_parsed_freemidi_key_signature_created=score_parsed_freemidi_key_signature_created+1
+# sys.exit()
 
 
-    spotify =items["api_sources"]["spotify"] 
+# library.file.file_update("S:\\Desktop\\results.txt",[ 
+#     "##################################################",
+#     "Start Time: "+start
+   
+# ])
 
-    if spotify["raw_data"]: score_api_sources_spotify_raw_data=score_api_sources_spotify_raw_data+1
-
-    if spotify["album_list"]: score_api_sources_spotify_album_list=score_api_sources_spotify_album_list+1
-
-    if spotify["track_list"]: score_api_sources_spotify_track_list=score_api_sources_spotify_track_list+1
-
-    youtube = items["api_sources"]["youtube"]
-
-    if youtube["raw_data"]: score_api_sources_youtube_raw_data=score_api_sources_youtube_raw_data+1
-
-    if youtube["track_list"]: score_api_sources_youtube_track_list=score_api_sources_youtube_track_list+1
-
-    apple_music = items["api_sources"]["apple"]
-
-    if apple_music["track_list"]: score_api_sources_apple_track_list=score_api_sources_apple_track_list+1
-
-    if items["api_sources"]["amazon"]["album_list"]: score_api_sources_amazon_album_list = score_api_sources_amazon_album_list+1
-
-
-library.file.file_update("S:\\Desktop\\results.txt",[ 
-    "##################################################",
-    "Start Time: "+start,
-    "End Time: "+end,
-    "---",
-    "Sources from Freemidi midi: "+str(score_sources_freemidi_midi)+"/"+str(total),
-    "Sources from Freemidi json: "+str(score_sources_freemidi_json)+"/"+str(total),
-    "---",
-    "Parsed Freemidi content: "+str(score_parsed_freemidi_compile_midi_file)+"/"+str(total),
-    "Parsed Freemidi key signature: "+str(score_parsed_freemidi_key_signature_created)+"/"+str(total),    
-    "---",
-    "Spotify raw data: "+str(score_api_sources_spotify_raw_data)+"/"+str(total),
-    "Spotify album list: "+str(score_api_sources_spotify_album_list)+"/"+str(total),
-    "Spotify track list: "+str(score_api_sources_spotify_track_list)+"/"+str(total),
-    "---",
-    "Youtube raw data: "+str(score_api_sources_youtube_raw_data)+"/"+str(total),
-    "Youtube track list: "+str(score_api_sources_youtube_track_list)+"/"+str(total),
-    "---",
-    "Apple Music track list: "+str(score_api_sources_apple_track_list)+"/"+str(total),
-    "---",
-    "Amazon Album list: "+str(score_api_sources_amazon_album_list)+"/"+str(total),
-    "----"
-])
-
-library.file.execute("S:\\Desktop\\results.txt")
+# library.file.execute("S:\\Desktop\\results.txt")
 

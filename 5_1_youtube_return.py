@@ -21,7 +21,7 @@ for data in library.json.import_json(track_database):
     track = data["track"]
 
     if library.file.file_exists(source_path+filename):
-        library.comment.returnMessage("Already added")
+        pass
     else:
         params = (
                 ('q', artist+" "+track),

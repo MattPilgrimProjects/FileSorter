@@ -21,6 +21,7 @@ def get_track_analysis():
                             track_id = schema["items"][0]["id"]
                             return_data = library.url.spotify_web_api(
                                 "https://api.spotify.com/v1/audio-analysis/"+track_id, [], auth)
+                            library.comment.returnUpdateMessage("Adding: "+track_analysis_path+data["filename"]+".json")
                             library.json.export_json(
                                 track_analysis_path+data["filename"]+".json", return_data)
 

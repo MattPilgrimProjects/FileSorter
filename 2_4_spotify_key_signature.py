@@ -7,6 +7,7 @@ import sys
 
 track_anaylsis = app.settings["spotify"]["track_analysis"]
 track_database = app.settings["track_database"]
+key_signature = app.settings["spotify"]["key_signature"]
 
 note_array = {
     9: "A",
@@ -136,6 +137,8 @@ def array_return(filename):
             key_signature_function = minor_scale(schema["track"]["key"]+12)
             relative_scale = major_scale(relative_note)
 
+        library.comment.returnMessage("Processing: "+filename)
+
         return {
             "key_signature": note_check(schema["track"]["key"]+12)+" "+mode_check(schema["track"]["mode"]),
             "relative_signature": note_check(relative_note)+" "+mode_relative_check(schema["track"]["mode"]),
@@ -146,14 +149,7 @@ def array_return(filename):
         }
 
 
-raw = []
-
 for data in library.json.import_json(track_database):
 
-    if library.file.file_exists(track_anaylsis+data["filename"]+".json"):
-
-        library.json.export_json("S:\\Midi-Library\\spotify\\key_signature\\" +data["filename"]+".json", array_return(track_anaylsis+data["filename"]+".json"))
-        raw.append(array_return(track_anaylsis+data["filename"]+".json"))
-
-library.json.export_json(
-    "S:\\Midi-Library\\spotify\\key_signature\\api.json", raw)
+    if library.file.file_exists(track_anaylsis+data["filename"]+".json") and library.file.file_does_not_exists(key_signature+data["filename"]+".json"):
+        library.json.export_json(key_signature+data["filename"]+".json", array_return(track_anaylsis+data["filename"]+".json"))
