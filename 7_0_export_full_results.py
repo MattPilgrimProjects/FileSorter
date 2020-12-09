@@ -41,16 +41,13 @@ for data in library.json.import_json(track_database):
 
         # library.comment.returnMessage("Adding Sidebar "+data["filename"])
 
-        if library.file.file_exists(apple_music_source):
-            apple = library.json.import_json(apple_music_source)
-        else:
-            apple = library.json.import_json("Z:\\apple_music\\unprocessed\\"+data["filename"]+".json")
+        apple = library.json.import_json("S:\\Midi-Library\\apple_music\\track_list\\"+data["filename"]+".json")
 
         library.json.export_json(sidebar,{
             "sources":{
-                "spotify":library.json.import_json(spotify_source),
-                "youtube":library.json.import_json(youtube_source),
-                "apple_music":apple
+                "Spotify":library.json.import_json(spotify_source),
+                "YouTube":library.json.import_json(youtube_source),
+                "Apple Music":apple
             },
             "album_list":library.json.import_json(amazon_source),
             "adverts":"https://www.karaoke-version.com/afflink.html?aff=948&action=redirect&part=custom&song="+data["track"]+"&artist="+data["artist"]

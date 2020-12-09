@@ -17,12 +17,16 @@ def export_data(filename, return_filename):
             schema["id"]["videoId"]
         except:
             videoId = ""
+            vid=""
         else:
             videoId = "https://www.youtube.com/watch?v=" + \
                 schema["id"]["videoId"]
+            vid = schema["id"]["videoId"]
 
         json_data.append({
-            "href": videoId
+            "href": videoId,
+            "img":"https://www.youtube.com/s/desktop/208916f9/img/favicon_96.png",
+            "embed":"https://www.youtube.com/embed/"+vid
 
         })
 

@@ -6,6 +6,7 @@ import random
 import re
 import numpy
 from difflib import SequenceMatcher
+import sys
 
 def parseLinksFromHTML(file,attribute):
     http = httplib2.Http()
@@ -23,16 +24,35 @@ def remove_duplicates_from_array(array):
     array = list(dict.fromkeys(array))
     return array 
 
+def convert_tuples_to_dictionary(tuples_data):
+    return dict((x, y) for x, y in tuples_data)
+
+def return_longer_list(list_1,list_2):
+    if len(list_1) >= len(list_2):
+        return list_1
+    if len(list_1) <= len(list_2):
+        return list_2
+
+def return_shorter_list(list_1,list_2):
+    if len(list_1) <= len(list_2):
+        return list_1
+    if len(list_1) >= len(list_2):
+        return list_2
 
 def match_percentage(array_1,array_2):
 
     match=0
+    longer_list = return_longer_list(array_1,array_2)
+    shorter_list = return_shorter_list(array_1,array_2)
 
     for note in array_1:
 
-        if note in array_2: match = match+1
+        if note in array_2: 
+ 
+            match = match+1   
 
-    return match/len(array_1)*100
+    return match/len(longer_list)*100
+    # return str(match)+"/"+str(len(longer_list))
 
 
 def find_and_replace_array(string,array):

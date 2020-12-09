@@ -16,32 +16,33 @@ def create_track_list_profile():
 
     for data in library.json.import_json(api_path):
 
-        if data["href"]:
-            library.json.export_json(track_list_path+data["filename"]+".json", {
-                "href": data["href"]
-            })
+        href = data["src"]
+
+        if data["href"]: 
+            href =data["href"]
+        else: 
+            pass
+    
+            
+
+        library.json.export_json(track_list_path+data["filename"]+".json", {
+                "href": href,
+                "img":"https://music.apple.com/assets/favicon/favicon-180-c132a95549a91ae6983a4914da3e1c44.png",
+                "embed":"https://embed.music.apple.com/"+href.replace("https://music.apple.com/","")
+        })
 
 
 def create_api_list():
     array = []
     for data in library.json.import_json(track_database):
-
-        if library.file.file_does_not_exists(track_list_path+data["filename"]+".json"):
-            array.append({
+        
+        array.append({
                 "filename": data["filename"],
                 "artist": data["artist"],
                 "track": data["track"],
                 "src": "https://music.apple.com/gb/search?term="+data["artist"]+" "+data["track"],
-                "href": ""
+                "href": library.json.import_json(track_list_path+data["filename"]+".json")["href"]
 
-            })
-
-            library.json.export_json("S:\\Midi-Library\\apple_music\\unprocessed\\"+data["filename"]+".json", {
-                "filename": data["filename"],
-                "artist": data["artist"],
-                "track": data["track"],
-                "src": "https://music.apple.com/gb/search?term="+data["artist"]+" "+data["track"],
-                "href": "https://music.apple.com/gb/search?term="+data["artist"]+" "+data["track"]
             })
 
     library.json.export_json(api_path, array)

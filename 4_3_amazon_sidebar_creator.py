@@ -7,7 +7,8 @@ import library.file
 import sys
 track_database = app.settings["track_database"]
 spotify_album_list_path = app.settings["spotify"]["album_list"]
-amazon_affiliate_path = "Z:\\amazon\\processed\\"
+amazon_affiliate_path = "S:\\Midi-Library\\amazon\\processed\\"
+api = app.settings["amazon"]["compressed"]
 
 def href_single(schema):
 
@@ -19,11 +20,11 @@ def href_single(schema):
 
 
 def sidebar_creator():
-    for data in library.json.import_json("Z:\\amazon\\api.json"):
+    for data in library.json.import_json(api):
 
         array=[]
 
-        for schema in library.json.import_json("Z:\\amazon\\api.json"):
+        for schema in library.json.import_json(api):
 
             if data["song"] == schema["song"]:
                 array.append({
@@ -34,7 +35,7 @@ def sidebar_creator():
                 })
         
 
-        library.json.export_json("Z:\\amazon\\sidebar\\"+data["song"]+".json",array)
+        library.json.export_json("S:\\Midi-Library\\amazon\\sidebar\\"+data["song"]+".json",array)
 
         library.comment.returnUpdateMessage("Processing: "+data["song"])
 

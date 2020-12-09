@@ -1,10 +1,7 @@
 import library.json
 import library.parser
 
-
-# setup = library.json.import_json("P:\\settings.json")
-
-settings = library.json.import_json("P:\\settings.json")
+settings = library.json.import_json("S:\\Projects\\settings.json")
 
 # directory_import_path = settings["source"]["freemidi"]["directory"]["import"]
 

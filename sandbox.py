@@ -1,7 +1,7 @@
 # import library.parser
 # import library.file
 import library.json
-# import library.midi
+import library.midi
 import controllers.return_key_signature
 import library.parser
 #############################################################
@@ -82,7 +82,7 @@ dictionary_2=[
 
 test  = library.parser.compress_dictionary(dictionary_2)
 
-library.json.export_json("test.json",test)
+
 
 
 
@@ -91,7 +91,5 @@ txt = "Céline Dion"
 x = txt.encode(encoding="ascii",errors="namereplace")
 
 
-
-
-
-print(x.decode()) 
+content = library.midi.import_midi("S:\\Downloads\\lights.mid")
+library.json.export_json("test.json",content)

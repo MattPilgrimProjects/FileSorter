@@ -15,7 +15,9 @@ def export_data_single(filename):
     for schema in data["tracks"]["items"]:
 
         json_data.append({
-            "href": schema["external_urls"]["spotify"]+"?highlight="+schema["uri"]
+            "href": schema["external_urls"]["spotify"]+"?highlight="+schema["uri"],
+            "img":"https://www.scdn.co/i/_global/touch-icon-114.png",
+            "embed":"https://open.spotify.com/embed/track/"+schema["uri"].replace("spotify:track:","")
         })
 
         pass
@@ -36,11 +38,11 @@ for filename in library.scan.scan_file_recursively(app.settings["spotify"]["expo
     return_filename = filename.replace(
         app.settings["spotify"]["export"], "")
 
-    if library.file.file_exists(app.settings["spotify"]["track_list"]+return_filename):
-        pass
-    else:
-        export = export_data_single(filename)
-        library.json.export_json(app.settings["spotify"]["track_list"]+return_filename,export)
+    # if library.file.file_exists(app.settings["spotify"]["track_list"]+return_filename):
+    #     pass
+    # else:
+    export = export_data_single(filename)
+    library.json.export_json(app.settings["spotify"]["track_list"]+return_filename,export)
     
 library.comment.returnMessage("---------")
 

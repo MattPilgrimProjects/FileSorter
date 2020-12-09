@@ -8,6 +8,7 @@ import library.scan
 import sys
 
 track_database = app.settings["track_database"]
+export_path = app.settings["spotify"]["export"]
 
 print("Enter the auth token:")
 auth = "Bearer "+input()
@@ -16,7 +17,7 @@ for data in library.json.import_json(track_database):
     artist = data["artist"]
     track = data["track"]
 
-    filepath = "Z:\\spotify\\raw_data\\"+data["filename"]+".json"
+    filepath = export_path+data["filename"]+".json"
 
     if library.file.file_does_not_exists(filepath):
         params = (
@@ -30,3 +31,4 @@ for data in library.json.import_json(track_database):
         library.json.export_json(filepath,content)
         library.comment.returnUpdateMessage("Added: "+filepath)
 
+library.comment.returnMessage("Completed")

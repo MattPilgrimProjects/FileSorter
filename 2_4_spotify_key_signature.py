@@ -139,17 +139,20 @@ def array_return(filename):
 
         library.comment.returnMessage("Processing: "+filename)
 
+        tempo = str(round(schema["track"]["tempo"]))
+
         return {
             "key_signature": note_check(schema["track"]["key"]+12)+" "+mode_check(schema["track"]["mode"]),
             "relative_signature": note_check(relative_note)+" "+mode_relative_check(schema["track"]["mode"]),
             "time_signature": str(schema["track"]["time_signature"])+"/4",
             "key_signature_scale": key_signature_function,
-            "relative_scale": relative_scale
+            "relative_scale": relative_scale,
+            "tempo":tempo
 
         }
 
 
 for data in library.json.import_json(track_database):
 
-    if library.file.file_exists(track_anaylsis+data["filename"]+".json") and library.file.file_does_not_exists(key_signature+data["filename"]+".json"):
+    if library.file.file_exists(track_anaylsis+data["filename"]+".json"):
         library.json.export_json(key_signature+data["filename"]+".json", array_return(track_anaylsis+data["filename"]+".json"))

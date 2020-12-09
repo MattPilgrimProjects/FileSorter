@@ -10,6 +10,8 @@ import sys
 def check_for_status_code_error(response):
     if response.status_code ==200:
         return response.json()
+    if response.status_code ==404:
+        return response.status_code
     
     print("Import Error " + str(response.status_code))
     sys.exit()

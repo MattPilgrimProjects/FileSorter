@@ -12,6 +12,8 @@ track_database = app.settings["track_database"]
 
 album_list_path = app.settings["spotify"]["album_list"]
 
+api = app.settings["amazon"]["compressed"]
+
 def single_file_exist(processed):
 
     if library.file.file_exists(processed):
@@ -32,7 +34,7 @@ def update_api_list():
 
             for schema in library.json.import_json(album_list):
 
-                raw_data_path = "Z:\\amazon\\processed\\" + data["filename_artist"]+"-" + library.parser.change_to_url(schema["album"])+".json"
+                raw_data_path = "S:\\Midi-Library\\amazon\\processed\\" + data["filename_artist"]+"-" + library.parser.change_to_url(schema["album"])+".json"
 
                 if library.file.file_does_not_exists(raw_data_path):
 
@@ -47,13 +49,13 @@ def update_api_list():
                     })
                
 
-    library.json.export_json("Z:\\amazon\\api.json", raw)
+    library.json.export_json(api, raw)
 
 
 def add_to_processed_list():
 
     array=[]
-    for data in library.json.import_json("Z:\\amazon\\api.json"):
+    for data in library.json.import_json(api):
 
         if data["href"] and library.file.file_does_not_exists(data["process_path"]):
             library.json.export_json(data["process_path"], data)
@@ -61,7 +63,7 @@ def add_to_processed_list():
         if not data["href"]:
             array.append(data)
 
-    library.json.export_json("Z:\\amazon\\api.json", array)
+    library.json.export_json(api, array)
       
 add_to_processed_list()
 update_api_list()
