@@ -82,10 +82,6 @@ dictionary_2=[
 
 test  = library.parser.compress_dictionary(dictionary_2)
 
-
-
-
-
 txt = "Céline Dion"
 
 x = txt.encode(encoding="ascii",errors="namereplace")

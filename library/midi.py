@@ -3,6 +3,7 @@ import mido
 import library.json
 import numpy
 from scipy import stats
+from statistics import mode
 
 notes = ["A","A♯/B♭","B","C","C♯/D♭","D","D♯/E♭","E","F","F♯/G♭","G","G♯/A♭","A","A♯/B♭","B","C","C♯/D♭","D","D♯/E♭","E","F","F♯/G♭","G","G♯/A♭","A","A♯/B♭","B","C"]
 
@@ -500,19 +501,25 @@ def import_midi(filename):
         note_match_array.append(note_name[key])
         most_notes.append({note_name[key]:value})
 
-    
 
     major_scale_match=scale_handler(note_match_array,[1,3,4,6,8,10])
     minor_scale_match = scale_handler(note_match_array,[1, 2, 4, 6,7,9])
     closest_match = library.parser.distinct(note_match_array)
     note_dump_results = library.parser.distinct(note_dump)
-    key_detection = smart_match_major(return_max(minor_scale_match),return_max(major_scale_match),closest_match)
-    key_signature = mode(closest_match,note_dump_results,key_detection)
+
+    reduced_minor = return_median(minor_scale_match)
+    reduced_major = return_median(major_scale_match)
+
+    key_detection = smart_match_major(return_max(reduced_minor),return_max(reduced_major),closest_match)
+  
+    key_signature = new_mode(closest_match,note_dump_results,key_detection)
+
     if key_signature==None:
         print("second filter")
-        key_detection=ambigious_data_filter(return_max(minor_scale_match),return_max(major_scale_match))
-        key_signature = mode(closest_match,note_dump_results,key_detection)
+        key_detection=ambigious_data_filter(return_max(reduced_minor),return_max(reduced_major))
+        key_signature = new_mode(closest_match,note_dump_results,key_detection)
 
+    
 
     return {
         "bpm": str(round(numpy.median(array))),
@@ -522,14 +529,34 @@ def import_midi(filename):
         "dev":{
             "major_scale":major_scale_match,
             "minor_scale":minor_scale_match,
-            "reduced_minor_match":return_max(minor_scale_match),
-            "reduced_major_match":return_max(major_scale_match)
+            "reduced_minor_match":reduced_minor,
+            "reduced_major_match":reduced_major
         },
         "key_detection":key_detection,
-        "key_signature":key_signature
+        "key_signature":key_signature,
+        "minor_scale":minor_scale(key_detection["minor"],[1, 2, 4, 6,7,9]),
+        "major_scale":minor_scale(key_detection["major"],[1,3,4,6,8,10]),
     
         
     }
+
+def return_median(notes_list):
+
+    count_list=[]
+    count_list_2=[]
+
+    for note,count in notes_list.items():
+
+        count_list.append(count)
+
+    for note_2,count_2 in notes_list.items(): 
+
+        if count_2 >= numpy.median(count_list):
+            count_list_2.append((note_2,count_2))
+
+
+    return library.parser.convert_tuples_to_dictionary(count_list_2)
+
 def get_relative_major(note):
     major_note__index_position= notes.index(note)
 
@@ -572,7 +599,7 @@ def ambigious_data_filter(minor_list,major_list):
 
     
 
-def mode(mode,note_dump_results,key_detection):
+def new_mode(mode,note_dump_results,key_detection):
 
     note_deviation_filter=[]
     note_deviation_filter_2=[]
