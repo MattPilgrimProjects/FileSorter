@@ -24,7 +24,6 @@ def return_list(value):
 artist_list = return_list("artist")
 track_list = return_list("track")
 
-
 def learning(single,array):
     return_array=[]
     for value in array:
@@ -35,9 +34,6 @@ def learning(single,array):
             })
 
     return return_array
-
-
-
 
 def artist_match(single,array):
     return_array=[]
@@ -213,6 +209,7 @@ def export_sorted_by_popular():
             pass
     library.json.export_json(track_database,export)
     library.comment.returnMessage("Completed: " + track_database)
+
 
 library.comment.returnMessage("Start")
 compress_api_data()

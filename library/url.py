@@ -7,6 +7,18 @@ import library.parser
 import library.cron
 import sys
 
+
+def import_midi(filename,url):
+
+    if library.file.file_exists(filename):
+        library.comment.returnMessage("Midi file already exists " + filename)
+    else:
+        library.cron.delay(5)
+        r = requests.get(url, allow_redirects=True)
+
+        library.comment.returnMessage("Downloading Midi Content "+filename)
+        return open(filename, 'wb').write(r.content)
+
 def check_for_status_code_error(response):
     if response.status_code ==200:
         return response.json()
@@ -61,7 +73,9 @@ def download_html_content(search_url,save_location):
     try: 
         returnURLContent(search_url)
     except:
-        library.comment.returnMessage("Error => "+search_url)
+        library.file.createFile(save_location,b"<html></html>")
+        library.comment.returnMessage("No Content Available: " + save_location)
+        library.comment.returnMessage("---")
     else:
 
         contents = returnURLContent(search_url)
