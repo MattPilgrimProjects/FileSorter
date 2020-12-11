@@ -1,30 +1,19 @@
 import app
-import library.url
-import library.file
+import config
+import library.download
 
 track_database = app.settings["track_database"]
 
-print(track_database)
 
 def return_artist_list():
-    artist_list=[]
-    
+    artist_list = []
+
     for data in library.json.import_json(track_database):
 
-        artist_list.append({
-            "artist":data["artist"],
-            "filename":data["filename_artist"]
+        artist_list.append(config.import_html_content(data))
 
-        })
-
-    return library.json.export_json("S:\\Midi-Library\\mididb\\artist.json",library.parser.remove_duplicates_from_dictionary(artist_list))
+    return library.json.export_json("S:\\Midi-Library\\url\\search_by_artist.json", library.parser.remove_duplicates_from_dictionary(artist_list))
 
 
-for schema in library.json.import_json("S:\\Midi-Library\\mididb\\artist.json"):
-
-    if library.file.file_exists("S:\\Website Projects\\live\\mididb\\"+schema["filename"]+".html"):
-        pass
-    else:
-        library.url.download_html_content("https://www.mididb.com/search.asp?q="+schema["artist"],"S:\\Website Projects\\live\\mididb\\"+schema["filename"]+".html")
-
-
+return_artist_list()
+library.download.download_html("S:\\Midi-Library\\url\\search_by_artist.json")

@@ -19,6 +19,16 @@ def import_midi(filename,url):
         library.comment.returnMessage("Downloading Midi Content "+filename)
         return open(filename, 'wb').write(r.content)
 
+def import_html(filename,url):
+    if library.file.file_exists(filename):
+        library.comment.returnMessage("HTML file already exists " + filename)
+    else:
+        library.cron.delay(5)
+        r = requests.get(url, allow_redirects=True)
+        library.comment.returnMessage("Downloading HTML Content "+filename)
+        return open(filename, 'wb').write(r.content)
+
+
 def check_for_status_code_error(response):
     if response.status_code ==200:
         return response.json()
