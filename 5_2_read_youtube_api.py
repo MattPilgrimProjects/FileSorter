@@ -19,8 +19,7 @@ def export_data(filename, return_filename):
             videoId = ""
             vid=""
         else:
-            videoId = "https://www.youtube.com/watch?v=" + \
-                schema["id"]["videoId"]
+            videoId = "https://www.youtube.com/watch?v="+schema["id"]["videoId"]
             vid = schema["id"]["videoId"]
 
         json_data.append({

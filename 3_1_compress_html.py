@@ -13,11 +13,28 @@ live_path = app.settings["live_path"]
 ################################
 
 
-def artist_handler(line, config):
+def start_handler(line, config):
+
+    line_count = line.split(config)
+
+    if len(line_count) != 0:
+        return line_count[1]
+    else:
+        return line
+
+
+def end_handler(line, config):
+
+    return line.split(config)[0]
+
+
+def config_handler(line, config):
+
     if config["start"]:
-        line = line.split(config["start"])[1]
+        line = start_handler(line, config["start"])
+
     if config["end"]:
-        line = line.split(config["end"])[0]
+        line = end_handler(line, config["end"])
 
     return library.parser.find_and_replace_array(line, config["find_and_replace"])
 
@@ -48,16 +65,16 @@ def export_handler(option, source, parse, split, artist, track, midipath, pagina
         for line in processed:
 
             if artist["match"] in line:
-                artist_list.append(artist_handler(line, artist))
+                artist_list.append(config_handler(line, artist))
 
             if track["match"] in line:
-                track_list.append(artist_handler(line, track))
+                track_list.append(config_handler(line, track))
 
             if midipath["match"] in line:
-                midi_path_list.append(artist_handler(line, midipath))
+                midi_path_list.append(config_handler(line, midipath))
 
             if pagination and pagination["match"] in line:
-                pagination_list.append(artist_handler(line, pagination))
+                pagination_list.append(config_handler(line, pagination))
 
         profile = []
 
@@ -71,9 +88,9 @@ def export_handler(option, source, parse, split, artist, track, midipath, pagina
 
                 for i in range(len(track_list)):
 
-                    if source == "freemidi":
-                        midi_id = midi_path_list[i].split("-")
-                        midi_path_list[i] = midi_id[0]+"-"+midi_id[1]
+                    # if source == "freemidi":
+                    #     midi_id = midi_path_list[i].split("-")
+                    #     midi_path_list[i] = midi_id[0]+"-"+midi_id[1]
 
                     profile.append({
                         "artist": artist_list[i],
@@ -102,11 +119,10 @@ def export_handler(option, source, parse, split, artist, track, midipath, pagina
 
             })
 
-            pagination_return = library.parser.remove_duplicates_from_array(
-                pagination_list)
-
-    library.json.export_json("S:\\Midi-Library\\parsed\\pages\\"+source+".json", pagination_return)
-    library.json.export_json("S:\\Midi-Library\\"+source+"\\midi-library.json", midi_list)
+    library.json.export_json(
+        "S:\\Midi-Library\\parsed\\pages\\"+source+".json", pagination_return)
+    library.json.export_json("S:\\Midi-Library\\" +
+                             source+"\\midi-library.json", midi_list)
 
 
 library.comment.returnMessage("Start")
@@ -137,7 +153,7 @@ export_handler("live", "mididb", "li", "\n",
                        '=\"': "",
                        '\">': "",
                        "_prt.mp3": ".mid",
-                       "https://www.mididb.com/midi-download/":"https://www.mididb.com/midi-download/AUD_"
+                       "https://www.mididb.com/midi-download/": "https://www.mididb.com/midi-download/AUD_"
                    }
                },
                {
@@ -171,40 +187,40 @@ export_handler("live", "midiworld", "li", "<li>",
                    }
                }, {})
 
+export_handler("live", "freemidi", "a", "</a>",
+               {
+                   "match": '.org/artist-',
+                   "start": 'title\">',
+                   "end": "</span>",
+                   "find_and_replace": {
 
-# export_handler("live", "freemidi", "a", "</a>",
-#                {
-#                    "match": '.org/artist-',
-#                    "start": 'e\">',
-#                    "end": "</span>",
-#                    "find_and_replace": {
+                   }
+               },
+               {
+                   "match": "download3-",
+                   "start": '">',
+                   "end": '',
+                   "find_and_replace": {
+                       "\n": ""
+                   }
+               },
+               {
+                   "match": "download3-",
+                   "start": 'href=\"',
+                   "end": '\" itemprop',
+                   "find_and_replace": {
 
-#                    }
-#                },
-#                {
-#                    "match": "download3-",
-#                    "start": '\n',
-#                    "end": '',
-#                    "find_and_replace": {
+                   }
+               },
+               {
+                   "match": "-P-",
+                   "start": 'href=\"',
+                   "end": '\"',
+                   "find_and_replace": {
+                       "https://freemidi.org/": "",
+                       "artist-": "https://freemidi.org/artist-"
+                   }
 
-#                    }
-#                },
-#                {
-#                    "match": "download3-",
-#                    "start": 'href=\"',
-#                    "end": '\"',
-#                    "find_and_replace": {
-#                        "download3-": "https://freemidi.org/getter-"
-#                    }
-#                },
-#                {
-#                    "match": "-P-",
-#                    "start": '<a href=\"',
-#                    "end": '\"',
-#                    "find_and_replace": {
-#                        "https://freemidi.org/": ""
-#                    }
-
-#                })
+               })
 
 library.comment.returnMessage("Completed")

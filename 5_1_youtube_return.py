@@ -1,35 +1,18 @@
 import app
-import library.file
-import library.csv
+import config
 import library.json
-import library.cron
-import library.url
-import library.comment
-import library.scan
-
-import sys
+import library.download
 
 track_database = app.settings["track_database"]
-source_path = app.settings["youtube"]["source"]
-auth = app.settings["youtube"]["auth"]
-api_key = app.settings["youtube"]["api"]
+
+youtube_library = "S:\\Midi-Library\\url\\youtube_library.json"
+
+export_list = []
 
 for data in library.json.import_json(track_database):
 
-    filename = data["filename"]+".json"
-    artist = data["artist"]
-    track = data["track"]
+    export_list.append(config.youtube_handler(data))
 
-    if library.file.file_exists(source_path+filename):
-        pass
-    else:
-        params = (
-                ('q', artist+" "+track),
-                ('part', 'snippet'),
-                ('key', api_key)
-            )
-        library.cron.delay(2)
-        library.comment.returnMessage("Processing "+source_path+filename)
-        content = library.url.youtube_web_api(params,auth)
-        library.json.export_json(source_path+filename,content)
-        library.comment.returnMessage("Added "+source_path+filename)
+library.json.export_json(youtube_library, export_list)
+
+library.download.download_youtube(youtube_library)

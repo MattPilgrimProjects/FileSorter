@@ -7,16 +7,18 @@ converted_database = app.settings["karaokeversion"]["output"]
 
 export_location = app.settings["karaokeversion"]["compressed"]
 
+
 def songs(artist):
 
-    return return_handler(artist,artist["songs"]["song"])
+    return return_handler(artist, artist["songs"]["song"])
 
-def return_handler(artist,song):
 
-    url = library.parser.find_and_replace_array(song['url'],{
-            "http://www.karaoke-version.com/mp3-backingtrack":"",
-            ".html":"",
-        })
+def return_handler(artist, song):
+
+    url = library.parser.find_and_replace_array(song['url'], {
+        "http://www.karaoke-version.com/mp3-backingtrack": "",
+        ".html": "",
+    })
 
     return {
         "artist": artist["name"],
@@ -24,26 +26,29 @@ def return_handler(artist,song):
         "url": url
     }
 
+
 def songs_array(artist):
 
-    array=[]
+    array = []
 
     for song in artist['songs']['song']:
 
-        array.append(return_handler(artist,song))
-       
+        array.append(return_handler(artist, song))
+
     return array
+
 
 def output_handler(data):
     return{
-                "artist":data["artist"],
-                "track":data["track"],
-                "url":data["url"],
-                "filename_artist":data["url"].split("/")[1],
-                "filename_track":data["url"].split("/")[2],
+        "artist": data["artist"],
+        "track": data["track"],
+        "url": data["url"],
+        "filename_artist": data["url"].split("/")[1],
+        "filename_track": data["url"].split("/")[2],
     }
 
-array=[]
+
+array = []
 
 for artist in library.json.import_json(converted_database)["artists"]["artist"]:
 
@@ -57,6 +62,5 @@ for artist in library.json.import_json(converted_database)["artists"]["artist"]:
         array.append(output_handler(songs(artist)))
     pass
 
-library.json.export_json(export_location,array)
+library.json.export_json(export_location, array)
 library.comment.returnMessage("Completed: "+export_location)
-

@@ -224,7 +224,7 @@ def high_match_percentage(string_1,string_2):
     
         for i in range(range_value):        
 
-            if example_1[i] == example_2[i] or example_1[i] == example_2[i].title():
+            if example_1[i] == example_2[i] or example_1[i] == example_2[i].lower() or example_1[i] == example_2[i].upper():
                 match=match+1
             else:
                 match=match

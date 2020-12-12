@@ -89,3 +89,7 @@ x = txt.encode(encoding="ascii",errors="namereplace")
 
 content = library.midi.import_midi("S:\\Downloads\\lights.mid")
 library.json.export_json("test.json",content)
+
+
+high = library.parser.high_match_percentage("AC/DC","ac-dc")
+print(high)

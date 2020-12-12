@@ -8,7 +8,7 @@ import library.cron
 import sys
 
 
-def import_midi(filename,url):
+def import_midi(filename, url):
 
     if library.file.file_exists(filename):
         library.comment.returnMessage("Midi file already exists " + filename)
@@ -19,7 +19,8 @@ def import_midi(filename,url):
         library.comment.returnMessage("Downloading Midi Content "+filename)
         return open(filename, 'wb').write(r.content)
 
-def import_html(filename,url):
+
+def import_html(filename, url):
     if library.file.file_exists(filename):
         library.comment.returnMessage("HTML file already exists " + filename)
     else:
@@ -30,15 +31,14 @@ def import_html(filename,url):
 
 
 def check_for_status_code_error(response):
-    if response.status_code ==200:
+    if response.status_code == 200:
         return response.json()
-    if response.status_code ==404:
+    if response.status_code == 404:
         return response.status_code
-    
+
     print("Import Error " + str(response.status_code))
     sys.exit()
-    
-  
+
 
 def returnURLContent(url):
     ssl._create_default_https_context = ssl._create_unverified_context
@@ -46,7 +46,8 @@ def returnURLContent(url):
 
     return response.read()
 
-def spotify_web_api(web,params,auth):
+
+def spotify_web_api(web, params, auth):
 
     # library.cron.delay(1)
 
@@ -61,7 +62,33 @@ def spotify_web_api(web,params,auth):
     return check_for_status_code_error(response)
 
 
-def youtube_web_api(params,auth):
+def import_youtube(params, auth, export_path):
+    if library.file.file_exists(export_path):
+        library.comment.returnMessage(
+            "JSON file already exists " + export_path)
+    else:
+        library.cron.delay(5)
+        content = youtube_web_api(params, auth)
+
+        if content.status_code == 200:
+            library.comment.returnMessage("Download Content => "+export_path)
+            return library.json.export_json(export_path, content.json())
+        else:
+            library.comment.returnMessage(
+            str(content.json()["error"]["code"])+": "+content.json()["error"]["message"])
+            sys.exit()
+
+
+
+
+def youtube_web_api(params, auth):
+
+    params = (
+        ('q', params["q"]),
+        ('part', params["part"]),
+        ('key', params["key"])
+    )
+
 
     headers = {
         'Accept': 'application/json',
@@ -69,9 +96,8 @@ def youtube_web_api(params,auth):
         'Authorization': auth
     }
 
-    response = requests.get('https://youtube.googleapis.com/youtube/v3/search', headers=headers, params=params)
+    return requests.get('https://youtube.googleapis.com/youtube/v3/search', headers=headers, params=params)
 
-    return check_for_status_code_error(response)
 
 
 def download_html_content(search_url,save_location):
