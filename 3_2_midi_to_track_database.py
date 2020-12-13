@@ -21,7 +21,7 @@ def artist_smart_match(artist_list, data):
 
         high = library.parser.high_match_percentage(check_artist, data)
 
-        if high >= 80.0:
+        if high >= 50.0:
             artist_match_list.append((check_artist, high))
 
     return library.parser.convert_tuples_to_dictionary(artist_match_list)
@@ -80,57 +80,10 @@ def midi_to_track_database(input_database,output_database):
 
 library.comment.returnMessage("Start")
 source="mididb"
-input_database = "S:\\Midi-Library\\"+source+"\\midi-library.json"
-output_database = "S:\\Midi-Library\\"+source+"\\midi-library\\check.json"
+for source in app.settings["sources"]:
+    input_database = "S:\\Midi-Library\\"+source+"\\midi-library.json"
+    output_database = "S:\\Midi-Library\\"+source+"\\midi-library\\check.json"
+    library.comment.returnMessage("Collating missing data from "+source)
+    midi_to_track_database(input_database,output_database)
 
-
-export_list=[]
-export_midi_list=[]
-for data in library.json.import_json("S:\\Midi-Library\\"+source+"\\midi-library\\perfect.json"):
-    if library.file.file_exists(data["export"]):
-        pass
-    else:
-        export_midi_list.append(data["import"])
-
-
-export_list_1=[]
-for schema in library.json.import_json("S:\\Midi-Library\\"+source+"\\midi-library.json"):
-    
-    export_list_1.append(schema)
-    
-
-library.json.export_json("S:\\Midi-Library\\"+source+"\\midi-library_1.json",export_list_1)
-
-
-library.comment.returnMessage("Collating missing data from "+source)
-# for source in app.settings["sources"]:
-midi_to_track_database(input_database,output_database)
-
-
-# export_json_content=[]
-# midi_library_remove=[]
-# for data in library.json.import_json(output_database):
-
-#     for schema in data["smart_match"]["final_match"]:
-
-#         midi_library_remove.append(data["midipath"])
-
-#         export_json_content.append({
-#             "artist":schema["artist"],
-#             "track":schema["track"],
-#             "import":data["midipath"],
-#             "export":"S:\\Midi-Library\\mididb\\midi\\"+schema["filename"]+".mid"
-#         })
-
-# new_midi_library=[]
-# for data in library.json.import_json(input_database):
-
-#     if data["midipath"] in midi_library_remove:
-#         pass
-#     else:
-#         new_midi_library.append(data)
- 
-
-# library.json.export_json(input_database,new_midi_library)
-# library.json.export_json("S:\\Midi-Library\\"+source+"\\midi-library\\perfect.json",export_json_content)
-# library.comment.returnMessage("Completed")
+library.comment.returnMessage("Completed")

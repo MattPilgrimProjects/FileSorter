@@ -30,16 +30,32 @@ def end_handler(line, config):
 
 def config_handler(line, config):
 
-    if config["start"]:
+    if "start" in config and config["start"]:
         line = start_handler(line, config["start"])
 
-    if config["end"]:
+    if "end" in config and config["end"]:
         line = end_handler(line, config["end"])
+    
+    line = library.parser.find_and_replace_array(line, config["find_and_replace"])
 
-    return library.parser.find_and_replace_array(line, config["find_and_replace"])
+    if "split" in config:
+        track_id = line.split("-")
+        line = track_id[0]+"-"+track_id[1]
+        
+
+    return line
 
 
-def export_handler(option, source, parse, split, artist, track, midipath, pagination):
+def export_handler(config):
+
+    option = config["status"]
+    source = config["source"]
+    parse = config["filter"]
+    split = config["filter_tags"]
+    artist = config["artist"]
+    track = config["track"]
+    midipath = config["midi"]
+    pagination = config["pagination"]
 
     library.comment.returnMessage("Importing web content from "+source)
 
@@ -127,100 +143,108 @@ def export_handler(option, source, parse, split, artist, track, midipath, pagina
 
 library.comment.returnMessage("Start")
 
-export_handler("live", "mididb", "li", "\n",
-               {
-                   "match": "artist-name",
-                   "start": ">",
-                   "end": "</div>",
-                   "find_and_replace": {
-                       "</div": ""
-                   }
-               },
-               {
-                   "match": "player button blue",
-                   "start": "title=",
-                   "end": "itemprop",
-                   "find_and_replace": {
-                       '\"': "",
-                       " MIDI backing track>": ""
-                   }
-               },
-               {
-                   "match": "data-audio-url",
-                   "start": "data-audio-url",
-                   "end": "</div>",
-                   "find_and_replace": {
-                       '=\"': "",
-                       '\">': "",
-                       "_prt.mp3": ".mid",
-                       "https://www.mididb.com/midi-download/": "https://www.mididb.com/midi-download/AUD_"
-                   }
-               },
-               {
+# export_handler("live", "mididb", "li", "\n",
+#                {
+#                    "match": "artist-name",
+#                    "start": ">",
+#                    "end": "</div>",
+#                    "find_and_replace": {
+#                        "</div": ""
+#                    }
+#                },
+#                {
+#                    "match": "player button blue",
+#                    "start": "title=",
+#                    "end": "itemprop",
+#                    "find_and_replace": {
+#                        '\"': "",
+#                        " MIDI backing track>": ""
+#                    }
+#                },
+#                {
+#                    "match": "data-audio-url",
+#                    "start": "data-audio-url",
+#                    "end": "</div>",
+#                    "find_and_replace": {
+#                        '=\"': "",
+#                        '\">': "",
+#                        "_prt.mp3": ".mid",
+#                        "https://www.mididb.com/midi-download/": "https://www.mididb.com/midi-download/AUD_"
+#                    }
+#                },
+#                {
 
-               })
+#                })
 
-export_handler("live", "midiworld", "li", "<li>",
-               {
-                   "match": "download",
-                   "start": "(",
-                   "end": ")",
-                   "find_and_replace": {
+# export_handler("live", "midiworld", "li", "<li>",
+#                {
+#                    "match": "download",
+#                    "start": "(",
+#                    "end": ")",
+#                    "find_and_replace": {
 
-                   }
-               },
-               {
-                   "match": "download",
-                   "start": "\n",
-                   "end": " (",
-                   "find_and_replace": {
+#                    }
+#                },
+#                {
+#                    "match": "download",
+#                    "start": "\n",
+#                    "end": " (",
+#                    "find_and_replace": {
 
-                   }
-               },
-               {
-                   "match": "download",
-                   "start": '<a href=\"',
-                   "end": '\" target=',
-                   "find_and_replace": {
+#                    }
+#                },
+#                {
+#                    "match": "download",
+#                    "start": '<a href=\"',
+#                    "end": '\" target=',
+#                    "find_and_replace": {
 
 
-                   }
-               }, {})
+#                    }
+#                }, {})
 
-export_handler("live", "freemidi", "a", "</a>",
-               {
-                   "match": '.org/artist-',
-                   "start": 'title\">',
-                   "end": "</span>",
-                   "find_and_replace": {
 
-                   }
-               },
-               {
-                   "match": "download3-",
-                   "start": '">',
-                   "end": '',
-                   "find_and_replace": {
-                       "\n": ""
-                   }
-               },
-               {
-                   "match": "download3-",
-                   "start": 'href=\"',
-                   "end": '\" itemprop',
-                   "find_and_replace": {
+freemidi_config = {
+    "status": "live",
+    "source": "freemidi",
+    "filter": "a",
+    "filter_tags": "</a>",
+    "artist": {
+        "match": '.org/artist-',
+        "start": 'title\">',
+        "end": "</span>",
+        "find_and_replace": {
 
-                   }
-               },
-               {
-                   "match": "-P-",
-                   "start": 'href=\"',
-                   "end": '\"',
-                   "find_and_replace": {
-                       "https://freemidi.org/": "",
-                       "artist-": "https://freemidi.org/artist-"
-                   }
+        }
+    },
+    "track": {
+        "match": "download3-",
+        "start": '">',
+        "end": '',
+        "find_and_replace": {
+            "\n": ""
+        }
+    },
+    "midi": {
+        "match": "download3-",
+        "start": 'href=\"',
+        "end": '\" itemprop',
+        "find_and_replace": {
+            "download3-": "https://freemidi.org/getter-"
+        },
+        "split":"-"
+    },
+    "pagination": {
+        "match": "-P-",
+        "start": 'href=\"',
+        "end": '\"',
+        "find_and_replace": {
+            "https://freemidi.org/": "",
+            "artist-": "https://freemidi.org/artist-"
+        }
+    }
+}
 
-               })
+export_handler(freemidi_config)
 
 library.comment.returnMessage("Completed")
