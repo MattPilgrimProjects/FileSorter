@@ -17,3 +17,6 @@ def return_artist_list():
 
 return_artist_list()
 library.download.download_html("S:\\Midi-Library\\url\\search_by_artist.json")
+
+
+# Update config manually if there's a no results found

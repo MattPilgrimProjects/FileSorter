@@ -7,7 +7,7 @@ import library.scan
 
 import sys
 
-track_database = app.settings["track_database"]
+track_database = app.settings["main_database_file"]
 track_list_path = app.settings["apple_music"]["track_list"]
 api_path = app.settings["apple_music"]["compressed"]
 
@@ -23,8 +23,6 @@ def create_track_list_profile():
         else: 
             pass
     
-            
-
         library.json.export_json(track_list_path+data["filename"]+".json", {
                 "href": href,
                 "img":"https://music.apple.com/assets/favicon/favicon-180-c132a95549a91ae6983a4914da3e1c44.png",

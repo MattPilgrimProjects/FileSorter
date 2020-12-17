@@ -5,7 +5,8 @@ import library.json
 import library.file
 
 import sys
-track_database = app.settings["track_database"]
+
+track_database = app.settings["main_database_file"]
 spotify_album_list_path = app.settings["spotify"]["album_list"]
 amazon_affiliate_path = "S:\\Midi-Library\\amazon\\processed\\"
 api = app.settings["amazon"]["compressed"]

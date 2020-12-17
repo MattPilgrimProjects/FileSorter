@@ -7,9 +7,9 @@ import library.url
 import library.directory
 import sys
 
-track_database = app.settings["track_database"]
+track_database = app.settings["main_database_file"]
 live_database = "S:\\Website Projects\\MusicKeyFinder\\resources\\api\\"
-key_signature = "S:\\Midi-Library\\spotify\\key_signature\\"
+key_signature = "S:\\Midi-Library\\key_signature\\"
 amazon_album_list  =app.settings["amazon"]["output"]
 spotify_track_list = app.settings["spotify"]["track_list"]
 youtube_track_list = app.settings["youtube"]["track_list"]
@@ -32,6 +32,7 @@ for data in library.json.import_json(track_database):
         library.json.export_json(profile,{
             "artist":data["artist"],
             "track":data["track"],
+            "tags":data["tags"],
             "content":library.json.import_json(key_signature+data["filename"]+".json")
         })
         

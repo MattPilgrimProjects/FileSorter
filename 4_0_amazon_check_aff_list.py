@@ -8,7 +8,7 @@ import library.directory
 
 import sys
 
-track_database = app.settings["track_database"]
+track_database = app.settings["main_database_file"]
 
 album_list_path = app.settings["spotify"]["album_list"]
 
@@ -20,9 +20,6 @@ def single_file_exist(processed):
         return processed
     else:
         return ""
-
-
-
 
 def update_api_list():
     raw = []
@@ -41,7 +38,7 @@ def update_api_list():
                     raw.append({
                             "artist": data["artist"],
                             "album": schema["album"],
-                            "src": "https://www.amazon.co.uk/s?k="+data["artist"]+" "+schema["album"]+"&i=popular&ref=nb_sb_noss",
+                            "src": "https://www.amazon.co.uk/s?k="+data["artist"]+" - "+schema["album"]+"&i=popular&ref=nb_sb_noss",
                             "href": "",
                             "album_artwork": schema["album_artwork"],
                             "process_path": raw_data_path,

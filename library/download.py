@@ -10,8 +10,14 @@ def download_midi(midi_database):
 
     for data in library.json.import_json(midi_database):
 
-        library.url.import_midi(data["export"],data["import"])
 
+        if data["sources"]:
+
+            for title,source in data["sources"].items():
+
+                for source_data in source:
+                    library.url.import_midi(source_data["export"],source_data["import"])
+                       
         i=i+1
         library.comment.returnMessage(str(i)+"/"+str(overall))
         library.comment.returnMessage("---")
