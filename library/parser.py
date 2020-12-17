@@ -11,7 +11,7 @@ import sys
 def parseLinksFromHTML(file,attribute):
     http = httplib2.Http()
     status, response = http.request(file)
-    return bs.BeautifulSoup(response, 'html.parser',parse_only=SoupStrainer(attribute))
+    return str(bs.BeautifulSoup(response, 'html.parser',parse_only=SoupStrainer(attribute)))
 
 
 def request_data_from_url(url):
