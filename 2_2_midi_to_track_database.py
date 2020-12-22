@@ -153,4 +153,3 @@ def create_full_listings():
 
     return library.json.export_json("S:\\Midi-Library\\midi_library.json", export_dictionary)
 
-create_full_listings()

@@ -4,6 +4,7 @@ import library.midi
 import library.comment
 import library.file
 import library.maths
+import library.scan
 
 track_database = app.settings["midi_library_database_file"]
 
@@ -134,20 +135,34 @@ def circle_of_fifths(key):
         return circle_of_fifths_segment(key, "C#", "Bb")
 
 
-export_data = []
-for data in library.json.import_json(track_database):
-    # print(data)
-    if data["key_signature"]:
 
-        note = data["key_signature"][0]
+import sys
 
-        content = circle_of_fifths(note)
+library.comment.returnMessage("Start")
+for filename in library.scan.scan_file_recursively("S:\\Midi-Library\\musicnotes\\key_signature\\*.json"):
+    
+    for title,filedata in library.json.import_json(filename).items():
+
+        if title=="original":
+            profile = filedata
 
         
 
-        library.json.export_json("S:\\Midi-Library\\key_signature\\"+data["filename"]+".json", content)
-# library.json.export_json("S:\\Midi-Library\\key_signature\\api.json",export_data)
+        if title=="musicnote_check":
 
-library.comment.returnMessage("Start")
-# key_signature_match()
+            key_signature = filedata[0]["key_signature"]
+            
+
+
+            return_data={
+                "original":profile,
+                "results":circle_of_fifths(key_signature)
+            }
+            
+            export_filepath = "S:\\Midi-Library\\key_signature\\"+profile["filename_artist"]+"-"+profile["filename_track"]+".json"
+  
+            library.json.export_json(export_filepath,return_data)
+            
+
+
 library.comment.returnMessage("Completed")

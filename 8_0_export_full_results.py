@@ -15,25 +15,32 @@ spotify_track_list = app.settings["spotify"]["track_list"]
 youtube_track_list = app.settings["youtube"]["track_list"]
 apple_music_track_list = app.settings["apple_music"]["track_list"]
 
+original_track_list = app.settings["karaokeversion"]["compressed"]
 
-for data in library.json.import_json(track_database):
+
+for data in library.json.import_json(original_track_list):
+
+    filename = data["filename_artist"]+"-"+data["filename_track"]
 
     profile = live_database+data["filename_artist"]+"\\"+data["filename_track"]+"\\profile.json"
     sidebar = live_database+data["filename_artist"]+"\\"+data["filename_track"]+"\\sidebar.json"
-    spotify_source = spotify_track_list+data["filename"]+".json"
-    youtube_source = youtube_track_list+data["filename"]+".json"
-    amazon_source = amazon_album_list+data["filename"]+".json"
-    apple_music_source = apple_music_track_list+data["filename"]+".json"
+    spotify_source = spotify_track_list+filename+".json"
+    youtube_source = youtube_track_list+filename+".json"
+    amazon_source = amazon_album_list+filename+".json"
+    apple_music_source = apple_music_track_list+filename+".json"
 
-    if library.file.file_exists(key_signature+data["filename"]+".json"):
+    if library.file.file_exists(key_signature+filename+".json") and library.file.file_exists("S:\\Midi-Library\\parsed\\matched\\processed\\"+filename+".json"):
         library.directory.create_recursive_directory(live_database+data["url"])
         # library.comment.returnMessage("Adding Profile "+data["filename"])
+
+        last_fm = library.json.import_json("S:\\Midi-Library\\parsed\\matched\\processed\\"+filename+".json")
+        content = library.json.import_json(key_signature+filename+".json")
 
         library.json.export_json(profile,{
             "artist":data["artist"],
             "track":data["track"],
-            "tags":data["tags"],
-            "content":library.json.import_json(key_signature+data["filename"]+".json")
+            "profile":last_fm[0]["last_fm"],
+            "content":content["results"]
         })
         
     if library.file.file_exists(amazon_source) and library.file.file_exists(youtube_source) and library.file.file_exists(spotify_source):
@@ -42,7 +49,7 @@ for data in library.json.import_json(track_database):
 
         # library.comment.returnMessage("Adding Sidebar "+data["filename"])
 
-        apple = library.json.import_json("S:\\Midi-Library\\apple_music\\track_list\\"+data["filename"]+".json")
+        apple = library.json.import_json("S:\\Midi-Library\\apple_music\\track_list\\"+filename+".json")
 
         library.json.export_json(sidebar,{
             "sources":{
@@ -79,5 +86,4 @@ library.comment.returnMessage("Completed")
    
 # ])
 
-# library.file.execute("S:\\Desktop\\results.txt")
 

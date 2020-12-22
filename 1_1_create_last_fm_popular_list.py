@@ -1,9 +1,11 @@
 import app
+import config
 import library.json
 import library.scan
 import library.csv
 import library.comment
 import library.file
+import library.machine_learning
 
 import sys
 
@@ -15,115 +17,11 @@ original_track_list = app.settings["karaokeversion"]["compressed"]
 
 #######################################################
 
-def return_list(value):
-    array=[]
-    for data in library.json.import_json(original_track_list):
-        array.append(data[value])
-    return library.parser.remove_duplicates_from_array(array)
-
-artist_list = return_list("artist")
-track_list = return_list("track")
-
-def learning(single,array):
-    return_array=[]
-    for value in array:
-
-        if single in value or single.title() in value:
-            return_array.extend({
-                value
-            })
-
-    return return_array
-
-def artist_match(single,array):
-    return_array=[]
-    for value in array:
-
-        est = library.parser.high_match_percentage(single,value)
-        
-        if  est >= 25:
-
-            return_array.append({
-                value:est,
-            })
-    return return_array
-    
-def clever_match_artist_to_track(artist_array,track_array):
-    
-    array=[]
-    for data in library.json.import_json(original_track_list):
-        if data["artist"] in artist_array and data["track"] in track_array:
-            array.append(data)
-    return array
-
-def export_learning_results():
-    return_json=[]
-    for data  in library.json.import_json("S:\\Midi-Library\\parsed\\compressed.json"):
-
-
-        match_to_artist = learning(data["artist"],artist_list)
-        match_to_track = learning(data["track"],track_list)
-        match_artist_to_track = clever_match_artist_to_track(match_to_artist,match_to_track)
-            
-        return_json.append({
-                "artist":data["artist"],
-                "track":data["track"],
-                "tags":data["tags"],
-                "clever_match_artist":match_to_artist,
-                "clever_match_track":match_to_track,
-                "clever_match_artist_to_track":match_artist_to_track
-        })
-        library.comment.returnMessage("Processing: "+data["artist"]+" "+data["track"])
-
-    return library.json.export_json("S:\\Midi-Library\\sources\\learning.json",return_json)
-
-def compile_list():
-    array = []
-
-    for data in library.scan.import_json_from_directory_recursively_items(source_path+"*.json"):
-
-        for schema in data["data"]:
-
-            if schema != "track":
-                try:
-                    schema["name"]
-                except:
-                    pass
-                else:
-
-                    if int(schema["playcount"]) >= 1000000:
-                        library.comment.returnUpdateMessage("Adding: "+schema["artist"]["name"] +" - "+schema["name"])
-                        array.append({
-                            "artist": schema["artist"]["name"],
-                            "track": schema["name"],
-                            "listeners": schema["listeners"],
-                            "playcount": schema["playcount"],
-                            "tag_1":schema["tags"][0]["name"]
-                        })
-
-    library.csv.export_csv(
-        compressed_path, ["artist", "track", "listeners", "playcount","tag_1"], array)
-
-def export_array_handler(data,schema):
-    return {
-        "artist": schema["artist"],
-        "track": schema["track"],
-        "tags":schema["tags"],
-        "url": data["url"],
-        "filename_artist": data["filename_artist"],
-        "filename_track": data["filename_track"],
-        "filename":data["filename_artist"]+"-"+data["filename_track"],
-        "affilate_match":{
-            "artist":data["artist"],
-            "track":data["track"]
-        }
-    }
-
-def compress_api_data():
+def compress_api_data(input_filepath,export_file):
 
     array=[]
     
-    for data in library.scan.import_json_from_directory_recursively_items(source_path+"*.json"):
+    for data in library.scan.import_json_from_directory_recursively_items(input_filepath):
         for schema in data["data"]: 
 
             artist=""
@@ -153,11 +51,6 @@ def compress_api_data():
                 for tag in tags:
                     result_tags.append(tag["name"])
 
-
-            
-
-
-
             if listeners and playcount and track and artist and result_tags:
 
                 array.append({
@@ -168,52 +61,115 @@ def compress_api_data():
                     "tags":result_tags
                 })
 
-    library.json.export_json("S:\\Midi-Library\\parsed\\uncompressed.json",array)
+    library.comment.returnMessage(export_file)
+    return library.json.export_json(export_file,array)
 
-def create_compressed_list():
+def run_matching_algorithm(import_file,export_filepath_location):
+    ## Run this second
+    for original_data in library.json.import_json(original_track_list):
 
-    playcount_list=[]
-    for data in library.json.import_json("S:\\Midi-Library\\parsed\\uncompressed.json"):
-        playcount_list.append(int(data["playcount"]))
-    
-    playcount_list.sort()
+        filename= original_data["filename_artist"]+"-"+original_data["filename_track"]
 
-    new_playcount=[]
+        if library.file.file_does_not_exists(export_filepath_location+filename+".json"):
 
-    for counts  in playcount_list:
+            last_fm_check_list=[]
 
-        if counts > 1000000:
-            new_playcount.append(counts)
-    
-    compressed_dictionary=[]
+            for schema in library.json.import_json(import_file):
 
-    for schema  in library.json.import_json("S:\\Midi-Library\\parsed\\uncompressed.json"):
+                match_artist = library.machine_learning.match_by_percentage(original_data["artist"],schema["artist"])
+                match_track = library.machine_learning.match_by_percentage(original_data["track"],schema["track"])
 
-        if int(schema["playcount"]) in new_playcount:
-            compressed_dictionary.append(schema)
-    
-    return library.json.export_json("S:\\Midi-Library\\parsed\\compressed.json",compressed_dictionary)
 
-def export_sorted_by_popular():
-    export=[]
-    for data in library.json.import_json("S:\\Midi-Library\\sources\\learning.json"):
+                if match_artist >=75 and match_track >=75:
 
-        match_array  = data["clever_match_artist_to_track"]
+                    last_fm_check_list.append({
+                        "artist":schema["artist"],
+                        "track":schema["track"],
+                        "listeners":schema["listeners"],
+                        "playcount":schema["playcount"],
+                        "tags":schema["tags"],
+                        "match_percentage":{
+                            "artist":match_artist,
+                            "track":match_track
+                        }
 
-        if len(match_array) ==1:
-            export.append(export_array_handler(match_array[0],data))
-        elif len(match_array)>=1:
-            for data_single in match_array:
-                export.append(export_array_handler(data_single,data))
+                    })
+            
+            original_data["filename"] = filename
+
+            
+            library.json.export_json(export_filepath_location+original_data["filename"]+".json",{
+                "original":original_data,
+                "last_fm_check":last_fm_check_list
+                })
+            library.comment.returnUpdateMessage("Processing")
+            
         else:
             pass
-    library.json.export_json(track_database,export)
-    library.comment.returnMessage("Completed: " + track_database)
 
+def run_processed_algorithm(import_filepath_location,export_filepath_location):
+    for filename in library.scan.scan_file_recursively(import_filepath_location):
+
+        for title,filedata in library.json.import_json(filename).items():
+
+            if title=="original":
+                original = filedata
+
+            if title=="last_fm_check":
+                for data in filedata:
+                    if data["match_percentage"]["artist"]==100.0 and data["match_percentage"]["track"]==100.0:
+
+                        if library.file.file_does_not_exists(export_filepath_location+original["filename"]+".json"):
+
+                            library.json.export_json(
+                                export_filepath_location+original["filename"]+".json",
+                                [
+                                    {
+                                    "artist":original["artist"],
+                                    "track":original["track"],
+                                    "url":original["url"],
+                                    "filename_artist":original["filename_artist"],
+                                    "filename_track":original["filename_track"],
+                                    "filename":original["filename"],
+                                    "last_fm":{
+                                        "last_fm_artist_match":data["artist"],
+                                        "last_fm_track_match":data["track"],
+                                        "listeners":data["listeners"],
+                                        "playcount":data["playcount"],
+                                        "tags":data["tags"]
+                                    }
+                                    }
+                                
+                                ])
+             
+def export_full_list(input_filepath_location,export_file):
+    array=[]
+    for filename in library.scan.scan_file_recursively("S:\\Midi-Library\\parsed\\matched\\processed\\*.json"):
+        for filedata in library.json.import_json(filename):
+            array.append(filedata)
+    return library.json.export_json("S:\\Midi-Library\\parsed\\matched\\full_list.json",array)
+
+
+def compressed_list(input_file,export_file):
+    array=[]
+    for filedata in library.json.import_json(input_file):
+        if int(filedata["last_fm"]["playcount"]) >= 100000:
+
+            array.append(config.import_html_content(filedata))
+
+    return_dictionary = library.parser.remove_duplicates_from_dictionary(array)
+    print("Number of Artists: "+str(len(return_dictionary)))
+
+    return library.json.export_json(export_file,return_dictionary)
+    
+
+#######################################################
 
 library.comment.returnMessage("Start")
-compress_api_data()
-create_compressed_list()
-export_learning_results()
-export_sorted_by_popular()
+
+compress_api_data("S:\\Website Projects\\live\\last_fm_tracks\\*.json","S:\\Midi-Library\\parsed\\uncompressed.json")
+run_matching_algorithm("S:\\Midi-Library\\parsed\\uncompressed.json","S:\\Midi-Library\\parsed\\matched\\unprocessed\\")
+run_processed_algorithm("S:\\Midi-Library\\parsed\\matched\\unprocessed\\*.json","S:\\Midi-Library\\parsed\\matched\\processed\\")
+export_full_list("S:\\Midi-Library\\parsed\\matched\\processed\\*.json","S:\\Midi-Library\\parsed\\matched\\full_list.json")
+compressed_list("S:\\Midi-Library\\parsed\\matched\\full_list.json","S:\\Midi-Library\\parsed\\matched\\compressed_list.json")
 library.comment.returnMessage("Completed")
