@@ -291,7 +291,7 @@ def compress_dictionary(dictionary):
 
 def global_return_path(filename):
     filename_only = find_and_replace_array(filename,{
-        "S:\\Website Projects\\MusicKeyFinder\\resources\\api\\":"",
+        app.settings["website_path"]+"\\resources\\api\\":"",
         "\\profile.json":""
     })
 

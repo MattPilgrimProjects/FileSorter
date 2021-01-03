@@ -6,6 +6,63 @@ from scipy import stats
 from statistics import mode
 import library.parser
 import library.maths
+from mido import MidiFile
+
+midi_note = library.json.import_json("S:/Projects/midi.json")
+
+def import_midi_to_json(midi_file, output_file):
+
+    mid = MidiFile(midi_file)
+
+    channels = []
+
+    for i, track in enumerate(mid.tracks):
+
+        track_name = "Track {}: {}".format(i, track.name)
+
+        data = []
+        raw=[]
+
+        for msg in track:
+
+            msg = str(msg)
+
+            raw.append(msg)
+
+            value = msg.split(" ")
+
+            note = value[2].replace("note=", "")
+
+            # channel = int(value[1].replace("channel=", ""))
+            #    "velocity": int(value[3].replace("velocity=", "")),
+
+            if "note_on" in msg:
+
+                
+
+                note_on = {
+               
+                    "note": midi_note[note],
+                    "time": int(value[4].replace("time=", ""))
+                }
+
+            if "note_off" in msg:
+
+                note = value[2].replace("note=", "")
+
+                note_off = {
+                    "note": midi_note[note],
+                    "duration": int(value[4].replace("time=", "")),
+                }
+
+                data.append({"on": note_on, "off": note_off})
+
+        if data:
+            channels.append({"track": track_name,"data": data})
+
+        library.json.export_json(output_file, channels)
+
+######
 
 notes = ["A","A♯/B♭","B","C","C♯/D♭","D","D♯/E♭","E","F","F♯/G♭","G","G♯/A♭","A","A♯/B♭","B","C","C♯/D♭","D","D♯/E♭","E","F","F♯/G♭","G","G♯/A♭","A","A♯/B♭","B","C"]
 

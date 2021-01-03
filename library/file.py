@@ -6,6 +6,9 @@ import library.parser
 import library.file
 import library.comment
 
+def file_remove(filename):
+    return os.remove(filename)
+
 def file_exists(filename):
     if os.path.exists(filename):
         return True
@@ -27,8 +30,7 @@ def create_temp_file(filename):
     return Path(filename).touch()
 
 
-def file_remove(filename):
-    return shutil.rmtree(filename)
+
 
 def move_file(original_location,new_location):
     try:

@@ -62,21 +62,19 @@ def spotify_web_api(web, params, auth):
     return check_for_status_code_error(response)
 
 
-def import_youtube(params, auth, export_path):
-    if library.file.file_exists(export_path):
-        library.comment.returnMessage(
-            "JSON file already exists " + export_path)
-    else:
-        library.cron.delay(5)
-        content = youtube_web_api(params, auth)
+def import_youtube(params, auth):
 
-        if content.status_code == 200:
-            library.comment.returnMessage("Download Content => "+export_path)
-            return library.json.export_json(export_path, content.json())
-        else:
-            library.comment.returnMessage(
-            str(content.json()["error"]["code"])+": "+content.json()["error"]["message"])
-            sys.exit()
+    library.cron.delay(1)
+    content = youtube_web_api(params, auth)
+
+    if content.status_code == 200:
+        return content.json()
+    else:
+        library.comment.returnMessage("---")
+        library.comment.returnMessage("---")
+        library.comment.returnMessage(str(content.json()["error"]["code"])+": "+content.json()["error"]["message"])
+
+        sys.exit()
 
 
 
@@ -124,17 +122,35 @@ def download_html_content(search_url,save_location):
 
     return None
 
-def last_fm_api(search_url,save_location):
+def params(data, params):
+    param_return = []
+
+    for key, value in params.items():
+
+        if value == "%ARTIST%":
+            value = value.replace(
+                value, data["filename_artist"].replace("-", "%20"))
+        if value == "%TRACK%":
+            value = value.replace(
+                value, data["filename_track"].replace("-", "%20"))
+
+        param_return.append(key+"="+value)
+
+    return param_return
+
+def last_fm_api(data,param,save_location):
+
+    url = www+"&"+"&".join(params(data,param))
 
     library.cron.delay(1)
 
     try: 
-        returnURLContent(search_url)
+        returnURLContent(url)
     except:
-        library.comment.returnMessage("Error => "+search_url)
+        library.comment.returnMessage("Error => "+url)
     else:
 
-        contents = returnURLContent(search_url)
+        contents = returnURLContent(url)
 
         library.file.createFile(save_location,contents)
 
